@@ -1,0 +1,55 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  author: { '@type': 'Person', name: 'Petucho' },
+};
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  path={`/blog/${post.id}/`}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <article class="section">
+    <div class="wrap">
+      <header style="max-width:68ch">
+        <p class="eyebrow">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          {post.data.tags.length > 0 && <> · {post.data.tags.join(' · ')}</>}
+        </p>
+        <h1 class="display" style="margin-top:1rem; font-size:clamp(2rem,4.5vw,3.25rem)">
+          {post.data.title}
+        </h1>
+        <p class="lede" style="margin-top:1.25rem">{post.data.description}</p>
+      </header>
+      <div class="prose" style="margin-top:2.5rem">
+        <Content />
+      </div>
+      <p style="margin-top:3rem">
+        <a class="link-arrow" href="/blog/">← All posts</a>
+      </p>
+    </div>
+  </article>
+</BaseLayout>

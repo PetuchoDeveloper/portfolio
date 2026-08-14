@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Work"
+  description="Selected projects: institutional platforms, streaming infrastructure, and marketplace tooling — built with automated testing and security review as standard."
+>
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Work</p>
+      <h1 class="display" style="margin-top:1.25rem; font-size:clamp(2.2rem,5vw,3.75rem)">
+        Selected projects.
+      </h1>
+      <p class="lede" style="margin-top:1.5rem">
+        Case studies with real scope, real constraints, and real numbers.
+        More are being written up — every project here shipped to production.
+      </p>
+
+      <div style="display:grid; gap:1.25rem; margin-top:3rem">
+        <a class="card card--link" href="/work/sed/" style="display:grid; grid-template-columns:1fr auto; gap:1.5rem; align-items:start">
+          <div>
+            <p class="eyebrow" style="color:var(--text-faint)">Flagship · Institutional platform</p>
+            <h2 class="h2" style="font-size:1.75rem; margin-top:0.6rem">SED — Teacher Evaluation System</h2>
+            <p class="muted" style="margin-top:0.75rem">
+              Anonymous evaluation platform for a public Mexican university.
+              Opaque credentials, immutable submissions, 2,500+ automated tests,
+              full CI/CD to AWS.
+            </p>
+            <p style="margin-top:1rem; display:flex; flex-wrap:wrap; gap:0.5rem">
+              <span class="tag">Django</span>
+              <span class="tag">React 19</span>
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">Celery</span>
+            </p>
+          </div>
+          <span class="link-arrow" style="white-space:nowrap; margin-top:0.5rem">Read →</span>
+        </a>
+
+        <article class="card" style="opacity:0.85">
+          <p class="eyebrow" style="color:var(--text-faint)">Case study in progress</p>
+          <h2 class="h2" style="font-size:1.75rem; margin-top:0.6rem">Video streaming stack</h2>
+          <p class="muted" style="margin-top:0.75rem">
+            Django backend, React frontend, and a Rust video-transcoding worker
+            with hardened cloud deployment. Write-up coming soon.
+          </p>
+        </article>
+
+        <article class="card" style="opacity:0.85">
+          <p class="eyebrow" style="color:var(--text-faint)">Case study in progress</p>
+          <h2 class="h2" style="font-size:1.75rem; margin-top:0.6rem">Marketplace operations platform</h2>
+          <p class="muted" style="margin-top:0.75rem">
+            Control-plane tooling for sellers expanding across Latin American
+            marketplaces. Spanish-first product design with demand validation
+            before a line of production code.
+          </p>
+        </article>
+
+        <article class="card" style="opacity:0.85">
+          <p class="eyebrow" style="color:var(--text-faint)">Case study in progress</p>
+          <h2 class="h2" style="font-size:1.75rem; margin-top:0.6rem">Automation verification gate</h2>
+          <p class="muted" style="margin-top:0.75rem">
+            An independent verification layer for workflow automations:
+            deterministic outcome contracts that stop silent false-positive
+            executions before they touch real data.
+          </p>
+        </article>
+      </div>
+
+      <p class="faint" style="margin-top:2rem; font-size:0.875rem">
+        Client work is under NDA-friendly review before publishing. Ask me
+        about it directly — I'm happy to walk through details on a call.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

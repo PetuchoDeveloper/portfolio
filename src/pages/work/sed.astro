@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'SED — Sistema de Evaluación Docente',
+  applicationCategory: 'EducationalApplication',
+  description:
+    'Anonymous teacher-evaluation platform for a public university in Mexico: opaque respondent credentials, immutable submissions, Django + React, with 2,500+ automated tests.',
+  operatingSystem: 'Web',
+};
+---
+
+<BaseLayout
+  title="SED — Teacher Evaluation System"
+  description="How I built an anonymous, tamper-evident teacher-evaluation platform for a public Mexican university: Django, React 19, opaque credentials, and 2,500+ automated tests."
+  path="/work/sed/"
+  jsonLd={jsonLd}
+>
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Case study · Institutional platform</p>
+      <h1 class="display" style="margin-top:1.25rem; font-size:clamp(2.2rem,5vw,3.75rem); max-width:22ch">
+        Teacher evaluations, made anonymous and tamper-evident.
+      </h1>
+      <p class="lede" style="margin-top:1.5rem">
+        SED is the evaluation system for a public university in Mexico:
+        students, teachers, and staff evaluate teaching performance every
+        term — without anyone being able to trace a response back to a person.
+      </p>
+
+      <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:2rem">
+        <span class="tag">Django + DRF</span>
+        <span class="tag">React 19 + TypeScript</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Redis + Celery</span>
+        <span class="tag">Docker / AWS</span>
+        <span class="tag">Caddy TLS</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight section" style="border-top:1px solid var(--line)">
+    <div class="wrap prose">
+      <h2>The problem</h2>
+      <p>
+        The university's previous evaluation system was a legacy stack with a
+        fundamental trust problem: respondents could not be sure their answers
+        were anonymous, so participation and honesty suffered. The new system
+        had to guarantee anonymity <em>by construction</em>, survive real
+        term-end traffic, and produce reports administrators could audit.
+      </p>
+
+      <h2>What I built</h2>
+      <p>
+        A full-stack platform with two completely separate faces: an admin
+        console for catalogs, teaching assignments, survey instruments,
+        credentials, and analytics — and a respondent flow that works with a
+        single opaque credential and leaves no identifying trail.
+      </p>
+      <ul>
+        <li>
+          <strong>Opaque credential system:</strong> respondents redeem a
+          server-issued token for an anonymous session. No name, no account,
+          no way to link a response to a person.
+        </li>
+        <li>
+          <strong>Immutable submissions:</strong> once an evaluation is
+          submitted it cannot be edited or deleted — the dataset the
+          institution reports on is provably the dataset that was collected.
+        </li>
+        <li>
+          <strong>Survey engine:</strong> configurable instruments — matrix
+          questions, Likert scales, open text, theory/practical classification
+          — published per evaluation period with a strict lifecycle:
+          draft → published → closed, with soft-deletes instead of hard
+          erasure.
+        </li>
+        <li>
+          <strong>Analytics &amp; reports:</strong> per-professor and
+          per-unit reports for institutional decision-making.
+        </li>
+      </ul>
+
+      <h2>Engineering standards</h2>
+      <p>
+        This project runs on discipline, not heroics:
+      </p>
+      <ul>
+        <li><strong>1,750+ backend tests</strong> and <strong>830+ frontend tests</strong>, run in CI on every change.</li>
+        <li><strong>Strict bundle budgets</strong> — every JavaScript chunk measured and capped, so slow devices in campus Wi-Fi still load fast.</li>
+        <li><strong>Security review as a standing practice:</strong> auth boundaries, session handling, and data storage are audited continuously, with findings tracked and fixed, not buried.</li>
+        <li><strong>Observability built in:</strong> health checks, request tracing, and metrics wired to monitoring from day one.</li>
+        <li><strong>Reproducible deployment:</strong> Docker images built in CI, promoted through environments, released to AWS with an audited pipeline.</li>
+      </ul>
+
+      <blockquote>
+        The requirement was never just "collect evaluations." It was:
+        prove to thousands of students that their voice is safe.
+      </blockquote>
+
+      <h2>Result</h2>
+      <p>
+        A platform the institution can run term after term: anonymous by
+        design, immutable by default, and maintained through automated tests
+        rather than tribal knowledge. The architecture documentation alone
+        lets a new engineer onboard without a guided tour.
+      </p>
+    </div>
+  </section>
+
+  <section class="section--tight section">
+    <div class="wrap">
+      <div class="panel" style="text-align:center">
+        <h2 class="h2">Need a platform you can trust with sensitive data?</h2>
+        <p class="muted" style="margin-top:1rem">
+          Anonymity, auditability, and uptime are design decisions — not afterthoughts.
+        </p>
+        <a class="btn btn--solid" style="margin-top:2rem" href="/contact/">Talk about your project</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

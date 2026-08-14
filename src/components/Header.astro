@@ -1,0 +1,27 @@
+---
+import { nav, site } from '../data/site';
+
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label={`${site.name} — home`}>
+      {site.name}<span class="dot">.</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      {nav.map((item) => {
+        const href = item.href.replace(/\/$/, '') || '/';
+        const active = current === href || current.startsWith(href + '/');
+        return (
+          <a href={item.href} aria-current={active ? 'page' : undefined}>
+            {item.label}
+          </a>
+        );
+      })}
+      <a class="btn btn--solid nav-cta" style="padding:0.55rem 1.1rem" href="/contact/">
+        Hire me
+      </a>
+    </nav>
+  </div>
+</header>

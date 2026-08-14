@@ -1,0 +1,48 @@
+---
+import { nav, site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-cols">
+      <div style="max-width:26rem">
+        <p class="col-label">Petucho</p>
+        <p class="muted" style="font-size:0.9375rem">
+          {site.tagline}
+        </p>
+      </div>
+      <div>
+        <p class="col-label">Site</p>
+        <ul>
+          {nav.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="col-label">Elsewhere</p>
+        <ul>
+          <li><a href={site.github} rel="me noopener" target="_blank">GitHub</a></li>
+          <li><a href={`mailto:${site.email}`}>Email</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="col-label">Contact</p>
+        <ul>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li class="muted">{site.location} · {site.languages.join(' / ')}</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer-wordmark" aria-hidden="true">{site.name.toUpperCase()}</p>
+
+    <div class="footer-meta">
+      <span>© {year} {site.name}. All rights reserved.</span>
+      <span>Built with Astro · No trackers, no cookies.</span>
+    </div>
+  </div>
+</footer>

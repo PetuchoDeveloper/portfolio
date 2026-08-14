@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { services, site } from '../data/site';
+---
+
+<BaseLayout
+  title="Services"
+  description="Two core services: search-friendly websites for small businesses, and full-stack web applications with security review included. Clear scope, weekly demos, full ownership handover."
+>
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Services</p>
+      <h1 class="display" style="margin-top:1.25rem; font-size:clamp(2.2rem,5vw,3.75rem); max-width:22ch">
+        Clear offers, honest scope.
+      </h1>
+      <p class="lede" style="margin-top:1.5rem">
+        Every engagement starts with a written plan you approve. Weekly
+        working demos. At the end, you own everything — code, domain, and
+        hosting.
+      </p>
+
+      {services.map((s, i) => (
+        <article id={s.slug} class="card" style="margin-top:2rem">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.75rem">
+            <h2 class="h2" style="font-size:clamp(1.5rem,3vw,2.25rem)">
+              {i + 1 === 1 ? '①' : '②'} {s.name}
+            </h2>
+            <span class="tag">{s.priority}</span>
+          </div>
+          <p class="muted" style="margin-top:1rem; max-width:60ch">{s.summary}</p>
+          <p class="eyebrow" style="color:var(--text-faint); margin-top:2rem">What you get</p>
+          <ul style="margin-top:0.75rem; padding-left:1.25rem; display:grid; gap:0.5rem; max-width:62ch">
+            {s.deliverables.map((d) => (
+              <li class="muted">{d}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+
+      <article class="card" style="margin-top:2rem">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.75rem">
+          <h2 class="h2" style="font-size:clamp(1.5rem,3vw,2.25rem)">Security review</h2>
+          <span class="tag">Included in full-stack builds</span>
+        </div>
+        <p class="muted" style="margin-top:1rem; max-width:60ch">
+          Not sold as a standalone audit — but every application I build gets
+          a security pass before launch: authentication flows, session
+          handling, secrets hygiene, and data protection. I also study
+          smart-contract security in my own time, and I bring that same
+          adversarial reading to web code.
+        </p>
+      </article>
+
+      <div class="panel" style="margin-top:3rem; text-align:center">
+        <h2 class="h2">Not sure which fits? Describe the problem.</h2>
+        <p class="muted" style="margin-top:1rem">
+          I'll tell you honestly whether I'm the right person for it — and if
+          not, I'll say so.
+        </p>
+        <a class="btn btn--solid" style="margin-top:2rem" href="/contact/">Start a conversation</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
