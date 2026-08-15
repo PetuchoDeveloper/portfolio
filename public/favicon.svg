@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
   <title>Petucho</title>
-  <rect width="32" height="32" fill="#f3efe6"/>
-  <path fill="#6a4a8a" d="M4 12h8.2c.6 0 1.1-.2 1.5-.6L16 9h12v19H4V12z"/>
+  <rect width="32" height="32" fill="#161616"/>
+  <path fill="#D4AF37" d="M4 12h8.2c.6 0 1.1-.2 1.5-.6L16 9h12v19H4V12z"/>
 </svg>
