@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Still from '../../components/Still.astro';
+import AnonPlate from '../../components/AnonPlate.astro';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -18,30 +20,53 @@ const jsonLd = {
   path="/work/sed/"
   jsonLd={jsonLd}
 >
-  <section class="section">
+  <section class="page-hero">
     <div class="wrap">
-      <p class="eyebrow">Case study · Institutional platform</p>
-      <h1 class="display" style="margin-top:1.25rem; font-size:clamp(2.2rem,5vw,3.75rem); max-width:22ch">
-        Teacher evaluations, made anonymous and tamper-evident.
+      <p class="file-kicker">Case study · Institutional platform</p>
+      <h1 class="display" style="max-width:18ch">
+        Teacher evaluations, made anonymous.
       </h1>
       <p class="lede" style="margin-top:1.5rem">
         SED is the evaluation system for a public university in Mexico:
         students, teachers, and staff evaluate teaching performance every
         term — without anyone being able to trace a response back to a person.
       </p>
+      <p class="chips" style="color:var(--ink-soft)">
+        <span>Django + DRF</span>
+        <span>React 19</span>
+        <span>PostgreSQL</span>
+        <span>Redis + Celery</span>
+        <span>Docker / AWS</span>
+      </p>
+      <p class="lede" style="margin-top:1.5rem">
+        I bring this same discipline to a small-business website: written
+        scope, weekly proof, and a handover you own.
+      </p>
+    </div>
+  </section>
 
-      <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:2rem">
-        <span class="tag">Django + DRF</span>
-        <span class="tag">React 19 + TypeScript</span>
-        <span class="tag">PostgreSQL</span>
-        <span class="tag">Redis + Celery</span>
-        <span class="tag">Docker / AWS</span>
-        <span class="tag">Caddy TLS</span>
+  <section style="padding-bottom:clamp(2rem,4vw,3rem)">
+    <div class="wrap media-split" style="margin-top:0">
+      <Still
+        src="/images/credential.webp"
+        alt="Conceptual image generated for this page; not a photograph of the live system."
+        width={1400}
+        height={933}
+        caption="A blank credential. No name. That is the point."
+      />
+      <div>
+        <p class="file-kicker">By construction</p>
+        <h2 class="h2" style="margin-top:0.4rem">How anonymity is built</h2>
+        <p class="muted" style="margin:0.9rem 0 1.25rem; max-width:46ch">
+          The respondent never creates an account. The file that remains
+          cannot be edited.
+        </p>
+        <AnonPlate />
       </div>
     </div>
   </section>
 
-  <section class="section--tight section" style="border-top:1px solid var(--line)">
+  <section style="padding-bottom:clamp(3rem,6vw,4rem)">
     <div class="wrap prose">
       <h2>The problem</h2>
       <p>
@@ -84,9 +109,7 @@ const jsonLd = {
       </ul>
 
       <h2>Engineering standards</h2>
-      <p>
-        This project runs on discipline, not heroics:
-      </p>
+      <p>This project runs on discipline, not heroics:</p>
       <ul>
         <li><strong>1,750+ backend tests</strong> and <strong>830+ frontend tests</strong>, run in CI on every change.</li>
         <li><strong>Strict bundle budgets</strong> — every JavaScript chunk measured and capped, so slow devices in campus Wi-Fi still load fast.</li>
@@ -110,14 +133,14 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="section--tight section">
+  <section style="padding-bottom:clamp(4rem,8vw,6rem)">
     <div class="wrap">
-      <div class="panel" style="text-align:center">
+      <div class="folder folder--orchid">
         <h2 class="h2">Need a platform you can trust with sensitive data?</h2>
         <p class="muted" style="margin-top:1rem">
           Anonymity, auditability, and uptime are design decisions — not afterthoughts.
         </p>
-        <a class="btn btn--solid" style="margin-top:2rem" href="/contact/">Talk about your project</a>
+        <a class="btn btn--solid" style="margin-top:1.75rem" href="/contact/">Talk about your project</a>
       </div>
     </div>
   </section>

@@ -7,7 +7,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="/" aria-label={`${site.name} — home`}>
-      {site.name}<span class="dot">.</span>
+      {site.name}
     </a>
     <nav class="site-nav" aria-label="Main">
       {nav.map((item) => {
@@ -19,9 +19,10 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
           </a>
         );
       })}
-      <a class="btn btn--solid nav-cta" style="padding:0.55rem 1.1rem" href="/contact/">
-        Hire me
-      </a>
     </nav>
+    <a class="btn btn--solid nav-cta" href="/contact/">
+      <span class="cta-full">Start a project</span>
+      <span class="cta-short">Start</span>
+    </a>
   </div>
 </header>

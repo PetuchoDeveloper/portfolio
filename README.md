@@ -4,13 +4,13 @@ Personal portfolio site: built to win freelancing clients and rank in search.
 
 **Stack:** [Astro](https://astro.build) (static-first, zero JS shipped to the
 browser by default) + `@astrojs/sitemap`. Self-hosted variable fonts
-(Space Grotesk, Fraunces). No trackers, no cookies, no client-side framework.
+(Bodoni Moda, Archivo). No trackers, no cookies, no client-side framework.
 
 ## Design language
 
-- Near-black violet surfaces, one flat wisteria accent, **no gradients**.
-- Oversized display type, uppercase eyebrows, hairline borders, generous
-  negative space. Footer uses an oversized wordmark.
+- Warm paper blotter, black ink, uncommon manganese purple as folder fields.
+- **No gradients.** Die-cut file tabs, hairline rules, oversized display type.
+- First viewport is the offer; work rises as a stack of files.
 
 ## Pages
 

@@ -1,0 +1,17 @@
+---
+const steps = [
+  { k: 'Token', d: 'A server-issued credential. No name on it.' },
+  { k: 'Session', d: 'Redeemed once. Leaves no account trail.' },
+  { k: 'File', d: 'The answer is written. Then it cannot change.' },
+];
+---
+
+<ol class="rail anon-rail" aria-label="How anonymity is built">
+  {steps.map((s, i) => (
+    <li class="rail-step">
+      <span class="tab-label">{String(i + 1).padStart(2, '0')}</span>
+      <strong>{s.k}</strong>
+      <p>{s.d}</p>
+    </li>
+  ))}
+</ol>

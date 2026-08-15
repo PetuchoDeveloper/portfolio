@@ -30,16 +30,16 @@ const jsonLd = {
   ogType="article"
   jsonLd={jsonLd}
 >
-  <article class="section">
+  <article class="page-hero">
     <div class="wrap">
       <header style="max-width:68ch">
-        <p class="eyebrow">
+        <p class="file-kicker">
           <time datetime={post.data.pubDate.toISOString()}>
             {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
           </time>
           {post.data.tags.length > 0 && <> · {post.data.tags.join(' · ')}</>}
         </p>
-        <h1 class="display" style="margin-top:1rem; font-size:clamp(2rem,4.5vw,3.25rem)">
+        <h1 class="display" style="margin-top:1rem; font-size:clamp(2.1rem,5vw,4rem); max-width:18ch">
           {post.data.title}
         </h1>
         <p class="lede" style="margin-top:1.25rem">{post.data.description}</p>
@@ -48,7 +48,7 @@ const jsonLd = {
         <Content />
       </div>
       <p style="margin-top:3rem">
-        <a class="link-arrow" href="/blog/">← All posts</a>
+        <a class="link-arrow" href="/blog/">← All notes</a>
       </p>
     </div>
   </article>

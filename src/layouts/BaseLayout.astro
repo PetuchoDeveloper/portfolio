@@ -1,6 +1,6 @@
 ---
-import '@fontsource-variable/space-grotesk';
-import '@fontsource-variable/fraunces';
+import '@fontsource-variable/bodoni-moda';
+import '@fontsource-variable/archivo';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -9,11 +9,8 @@ import { site } from '../data/site';
 interface Props {
   title: string;
   description?: string;
-  /** Optional JSON-LD object(s) to inject */
   jsonLd?: object | object[];
-  /** Override og:type, defaults to 'website' */
   ogType?: string;
-  /** Canonical path override (defaults to current URL) */
   path?: string;
 }
 
@@ -48,7 +45,6 @@ const ldArray = jsonLd
     <link rel="canonical" href={canonical} />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Open Graph -->
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -60,14 +56,12 @@ const ldArray = jsonLd
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogImageAlt} />
 
-    <!-- Structured data -->
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',
@@ -96,8 +90,16 @@ const ldArray = jsonLd
     ))}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
   </head>
   <body>
+    <!--
+      THESIS: The first screen is a desk blotter with one sentence — websites that get found — and a purple file tab. It refuses the dark name-role-cards portfolio.
+      OWN-WORLD: Warm paper #f3efe6, warm black ink, uncommon manganese purple #6a4a8a as folder fields. Bodoni Moda display, Archivo labels. Hairline black rules, die-cut tabs, no gradients.
+      STORY: A small-business owner sees they can get a site customers find, trusts the work is careful, and emails to start.
+      FIRST VIEWPORT: Sticky paper header. Huge left-stacked offer. Empty paper. One purple tab at the bottom: WORK / 04 FILES. Primary action is Start a project in the header.
+      FORM: Expediente (grounded 4), staging offer-then-rising-files, seed ccd7a1f1.
+    -->
     <a class="skip-link" href="#main">Skip to content</a>
     <Header />
     <main id="main">

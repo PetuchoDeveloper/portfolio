@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-15T06:51:26.263613Z",
+  "title": "Design System: Expediente",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Manganese Purple (Primary Role)",
+        "canonical": "#6a4a8a",
+        "tonalRamp": ["#130024", "#2e0c48", "#482865", "#644483", "#8160a2", "#ae8dd3", "#d5b3fb", "#f3eaff"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "#f3efe6",
+        "tonalRamp": ["#0d0b06", "#24211b", "#3d3a33", "#58554d", "#757169", "#a29e96", "#c8c4bb", "#f2eee5"]
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "Paper Shadow",
+        "canonical": "#e8e2d4",
+        "tonalRamp": ["#0f0b03", "#262117", "#3f3a2f", "#5a5549", "#767165", "#a49e91", "#c9c4b6", "#f4eee0"]
+      },
+      "kraft": {
+        "role": "secondary",
+        "displayName": "Kraft Paper",
+        "canonical": "#cbb892",
+        "tonalRamp": ["#110a00", "#2d1f00", "#483815", "#645330", "#816f4c", "#af9c77", "#d5c29c", "#ffecc7"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Warm Black Ink",
+        "canonical": "#14110c",
+        "tonalRamp": ["#0e0b06", "#24211c", "#3e3a34", "#58554f", "#75716a", "#a29e97", "#c8c3bc", "#f2eee6"]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#3a342c",
+        "tonalRamp": ["#0f0a05", "#262119", "#403931", "#5b544c", "#777067", "#a49d94", "#cac3b9", "#f5ede3"]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#1a1712",
+        "tonalRamp": ["#0d0b06", "#24211c", "#3d3a34", "#58554f", "#75716b", "#a29e97", "#c8c3bd", "#f2eee7"]
+      },
+      "orchid": {
+        "role": "primary",
+        "displayName": "Manganese Purple",
+        "canonical": "#6a4a8a",
+        "tonalRamp": ["#130024", "#2e0c48", "#482865", "#644483", "#8160a2", "#ae8dd3", "#d5b3fb", "#f3eaff"]
+      },
+      "orchid-deep": {
+        "role": "primary-strong",
+        "displayName": "Deep Manganese",
+        "canonical": "#4e326c",
+        "tonalRamp": ["#130025", "#2d0f47", "#462a64", "#624681", "#7f62a0", "#ac8fd1", "#d2b4f9", "#f3eaff"]
+      },
+      "on-orchid": {
+        "role": "on-primary",
+        "displayName": "On Orchid",
+        "canonical": "#f3efe6",
+        "tonalRamp": ["#0d0b06", "#24211b", "#3d3a33", "#58554d", "#757169", "#a29e96", "#c8c4bb", "#f2eee5"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Bodoni Display",
+        "purpose": "Hero offers and large page headlines; high-contrast editorial emphasis."
+      },
+      "headline": {
+        "displayName": "Bodoni Headline",
+        "purpose": "File, folder, and section headings that carry the narrative hierarchy."
+      },
+      "title": {
+        "displayName": "Archivo Title",
+        "purpose": "Compact process and work titles that need a practical reading rhythm."
+      },
+      "body": {
+        "displayName": "Archivo Body",
+        "purpose": "Readable explanatory copy, ledes, prose, metadata, and supporting detail."
+      },
+      "label": {
+        "displayName": "Archivo Label",
+        "purpose": "Uppercase, tracked filing labels, tabs, navigation, and footer metadata."
+      },
+      "field": {
+        "displayName": "Archivo Field",
+        "purpose": "The smaller practical text size used by contact form labels and controls."
+      },
+      "button": {
+        "displayName": "Archivo Button",
+        "purpose": "Compact action text with restrained tracking and inherited body leading."
+      }
+    },
+    "shadows": [
+      {
+        "name": "file-overlap",
+        "value": "0 -18px 28px rgb(20 17 12 / 0.08)",
+        "purpose": "Separates each rising file as it overlays the previous file."
+      }
+    ],
+    "motion": [
+      {
+        "name": "smooth-scroll",
+        "value": "scroll-behavior: smooth",
+        "purpose": "Supports the desk/file reading path through the page."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media (prefers-reduced-motion: reduce)",
+        "purpose": "Turns off smooth scrolling and sticky file behavior for motion-sensitive visitors."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px",
+        "purpose": "Allows navigation to scroll horizontally and reduces small label sizes."
+      },
+      {
+        "name": "md",
+        "value": "720px",
+        "purpose": "Enables two-column work/post rows and hides the compact header CTA below this width."
+      },
+      {
+        "name": "lg",
+        "value": "800px",
+        "purpose": "Enables the two-column process grid."
+      },
+      {
+        "name": "xl",
+        "value": "880px",
+        "purpose": "Enables the two-column page split used by contact and other interior layouts."
+      }
+    ],
+    "texture": {
+      "name": "paper-grain",
+      "value": "url('/paper.webp')",
+      "purpose": "Repeating desk-blotter texture on the body; the CSS sets background-size to 1800px."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single high-emphasis action: purple, direct, and readable on paper or as an inverse on a purple file.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Start a project</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; border: 1px solid var(--orchid); background: var(--orchid); color: var(--on-orchid); font-family: var(--font-ui); font-weight: 600; font-size: 0.8125rem; line-height: 1.65; letter-spacing: 0.04em; text-decoration: none; border-radius: 2px; } .ds-btn-primary:hover { background: var(--orchid-deep); border-color: var(--orchid-deep); } .ds-btn-primary:focus-visible { outline: 2px solid var(--orchid); outline-offset: 3px; } .ds-btn-primary:active { background: var(--orchid-deep); border-color: var(--orchid-deep); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A transparent ink button for a lower-emphasis path, with a quiet paper hover state.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">See the work →</a>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; border: 1px solid var(--line); background: transparent; color: var(--ink); font-family: var(--font-ui); font-weight: 600; font-size: 0.8125rem; line-height: 1.65; letter-spacing: 0.04em; text-decoration: none; border-radius: 2px; } .ds-btn-secondary:hover { background: var(--paper-2); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--orchid); outline-offset: 3px; } .ds-btn-secondary:active { background: var(--paper-2); }"
+    },
+    {
+      "name": "Project Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "A mailto-first inquiry field that stays tactile and paper-like instead of becoming a glossy app form.",
+      "html": "<label class=\"ds-field\"><span>Your email</span><input type=\"email\" name=\"email\" /></label>",
+      "css": ".ds-field { display: grid; gap: 0.35rem; color: var(--ink); font-family: var(--font-ui); font-size: 0.9375rem; line-height: 1.65; } .ds-field span { color: var(--ink-soft); } .ds-field input { background: var(--paper); border: 1px solid var(--line); border-radius: 2px; padding: 0.7rem 0.9rem; color: var(--ink); font: inherit; } .ds-field input:focus-visible { outline: 2px solid var(--orchid); outline-offset: 2px; }"
+    },
+    {
+      "name": "Folder Card",
+      "kind": "card",
+      "refersTo": "folder",
+      "description": "A square paper sheet for offers, proof, and supporting information; it reads as filed material, not a lifted card.",
+      "html": "<article class=\"ds-folder\"><p class=\"ds-folder-label\">Case study in progress</p><h3>Video streaming stack</h3><p class=\"ds-folder-copy\">Django, React, and a Rust worker with a write-up coming soon.</p></article>",
+      "css": ".ds-folder { background: var(--paper); border: 1px solid var(--line); color: var(--ink); padding: clamp(1.5rem, 3vw, 2.25rem); } .ds-folder-label { margin: 0 0 1.1rem; color: var(--ink-soft); font-family: var(--font-ui); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.18em; line-height: 1.65; text-transform: uppercase; } .ds-folder h3 { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.02; } .ds-folder-copy { margin: 1rem 0 0; color: var(--ink-soft); font-family: var(--font-ui); line-height: 1.65; max-width: 60ch; }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "The sticky paper header keeps the brand and the start-project action visible without turning the site into an app shell.",
+      "html": "<header class=\"ds-site-header\"><a class=\"ds-brand\" href=\"#\">Petucho</a><nav aria-label=\"Main\"><a href=\"#\">Work</a><a class=\"ds-nav-cta\" href=\"#\">Start a project</a></nav></header>",
+      "css": ".ds-site-header { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.25rem; padding: 0 1.25rem; background: color-mix(in srgb, var(--paper) 92%, transparent); border-bottom: 1px solid var(--line); color: var(--ink); font-family: var(--font-ui); } .ds-brand { color: var(--ink); font-weight: 700; font-size: 0.75rem; letter-spacing: 0.18em; text-decoration: none; text-transform: uppercase; } .ds-site-header nav { display: flex; align-items: center; gap: clamp(0.85rem, 2.4vw, 1.75rem); } .ds-site-header nav > a { color: var(--ink-soft); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.16em; text-decoration: none; text-transform: uppercase; } .ds-site-header nav > a:hover, .ds-site-header nav > a[aria-current='page'] { color: var(--ink); } .ds-site-header .ds-nav-cta { padding: 0.5rem 0.9rem; background: var(--orchid); border: 1px solid var(--orchid); color: var(--on-orchid); } .ds-site-header .ds-nav-cta:hover { background: var(--orchid-deep); border-color: var(--orchid-deep); } .ds-site-header .ds-nav-cta:focus-visible { outline: 2px solid var(--orchid); outline-offset: 3px; } @media (max-width: 720px) { .ds-site-header .ds-nav-cta { display: none; } } @media (max-width: 640px) { .ds-site-header nav { gap: 0.75rem; overflow-x: auto; } .ds-site-header nav > a { font-size: 0.625rem; white-space: nowrap; } }"
+    },
+    {
+      "name": "File Tab",
+      "kind": "custom",
+      "refersTo": "file-tab",
+      "description": "The signature filing cue: a clipped tab attached to a sticky paper file, with purple reserved for the memorable work field.",
+      "html": "<section class=\"ds-file\"><p class=\"ds-file-tab\">Work / 04 files</p><h2>Four files. One shipped in public.</h2></section>",
+      "css": ".ds-file { position: relative; min-height: calc(100svh - var(--header-h)); margin-top: 2.15rem; padding: clamp(3.5rem, 7vw, 5.5rem) 1.25rem clamp(3rem, 6vw, 5rem); background: var(--orchid); border-top: 1px solid var(--orchid-deep); color: var(--on-orchid); } .ds-file h2 { max-width: 18ch; margin: 0; font-family: var(--font-display); font-size: clamp(1.85rem, 4vw, 3.25rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.02; } .ds-file-tab { position: absolute; top: calc(var(--tab-h) * -1 + 1px); left: 1.25rem; display: flex; align-items: center; justify-content: center; min-width: 11rem; height: var(--tab-h); margin: 0; padding: 0 1.4rem; background: inherit; border: 1px solid var(--orchid-deep); border-bottom: 0; color: var(--on-orchid); font-family: var(--font-ui); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 100%, 0 100%); }"
+    },
+    {
+      "name": "Inline Chips",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "A filing-style inline list for technologies and deliverables, separated by rules instead of pill containers.",
+      "html": "<div class=\"ds-chips\" aria-label=\"Included\"><span>Hours</span><span>Map</span><span>Contact</span><span>Search setup</span></div>",
+      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 0.45rem 1.25rem; color: var(--ink); font-family: var(--font-ui); font-size: 0.875rem; line-height: 1.65; } .ds-chips span + span { border-left: 1px solid currentColor; padding-left: 1.25rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Expediente / papelería desk blotter",
+    "overview": "Expediente treats the site as a sheet of careful paperwork on a real desk: warm paper, warm-black ink, and a single uncommon purple that reads like a folder field. It is editorial without becoming precious—large type carries the offer, while labels, rules, and tabs make the work feel filed, inspectable, and ready to ship.\n\nThe world is intentionally not a dark name-role-cards portfolio. It leaves air in the first viewport, uses no gradients, and gets depth from paper texture, tonal surfaces, hairline borders, and the overlap of rising files. The home story moves from the offer to proof to a clear email action without adding decorative noise.",
+    "keyCharacteristics": [
+      "Paper-first surfaces with a repeated `paper.webp` desk texture.",
+      "Bodoni Moda for display and Archivo for body copy, labels, and controls.",
+      "Manganese purple as a rare folder field, action color, link color, and focus color.",
+      "Hairline ink rules, square folders, gently softened 2px controls, and die-cut tabs.",
+      "Sticky, rising files that make the work feel organized rather than card-grid generic."
+    ],
+    "rules": [
+      {
+        "name": "The Purple Folder Rule",
+        "body": "Purple should read as a tangible folder field or a deliberate action. Do not dilute its rarity with gradients, decoration, or an all-purple page.",
+        "section": "colors"
+      },
+      {
+        "name": "The Paper-First Rule",
+        "body": "When a surface has no stronger semantic reason to change, it stays paper.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Inks Rule",
+        "body": "Bodoni carries display emphasis; Archivo carries every functional or explanatory voice. Do not introduce a third type family for UI decoration.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Desk Rule",
+        "body": "Keep surfaces flat at rest. Use texture, tone, rules, and the file overlap shadow to make depth—not gradients, glass, or generic elevation presets.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Die-Cut Rule",
+        "body": "Use the clipped tab silhouette for filing cues; do not turn every control into a pill or rounded card.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do let `colors.paper` and the repeated paper texture be the default canvas.",
+      "Do use Bodoni Moda for the display/headline hierarchy and Archivo for body, labels, navigation, and controls.",
+      "Do reserve `colors.orchid` for folder fields, primary actions, links, selection, and focus; use `colors.orchid-deep` for their pressed/edge state.",
+      "Do keep structure visible with one-pixel ink rules and use the `2px` radius only where the CSS already does.",
+      "Do use the file/tab geometry and rising sticky overlap when a surface needs to feel like an Expediente, not a generic list of cards."
+    ],
+    "donts": [
+      "Don't bring back a dark name-role-cards portfolio or replace the paper desk with a dark app-shell treatment.",
+      "Don't add gradients, glossy glass, or a new shadow vocabulary.",
+      "Don't turn the purple accent into a full-page wash, decorative pattern, or pill system.",
+      "Don't substitute rounded cards for the square folder/file silhouette or replace hairline rules with heavy separators.",
+      "Don't introduce another display or UI type family without changing the established two-font system deliberately."
+    ]
+  }
+}

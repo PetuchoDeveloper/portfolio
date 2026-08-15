@@ -18,3 +18,8 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# generated working files
+src/assets/*-source.png
+.impeccable/mocks/
+.impeccable/review/

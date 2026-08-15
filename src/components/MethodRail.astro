@@ -1,0 +1,17 @@
+---
+const steps = [
+  { k: 'Scope', d: 'Written plan, price, date.' },
+  { k: 'Preview', d: 'A live link every week.' },
+  { k: 'Tests', d: 'Proof, not promises.' },
+  { k: 'Handover', d: 'Your repo. Your domain.' },
+];
+---
+
+<ol class="rail" aria-label="How an engagement runs">
+  {steps.map((s) => (
+    <li class="rail-step">
+      <span class="tab-label">{s.k}</span>
+      <p>{s.d}</p>
+    </li>
+  ))}
+</ol>

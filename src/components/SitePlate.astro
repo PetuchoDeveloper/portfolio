@@ -1,0 +1,17 @@
+---
+const cells = [
+  { k: 'Hours', d: 'When you are open.' },
+  { k: 'Map', d: 'Where to find you.' },
+  { k: 'Contact', d: 'How to reach you.' },
+  { k: 'Search', d: 'How Google reads you.' },
+];
+---
+
+<div class="plate" aria-label="What a found website includes">
+  {cells.map((c) => (
+    <div class="plate-cell">
+      <p class="tab-label">{c.k}</p>
+      <p>{c.d}</p>
+    </div>
+  ))}
+</div>
