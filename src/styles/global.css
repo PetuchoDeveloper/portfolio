@@ -2,7 +2,7 @@
    Kinetic Tactile / Dark Luxury Dossier — Petucho portfolio
    An evolution of the expediente folder motif into a stealthy
    classified dossier. Matte onyx fields, charcoal plates, bone
-   typography, burnished brass accents. Die-cut tabs survive.
+   typography, clearance purple accents. Die-cut tabs survive.
    Frosted header, tactile press states, stamp seals.
    ============================================================ */
 
@@ -15,9 +15,9 @@
   --line-strong: #3D3D42;
   --bone: #ECE7DE;
   --bone-soft: #A8A296;
-  --brass: #D4AF37;
-  --brass-deep: #B8942A;
-  --on-brass: #161616;
+  --violet: #8B5CF6;
+  --violet-deep: #7443E8;
+  --on-violet: #ECE7DE;
 
   --font-display: 'Fraunces Variable', 'Fraunces', 'Times New Roman', serif;
   --font-ui: 'Geist Variable', 'Geist', system-ui, sans-serif;
@@ -53,10 +53,10 @@ input, button, textarea { font: inherit; color: inherit; }
 a { color: inherit; }
 button { cursor: pointer; }
 
-::selection { background: var(--brass); color: var(--on-brass); }
+::selection { background: var(--violet); color: var(--on-violet); }
 
 :focus-visible {
-  outline: 2px solid var(--brass);
+  outline: 2px solid var(--violet);
   outline-offset: 3px;
 }
 
@@ -150,7 +150,7 @@ button { cursor: pointer; }
   transition: color 150ms ease;
 }
 .site-nav a:hover { color: var(--bone); }
-.site-nav a[aria-current='page'] { color: var(--brass); }
+.site-nav a[aria-current='page'] { color: var(--violet); }
 
 @media (max-width: 640px) {
   .site-nav { gap: 0.75rem; overflow-x: auto; }
@@ -188,11 +188,11 @@ button { cursor: pointer; }
 .btn:active { transform: translateY(1px) scale(0.99); }
 
 .btn--solid {
-  background: var(--brass);
-  border-color: var(--brass);
-  color: var(--on-brass);
+  background: var(--violet);
+  border-color: var(--violet);
+  color: var(--on-violet);
 }
-.btn--solid:hover { background: var(--brass-deep); border-color: var(--brass-deep); }
+.btn--solid:hover { background: var(--violet-deep); border-color: var(--violet-deep); }
 
 .nav-cta {
   padding: 0.5rem 0.9rem;
@@ -203,7 +203,7 @@ button { cursor: pointer; }
 }
 
 .link-arrow {
-  color: var(--brass);
+  color: var(--violet);
   text-decoration: none;
   font-weight: 650;
 }
@@ -256,23 +256,23 @@ button { cursor: pointer; }
 }
 
 .file--orchid {
-  background: var(--brass);
-  color: var(--on-brass);
-  border-top-color: var(--brass-deep);
+  background: var(--violet);
+  color: var(--on-violet);
+  border-top-color: var(--violet-deep);
 }
-.file--orchid .file-tab { color: var(--on-brass); border-color: var(--brass-deep); }
+.file--orchid .file-tab { color: var(--on-violet); border-color: var(--violet-deep); }
 .file--orchid .lede,
-.file--orchid .muted { color: color-mix(in srgb, var(--on-brass) 72%, var(--brass)); }
-.file--orchid .link-arrow { color: var(--on-brass); }
+.file--orchid .muted { color: color-mix(in srgb, var(--on-violet) 72%, var(--violet)); }
+.file--orchid .link-arrow { color: var(--on-violet); }
 .file--orchid .btn {
-  border-color: var(--on-brass);
-  color: var(--on-brass);
+  border-color: var(--on-violet);
+  color: var(--on-violet);
 }
-.file--orchid .btn:hover { background: color-mix(in srgb, var(--on-brass) 12%, var(--brass)); }
+.file--orchid .btn:hover { background: color-mix(in srgb, var(--on-violet) 12%, var(--violet)); }
 .file--orchid .btn--solid {
-  background: var(--on-brass);
-  border-color: var(--on-brass);
-  color: var(--brass);
+  background: var(--on-violet);
+  border-color: var(--on-violet);
+  color: var(--violet);
 }
 .file--orchid .btn--solid:hover { background: var(--onyx-2); }
 
@@ -286,7 +286,7 @@ button { cursor: pointer; }
   color: var(--bone-soft);
   margin-bottom: 1.1rem;
 }
-.file--orchid .file-kicker { color: color-mix(in srgb, var(--on-brass) 66%, var(--brass)); }
+.file--orchid .file-kicker { color: color-mix(in srgb, var(--on-violet) 66%, var(--violet)); }
 
 .chips {
   display: flex;
@@ -302,10 +302,10 @@ button { cursor: pointer; }
   display: grid;
   gap: 0.35rem 1.5rem;
   padding: 1.15rem 0;
-  border-top: 1px solid color-mix(in srgb, var(--on-brass) 30%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--on-violet) 30%, transparent);
   text-decoration: none;
 }
-.work-row:last-child { border-bottom: 1px solid color-mix(in srgb, var(--on-brass) 30%, transparent); }
+.work-row:last-child { border-bottom: 1px solid color-mix(in srgb, var(--on-violet) 30%, transparent); }
 .work-row strong { font-size: 1.05rem; }
 @media (min-width: 720px) {
   .work-row { grid-template-columns: 1fr auto; align-items: baseline; }
@@ -332,7 +332,7 @@ button { cursor: pointer; }
   filter: contrast(1.03) saturate(0.92);
 }
 .file--orchid .still img {
-  border-color: color-mix(in srgb, var(--on-brass) 30%, transparent);
+  border-color: color-mix(in srgb, var(--on-violet) 30%, transparent);
 }
 .still figcaption {
   margin-top: 0.55rem;
@@ -341,7 +341,7 @@ button { cursor: pointer; }
   max-width: 62ch;
 }
 .file--orchid .still figcaption {
-  color: color-mix(in srgb, var(--on-brass) 66%, var(--brass));
+  color: color-mix(in srgb, var(--on-violet) 66%, var(--violet));
 }
 
 .plate {
@@ -358,12 +358,12 @@ button { cursor: pointer; }
 .plate-cell:nth-child(2n) { border-right: 0; }
 .plate-cell:nth-last-child(-n+2) { border-bottom: 0; }
 .plate-cell p { margin-top: 0.35rem; font-size: 0.9375rem; color: var(--bone-soft); }
-.file--orchid .plate { border-color: color-mix(in srgb, var(--on-brass) 30%, transparent); background: color-mix(in srgb, var(--on-brass) 8%, var(--brass)); }
+.file--orchid .plate { border-color: color-mix(in srgb, var(--on-violet) 30%, transparent); background: color-mix(in srgb, var(--on-violet) 8%, var(--violet)); }
 .file--orchid .plate-cell {
-  border-color: color-mix(in srgb, var(--on-brass) 22%, transparent);
+  border-color: color-mix(in srgb, var(--on-violet) 22%, transparent);
 }
 .file--orchid .plate-cell p {
-  color: color-mix(in srgb, var(--on-brass) 74%, var(--brass));
+  color: color-mix(in srgb, var(--on-violet) 74%, var(--violet));
 }
 
 .rail {
@@ -430,16 +430,16 @@ button { cursor: pointer; }
 }
 .folder + .folder { margin-top: 1.25rem; }
 .folder:hover {
-  border-color: color-mix(in srgb, var(--brass) 55%, var(--line-strong));
+  border-color: color-mix(in srgb, var(--violet) 55%, var(--line-strong));
   transform: translateY(-2px);
   box-shadow: 0 14px 36px rgb(0 0 0 / 0.35);
 }
 .folder--orchid {
-  background: var(--brass);
-  border-color: var(--brass-deep);
-  color: var(--on-brass);
+  background: var(--violet);
+  border-color: var(--violet-deep);
+  color: var(--on-violet);
 }
-.folder--orchid .muted { color: color-mix(in srgb, var(--on-brass) 72%, var(--brass)); }
+.folder--orchid .muted { color: color-mix(in srgb, var(--on-violet) 72%, var(--violet)); }
 
 .tag {
   display: inline-block;
@@ -476,7 +476,7 @@ button { cursor: pointer; }
 }
 .field input:focus,
 .field textarea:focus {
-  outline: 2px solid var(--brass);
+  outline: 2px solid var(--violet);
   outline-offset: 2px;
 }
 
@@ -492,7 +492,7 @@ button { cursor: pointer; }
   letter-spacing: -0.04em;
   line-height: 0.8;
   font-size: clamp(3.6rem, 14vw, 10rem);
-  color: color-mix(in srgb, var(--brass) 26%, var(--onyx));
+  color: color-mix(in srgb, var(--violet) 26%, var(--onyx));
   user-select: none;
 }
 
@@ -511,7 +511,7 @@ button { cursor: pointer; }
 }
 .footer-cols ul { list-style: none; padding: 0; display: grid; gap: 0.4rem; }
 .footer-cols a { color: var(--bone-soft); text-decoration: none; }
-.footer-cols a:hover { color: var(--brass); }
+.footer-cols a:hover { color: var(--violet); }
 
 .footer-meta {
   display: flex;
@@ -533,11 +533,11 @@ button { cursor: pointer; }
 }
 .prose h3 { font-size: 1.2rem; margin-block: 2rem 0.7rem; }
 .prose p { margin-block: 1rem; color: var(--bone-soft); }
-.prose a { color: var(--brass); }
+.prose a { color: var(--violet); }
 .prose ul, .prose ol { margin-block: 1rem; padding-left: 1.3rem; color: var(--bone-soft); }
 .prose li { margin-block: 0.35rem; }
 .prose blockquote {
-  border-left: 2px solid var(--brass);
+  border-left: 2px solid var(--violet);
   padding-left: 1.25rem;
   margin-block: 1.5rem;
   font-family: var(--font-display);
@@ -574,7 +574,7 @@ button { cursor: pointer; }
   text-decoration: none;
   transition: background 150ms ease;
 }
-.post-row:hover { background: color-mix(in srgb, var(--brass) 5%, transparent); }
+.post-row:hover { background: color-mix(in srgb, var(--violet) 5%, transparent); }
 @media (min-width: 720px) {
   .post-row { grid-template-columns: 1fr auto; align-items: baseline; }
 }
@@ -584,8 +584,8 @@ button { cursor: pointer; }
   left: 1rem;
   top: -3rem;
   z-index: 100;
-  background: var(--brass);
-  color: var(--on-brass);
+  background: var(--violet);
+  color: var(--on-violet);
   padding: 0.6rem 1rem;
   font-weight: 600;
   text-decoration: none;
