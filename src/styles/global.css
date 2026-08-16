@@ -233,9 +233,15 @@ button { cursor: pointer; }
 .hero-board { display: flex; justify-content: flex-end; }
 
 @media (max-width: 860px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-board { justify-content: flex-start; margin-top: 1rem; }
-  .hero-board .board { max-width: 380px; }
+  .hero-grid { grid-template-columns: 1fr; align-items: end; }
+  .hero-board { order: 1; justify-content: flex-start; margin-bottom: 0.75rem; }
+  .hero-copy { order: 2; }
+  .hero-board .board { max-width: 230px; aspect-ratio: 13 / 12; }
+  .hero-board .evidence { padding: 1.1rem 0.9rem 0.9rem; }
+  .hero-board .evidence-sketch { width: 62px; height: 62px; }
+  .hero-board .evidence--found { min-width: 150px; padding: 1.4rem 1.2rem 1rem; }
+  .hero-board .stamp { font-size: 1.2rem; }
+  .hero-board .board-thread { display: none; }
 }
 
 /* ---------- Rising files (sticky dossier stack) ---------- */
