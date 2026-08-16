@@ -1,0 +1,188 @@
+---
+/* Evidence board — tilted exhibit cards pinned and joined by thread.
+   The dossier collects what it finds: a flower, a web, a FOUND stamp. */
+---
+
+<div class="board" aria-hidden="true">
+  <!-- Thread connecting the pins -->
+  <svg class="board-thread" viewBox="0 0 520 560" fill="none">
+    <path d="M 130 95 Q 260 60, 385 130" />
+    <path d="M 385 130 Q 330 260, 265 340" />
+    <path d="M 130 95 Q 160 220, 265 340" />
+  </svg>
+
+  <!-- Exhibit A: pressed flower -->
+  <div class="evidence evidence--a">
+    <span class="pin"></span>
+    <p class="evidence-tag">Exhibit A</p>
+    <svg class="evidence-sketch" viewBox="0 0 80 80" fill="none">
+      <!-- stem -->
+      <path d="M 40 72 Q 38 50, 40 34" />
+      <!-- leaves -->
+      <path d="M 39 56 Q 28 50, 26 42 Q 36 46, 39 52" />
+      <path d="M 41 48 Q 52 44, 56 36 Q 46 38, 41 44" />
+      <!-- petals -->
+      <ellipse cx="40" cy="22" rx="5" ry="9" transform="rotate(0 40 22)" />
+      <ellipse cx="40" cy="22" rx="5" ry="9" transform="rotate(72 40 22)" />
+      <ellipse cx="40" cy="22" rx="5" ry="9" transform="rotate(144 40 22)" />
+      <ellipse cx="40" cy="22" rx="5" ry="9" transform="rotate(216 40 22)" />
+      <ellipse cx="40" cy="22" rx="5" ry="9" transform="rotate(288 40 22)" />
+      <circle cx="40" cy="22" r="3.5" />
+    </svg>
+  </div>
+
+  <!-- Exhibit B: web fragment -->
+  <div class="evidence evidence--b">
+    <span class="pin"></span>
+    <p class="evidence-tag">Exhibit B</p>
+    <svg class="evidence-sketch" viewBox="0 0 80 80" fill="none">
+      <!-- corner web -->
+      <line x1="74" y1="6" x2="20" y2="70" />
+      <line x1="74" y1="6" x2="6" y2="52" />
+      <line x1="74" y1="6" x2="6" y2="24" />
+      <path d="M 56 27 Q 48 30, 42 26" />
+      <path d="M 44 42 Q 33 44, 26 38" />
+      <path d="M 33 56 Q 20 57, 12 49" />
+      <!-- tiny spider -->
+      <circle cx="38" cy="50" r="3" />
+      <circle cx="38" cy="44" r="2" />
+      <path d="M 35 48 L 30 45 M 35 51 L 29 52 M 41 48 L 46 45 M 41 51 L 47 52" />
+    </svg>
+  </div>
+
+  <!-- Found card -->
+  <div class="evidence evidence--found">
+    <span class="pin"></span>
+    <p class="evidence-status">Case 001</p>
+    <p class="stamp">FOUND</p>
+    <p class="evidence-note">Recovered in plain sight.</p>
+  </div>
+</div>
+
+<style>
+  .board {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 13 / 14;
+  }
+
+  .board-thread {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  .board-thread path {
+    stroke: color-mix(in srgb, var(--violet) 38%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: none;
+  }
+
+  .evidence {
+    position: absolute;
+    background: var(--onyx-2);
+    border: 1px solid var(--line-strong);
+    padding: 1.6rem 1.2rem 1.2rem;
+    box-shadow: 0 10px 32px rgb(0 0 0 / 0.4);
+    transition: transform 300ms ease, box-shadow 300ms ease;
+  }
+  .evidence:hover {
+    box-shadow: 0 16px 44px rgb(0 0 0 / 0.5);
+  }
+
+  .pin {
+    position: absolute;
+    top: 0.55rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--violet);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.6);
+  }
+
+  .evidence-tag {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    margin-bottom: 0.75rem;
+  }
+
+  .evidence-sketch {
+    display: block;
+    width: 80px;
+    height: 80px;
+  }
+  .evidence-sketch line,
+  .evidence-sketch path,
+  .evidence-sketch ellipse,
+  .evidence-sketch circle {
+    stroke: color-mix(in srgb, var(--violet) 62%, var(--bone));
+    stroke-width: 1.4;
+    fill: none;
+  }
+  .evidence-sketch circle:last-child { fill: color-mix(in srgb, var(--violet) 62%, var(--bone)); }
+
+  .evidence--a {
+    top: 4%;
+    left: 4%;
+    transform: rotate(-4deg);
+    z-index: 1;
+  }
+  .evidence--a:hover { transform: rotate(-2deg) translateY(-3px); }
+
+  .evidence--b {
+    top: 12%;
+    right: 2%;
+    transform: rotate(3deg);
+    z-index: 2;
+  }
+  .evidence--b:hover { transform: rotate(1.5deg) translateY(-3px); }
+
+  .evidence--found {
+    bottom: 16%;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1.5deg);
+    z-index: 3;
+    text-align: center;
+    padding: 2rem 2.2rem 1.4rem;
+    min-width: 200px;
+  }
+  .evidence--found:hover { transform: translateX(-50%) rotate(-0.5deg) translateY(-4px); }
+
+  .evidence-status {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    margin-bottom: 0.9rem;
+  }
+
+  .stamp {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-weight: 800;
+    font-size: 1.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--violet);
+    border: 2.5px solid var(--violet);
+    border-radius: 4px;
+    padding: 0.35em 0.6em;
+    transform: rotate(-6deg);
+    opacity: 0.92;
+  }
+
+  .evidence-note {
+    margin-top: 0.9rem;
+    font-size: 0.75rem;
+    color: var(--bone-soft);
+    font-style: italic;
+  }
+</style>

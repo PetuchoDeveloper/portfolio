@@ -220,6 +220,24 @@ button { cursor: pointer; }
 
 .hero .display { max-width: 11ch; }
 
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  width: 100%;
+}
+
+.hero-copy .file-kicker { margin-bottom: 1.2rem; }
+
+.hero-board { display: flex; justify-content: flex-end; }
+
+@media (max-width: 860px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-board { justify-content: flex-start; margin-top: 1rem; }
+  .hero-board .board { max-width: 380px; }
+}
+
 /* ---------- Rising files (sticky dossier stack) ---------- */
 .file-stack {
   position: relative;
