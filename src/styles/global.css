@@ -235,6 +235,7 @@ button { cursor: pointer; }
 .hero-board { display: flex; justify-content: flex-end; }
 
 @media (max-width: 860px) {
+  .hero { padding-bottom: calc(var(--tab-h) + 3.5rem); }
   .hero-grid { grid-template-columns: 1fr; align-items: end; }
   .hero-board { order: 1; justify-content: flex-start; margin-bottom: 0.75rem; }
   .hero-copy { order: 2; }
