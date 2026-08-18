@@ -5,11 +5,12 @@ interface Props {
   width: number;
   height: number;
   caption?: string;
+  product?: boolean;
 }
-const { src, alt, width, height, caption } = Astro.props;
+const { src, alt, width, height, caption, product = false } = Astro.props;
 ---
 
-<figure class="still">
+<figure class:list={['still', product && 'still--product']}>
   <img src={src} alt={alt} width={width} height={height} decoding="async" />
   {caption && <figcaption>{caption}</figcaption>}
 </figure>

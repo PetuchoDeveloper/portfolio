@@ -1,18 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Still from '../../components/Still.astro';
+import { site } from '../../data/site';
 ---
 
 <BaseLayout
   title="Work"
-  description="Selected projects: institutional platforms, streaming infrastructure, and marketplace tooling — built with automated testing and security review as standard."
+  description="Selected work in institutional software, video infrastructure, marketplace operations, and workflow verification."
 >
   <section class="page-hero">
     <div class="wrap">
       <h1 class="display">Selected files.</h1>
       <p class="lede" style="margin-top:1.5rem">
-        SED is written up. The others are in progress — I will not invent
-        a case study to fill a folder.
+        The SED case study is ready. I am still writing the other three, so I
+        have kept their descriptions short and factual.
       </p>
       <div style="margin-top:2rem; max-width:42rem">
         <Still
@@ -36,15 +37,18 @@ import Still from '../../components/Still.astro';
           Opaque credentials, immutable submissions, 2,500+ automated tests,
           full CI/CD to AWS.
         </p>
-        <p style="margin-top:1.25rem">Read →</p>
+        <p style="margin-top:1.25rem">Read the case →</p>
       </a>
+      <p>
+        <a class="link-arrow" href={site.sedLiveUrl} target="_blank" rel="noreferrer">Open the live system →</a>
+      </p>
 
       <article class="folder">
         <p class="tab-label">Case study in progress</p>
         <h2 class="h2" style="margin-top:0.8rem; font-size:clamp(1.6rem,3vw,2.4rem)">Video streaming stack</h2>
         <p class="muted" style="margin-top:0.85rem; max-width:60ch">
           Django backend, React frontend, and a Rust video-transcoding worker
-          with hardened cloud deployment. Write-up coming soon.
+          deployed in the cloud. Write-up coming soon.
         </p>
       </article>
 
@@ -52,9 +56,9 @@ import Still from '../../components/Still.astro';
         <p class="tab-label">Case study in progress</p>
         <h2 class="h2" style="margin-top:0.8rem; font-size:clamp(1.6rem,3vw,2.4rem)">Marketplace operations platform</h2>
         <p class="muted" style="margin-top:0.85rem; max-width:60ch">
-          Control-plane tooling for sellers expanding across Latin American
-          marketplaces. Spanish-first product design with demand validation
-          before a line of production code.
+          Operations software for sellers working across Latin American
+          marketplaces. The product is Spanish-first, and demand is tested
+          before production development begins.
         </p>
       </article>
 
@@ -62,15 +66,15 @@ import Still from '../../components/Still.astro';
         <p class="tab-label">Case study in progress</p>
         <h2 class="h2" style="margin-top:0.8rem; font-size:clamp(1.6rem,3vw,2.4rem)">Automation verification gate</h2>
         <p class="muted" style="margin-top:0.85rem; max-width:60ch">
-          An independent verification layer for workflow automations:
-          deterministic outcome contracts that stop silent false-positive
-          executions before they touch real data.
+          A separate verification step for automated workflows. It checks the
+          recorded outcome before the workflow can report success or change
+          real data.
         </p>
       </article>
 
       <p class="muted" style="font-size:0.875rem">
-        Client work is under NDA-friendly review before publishing. Ask me
-        about it directly — I'm happy to walk through details on a call.
+        I am reviewing what I can publish without exposing private client
+        details. I can discuss the technical work on a call.
       </p>
     </div>
   </section>

@@ -1,6 +1,12 @@
 ---
 /* Evidence board — tilted exhibit cards pinned and joined by thread.
    The dossier collects what it finds: a flower, a web, a FOUND stamp. */
+import type { Locale } from '../i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const copy = locale === 'es'
+  ? { exhibitA: 'Evidencia A', exhibitB: 'Evidencia B', case: 'Caso 001', found: 'ENCONTRADO', note: 'Visible donde buscan sus clientes.' }
+  : { exhibitA: 'Exhibit A', exhibitB: 'Exhibit B', case: 'Case 001', found: 'FOUND', note: 'Visible where customers look.' };
 ---
 
 <div class="board" aria-hidden="true">
@@ -14,7 +20,7 @@
   <!-- Exhibit A: pressed flower -->
   <div class="evidence evidence--a">
     <span class="pin"></span>
-    <p class="evidence-tag">Exhibit A</p>
+    <p class="evidence-tag">{copy.exhibitA}</p>
     <svg class="evidence-sketch" viewBox="0 0 80 80" fill="none">
       <!-- stem -->
       <path d="M 40 72 Q 37 53 40 34" />
@@ -34,7 +40,7 @@
   <!-- Exhibit B: web fragment -->
   <div class="evidence evidence--b">
     <span class="pin"></span>
-    <p class="evidence-tag">Exhibit B</p>
+    <p class="evidence-tag">{copy.exhibitB}</p>
     <svg class="evidence-sketch" viewBox="0 0 80 80" fill="none">
       <!-- corner web -->
       <line x1="74" y1="6" x2="63.06" y2="68.04" />
@@ -63,9 +69,9 @@
   <!-- Found card -->
   <div class="evidence evidence--found">
     <span class="pin"></span>
-    <p class="evidence-status">Case 001</p>
-    <p class="stamp">FOUND</p>
-    <p class="evidence-note">Recovered in plain sight.</p>
+    <p class="evidence-status">{copy.case}</p>
+    <p class="stamp">{copy.found}</p>
+    <p class="evidence-note">{copy.note}</p>
   </div>
 </div>
 
@@ -194,5 +200,54 @@
     font-size: 0.75rem;
     color: var(--bone-soft);
     font-style: italic;
+  }
+
+  @media (max-width: 860px) {
+    .board {
+      width: 90vw;
+      height: min(44vw, 22vh);
+      max-width: none;
+      aspect-ratio: auto;
+    }
+    .evidence {
+      padding: 6vw 3vw 3vw;
+    }
+    .evidence-sketch {
+      width: 14vw;
+      height: 14vw;
+    }
+    .evidence--a {
+      top: 0;
+      left: 0;
+    }
+    .evidence--b {
+      top: 4%;
+      right: 0;
+    }
+    .evidence--found {
+      bottom: 0;
+      min-width: 38vw;
+      padding: 6vw 3vw 3vw;
+    }
+    .stamp { font-size: 4.4vw; }
+  }
+
+  @media (min-width: 641px) and (max-width: 860px) {
+    .board {
+      width: min(72vw, 54vh);
+      height: min(28vw, 28vh);
+    }
+    .evidence {
+      padding: 1.3rem 1rem 1rem;
+    }
+    .evidence-sketch {
+      width: 70px;
+      height: 70px;
+    }
+    .evidence--found {
+      min-width: 180px;
+      padding: 1.7rem 1.5rem 1.1rem;
+    }
+    .stamp { font-size: 1.35rem; }
   }
 </style>

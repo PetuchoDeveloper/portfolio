@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Still from '../../../components/Still.astro';
+import AnonPlate from '../../../components/AnonPlate.astro';
+import { site } from '../../../data/site';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'SED — Sistema de Evaluación Docente',
+  applicationCategory: 'EducationalApplication',
+  description:
+    'Plataforma anónima de evaluación docente para una universidad pública en México: credenciales opacas para quien responde, respuestas inmutables, Django + React y 2,500+ pruebas automatizadas.',
+  operatingSystem: 'Web',
+  url: site.sedLiveUrl,
+};
+---
+
+<BaseLayout
+  title="SED — Sistema de Evaluación Docente"
+  description="Cómo construí una plataforma anónima de evaluación docente, a prueba de alteraciones, para una universidad pública mexicana: Django, React 19, credenciales opacas y 2,500+ pruebas automatizadas."
+  path="/es/work/sed/"
+  jsonLd={jsonLd}
+  locale="es"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="file-kicker">Caso de estudio · Plataforma institucional</p>
+      <h1 class="display" style="max-width:18ch">Evaluaciones docentes, anónimas.</h1>
+      <p class="lede" style="margin-top:1.5rem">
+        SED es el sistema de evaluación de una universidad pública en México:
+        estudiantes, docentes y personal evalúan el desempeño docente cada periodo,
+        sin guardar un vínculo entre una respuesta y la identidad de una persona.
+      </p>
+      <p class="chips" style="color:var(--ink-soft)">
+        <span>Django + DRF</span><span>React 19</span><span>PostgreSQL</span>
+        <span>Redis + Celery</span><span>Docker / AWS</span>
+      </p>
+      <p style="margin-top:1.5rem">
+        <a class="btn btn--solid" href={site.sedLiveUrl} target="_blank" rel="noreferrer">
+          Abrir el sistema en operación
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(2rem,4vw,3rem)">
+    <div class="wrap">
+      <Still
+        product
+        src="/images/sed/landing.webp"
+        alt="Página de inicio de SED en operación, con dos entradas: evaluar docentes o abrir el panel administrativo."
+        width={1400}
+        height={953}
+        caption="Inicio del sistema en el despliegue actual. Dos audiencias, una plataforma."
+      />
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(2rem,4vw,3rem)">
+    <div class="wrap media-split" style="margin-top:0">
+      <Still
+        product
+        src="/images/sed/eval.webp"
+        alt="Pantalla para quien responde: ingresa un código institucional para iniciar una evaluación anónima."
+        width={1400}
+        height={875}
+        caption="Entrada de quien responde. Un código opaco. Sin cuenta."
+      />
+      <div>
+        <p class="file-kicker">Por construcción</p>
+        <h2 class="h2" style="margin-top:0.4rem">Cómo se construye el anonimato</h2>
+        <p class="muted" style="margin:0.9rem 0 1.25rem; max-width:46ch">
+          Quien responde nunca crea una cuenta. El registro que queda no se puede editar.
+        </p>
+        <AnonPlate locale="es" />
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(3rem,6vw,4rem)">
+    <div class="wrap prose">
+      <h2>El problema</h2>
+      <p>
+        El sistema de evaluación anterior de la universidad era una plataforma heredada con un problema de confianza de fondo: quienes respondían no podían estar seguros de que sus respuestas fueran anónimas, y eso afectaba la participación y la honestidad. El sistema nuevo tenía que garantizar el anonimato por construcción, soportar el tráfico real de fin de periodo y producir reportes que la administración pudiera auditar.
+      </p>
+
+      <h2>Qué construí</h2>
+      <p>
+        Una plataforma full-stack con dos lados separados: una consola de administración para catálogos, asignaciones docentes, instrumentos de encuesta, credenciales y analítica, y un flujo para quien responde que funciona con una sola credencial opaca y no deja rastro identificable.
+      </p>
+    </div>
+    <div class="wrap media-split" style="margin-top:2rem">
+      <Still
+        product
+        src="/images/sed/dashboard.webp"
+        alt="Panel del coordinador con métricas del periodo, promedios por categoría y resultados por academia."
+        width={1400}
+        height={784}
+        caption="Panel del coordinador. Datos de un periodo de prueba en una captura local."
+      />
+      <Still
+        product
+        src="/images/sed/instruments.webp"
+        alt="Pantalla de instrumentos de evaluación con un paquete 360 y acciones para crear instrumentos."
+        width={1400}
+        height={784}
+        caption="Instrumentos y paquetes 360. Las etiquetas de prueba se dejaron visibles."
+      />
+    </div>
+    <div class="wrap prose">
+      <ul>
+        <li><strong>Sistema de credenciales opacas:</strong> quien responde canjea un token emitido por el servidor por una sesión anónima. Sin nombre, sin cuenta, sin forma de vincular una respuesta con una persona.</li>
+        <li><strong>Respuestas inmutables:</strong> una vez enviada, una evaluación no se puede editar ni borrar. El conjunto de datos sobre el que reporta la institución es el mismo que se recolectó.</li>
+        <li><strong>Motor de encuestas:</strong> instrumentos configurables con preguntas matriciales, escalas Likert, texto abierto y preguntas de clasificación teórica/práctica. Cada instrumento sigue un ciclo de vida estricto: borrador → publicado → cerrado, con eliminación lógica en lugar de un borrado definitivo.</li>
+        <li><strong>Analítica y reportes:</strong> reportes por profesor y por unidad para la toma de decisiones institucionales.</li>
+      </ul>
+
+      <h2>Estándares de ingeniería</h2>
+      <p>El proyecto tiene revisiones en cada etapa de desarrollo y de publicación:</p>
+      <ul>
+        <li><strong>1,750+ pruebas de backend</strong> y <strong>830+ pruebas de frontend</strong>, que corren en CI con cada cambio.</li>
+        <li><strong>Presupuestos estrictos de bundle:</strong> cada chunk de JavaScript se mide y se limita para dispositivos más lentos y para el Wi-Fi del campus.</li>
+        <li><strong>Revisión de seguridad continua:</strong> los límites de autenticación, las sesiones y el almacenamiento de datos se revisan durante todo el desarrollo. A los hallazgos se les da seguimiento hasta resolverlos.</li>
+        <li><strong>Observabilidad desde el inicio:</strong> health checks, trazas de solicitudes y métricas conectadas al monitoreo desde el primer día.</li>
+        <li><strong>Despliegue reproducible:</strong> imágenes Docker construidas en CI, promovidas entre ambientes y publicadas en AWS con un pipeline auditado.</li>
+      </ul>
+
+      <blockquote>
+        Recoger evaluaciones no era el requisito. El requisito era demostrarle a miles de estudiantes que su voz está a salvo.
+      </blockquote>
+
+      <h2>Resultado</h2>
+      <p>
+        La institución puede usar la plataforma en cada periodo de evaluación. El flujo de quien responde no recolecta la identidad de una persona, las evaluaciones enviadas no se pueden cambiar y las pruebas automatizadas protegen los flujos principales. La documentación de arquitectura le da a un ingeniero nuevo un punto de partida, sin depender de una entrega oral.
+      </p>
+      <p>
+        El despliegue actual está en
+        <a class="link-arrow" href={site.sedLiveUrl} target="_blank" rel="noreferrer">{site.sedLiveUrl.replace('https://', '')}</a>.
+        El acceso de administración y de evaluación requiere credenciales institucionales.
+      </p>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(4rem,8vw,6rem)">
+    <div class="wrap">
+      <div class="folder folder--orchid">
+        <h2 class="h2">¿Construyes software que maneja datos sensibles?</h2>
+        <p class="muted" style="margin-top:1rem">Cuéntame qué debe proteger el sistema y cómo lo van a usar las personas.</p>
+        <a class="btn btn--solid" style="margin-top:1.75rem" href="/es/contact/">Cuéntame tu proyecto</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

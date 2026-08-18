@@ -1,17 +1,18 @@
 ---
 import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const posts = (await getCollection('blog')).filter((post) => post.data.lang === 'en');
+  const posts = (await getCollection('blog')).filter((post) => post.data.lang === 'es');
   return posts.map((post) => ({
-    params: { slug: post.id },
+    params: { slug: post.id.split('/').at(-1) },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const slug = post.id.split('/').at(-1);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -26,17 +27,18 @@ const jsonLd = {
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
-  path={`/blog/${post.id}/`}
+  path={`/es/blog/${slug}/`}
   ogType="article"
   jsonLd={jsonLd}
-  alternateEsPath="/es/blog/cinco-razones-tecnicas/"
+  locale="es"
+  alternateEnPath="/blog/why-small-business-websites-dont-rank/"
 >
   <article class="page-hero">
     <div class="wrap">
       <header style="max-width:68ch">
         <p class="file-kicker">
           <time datetime={post.data.pubDate.toISOString()}>
-            {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            {post.data.pubDate.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' })}
           </time>
           {post.data.tags.length > 0 && <> · {post.data.tags.join(' · ')}</>}
         </p>
@@ -49,7 +51,7 @@ const jsonLd = {
         <Content />
       </div>
       <p style="margin-top:3rem">
-        <a class="link-arrow" href="/blog/">← All notes</a>
+        <a class="link-arrow" href="/es/blog/">← Todas las notas</a>
       </p>
     </div>
   </article>

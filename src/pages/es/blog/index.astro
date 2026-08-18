@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).filter((post) => post.data.lang === 'es').sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout
+  title="Notas"
+  description="Notas sobre desarrollo web, SEO técnico, rendimiento y lo que se aprende en proyectos en producción."
+  locale="es"
+  path="/es/blog/"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="display">Notas del trabajo.</h1>
+      <p class="lede" style="margin-top:1.5rem">
+        Lo que aprendo al trabajar en rendimiento, SEO técnico y software en producción.
+      </p>
+
+      <div class="post-list" style="margin-top:3rem">
+        {posts.map((post) => {
+          const slug = post.id.split('/').at(-1);
+          return (
+            <a class="post-row" href={`/es/blog/${slug}/`}>
+              <div>
+                <h2 class="h3" style="font-size:1.375rem">{post.data.title}</h2>
+                <p class="muted" style="margin-top:0.35rem; font-size:0.9375rem">{post.data.description}</p>
+              </div>
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' })}
+              </time>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,69 +1,66 @@
 ---
-title: "Why small-business websites don't rank (and what actually fixes it)"
-description: "Most small-business sites don't fail because of design. They fail because search engines can't read them. Here's the checklist I run on every site I build."
+title: "Five technical reasons a small-business website may not rank"
+description: "A practical check for crawlable text, metadata, page speed, focused service pages, and site ownership."
 pubDate: 2026-08-14
 tags: [SEO, small-business]
 ---
 
-Most small-business websites don't fail because they look bad. They fail
-because no one can find them — and the reasons are almost always technical,
-not creative.
+Some small-business websites look fine but give search engines very little to
+work with. The problem is often technical rather than visual.
 
-After building and auditing business sites, the same five problems show up
-over and over.
+These are the five checks I start with.
 
 ## 1. The site is built from images
 
-A phone number that's part of an image is invisible to Google. A menu that's
-a photograph of a menu is invisible to Google. Search engines read text,
-links, and structured data — not pixels.
+A phone number inside an image is not useful as a phone link, and a photo of a
+menu is harder for search engines and screen readers to understand. Important
+information should be text in the page's HTML.
 
-The fix is unglamorous: real text in the HTML, real headings, real links.
+The fix is ordinary: real text in the HTML, useful headings, and working links.
 Images should *illustrate* the content, not *be* the content.
 
 ## 2. There's no structure for search engines to trust
 
-Modern SEO runs on boring, invisible files: a sitemap, a robots file,
+Technical SEO includes a few mostly invisible parts: a sitemap, a robots file,
 canonical URLs, and structured data that says "this is a local business,
 here is its address, here is what it does."
 
-None of it is hard. All of it compounds. A site with clean metadata gets
-crawled faster, understood better, and shown more often in local results.
+These files do not guarantee a ranking. They make the site easier to crawl and
+reduce ambiguity about the business and its pages.
 
 ## 3. Pages take five seconds to load on a phone
 
-Google measures what your customers feel. A heavy template, unoptimized
-photos, and three tracking scripts turn a fast idea into a slow page — and
-slow pages get abandoned before they rank.
+A heavy template, oversized photos, and several tracking scripts can make a
+page slow on a phone. Visitors may leave before it becomes usable, and poor
+page experience can also hurt search performance.
 
-The fix is usually subtraction: fewer scripts, properly sized images, and
-static-first hosting. The sites I ship target under one second, and that's
-not vanity — it's the difference between a bounce and a customer.
+The first fixes are usually fewer scripts, properly sized images, and simple
+hosting. I set a performance budget for each site and test it on mobile-sized
+screens before launch.
 
 ## 4. Every page tries to rank for everything
 
-A page that talks about "quality, service, and excellence" ranks for
-nothing. A page titled "Bakery in Guadalajara — custom cakes and daily
-bread" has a chance. Search engines reward specificity, and so do humans.
+A page that only promises "quality, service, and excellence" says little about
+the business. A title such as "Bakery in Guadalajara: custom cakes and daily
+bread" names the service and the location.
 
 Good SEO copywriting is just honest specificity: name the service, name the
 place, say it plainly.
 
 ## 5. Nobody owns the site
 
-This is the quiet one. Templates from site builders often mean you can't
-export your content, can't change your hosting, and can't add the technical
-pieces above. You're renting a website, and the landlord won't let you
-renovate.
+This one is easy to miss. Some site builders do not let you export your
+content, change your hosting, or add the technical pieces above. That limits
+what you can fix later and makes changing providers harder.
 
 If you're paying for a website, you should own the domain, the code, and the
 hosting. Insist on it before you sign anything.
 
 ## The short version
 
-Ranking isn't magic; it's legibility. Make your business *legible* to the
-machines — real text, real structure, real speed, real ownership — and the
-traffic follows.
+Search rankings depend on more than a technical checklist. But search engines
+still need crawlable text, clear page structure, useful metadata, and a site
+that works well on a phone. Fix those basics before chasing tricks.
 
-If you'd like someone to run this checklist on your business, that's
-literally the first thing I do in every website project.
+I run this check at the start of every website project. If you want me to look
+at yours, send me the URL and tell me which customers you want to reach.

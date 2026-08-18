@@ -1,28 +1,82 @@
 ---
-import { nav, site } from '../data/site';
+import { site } from '../data/site';
+import { localeMeta, localizedNav, localizedPath, type Locale } from '../i18n';
 
+interface Props { locale?: Locale; languageSwitchPath?: string; }
+const { locale = 'en', languageSwitchPath } = Astro.props;
+const copy = localeMeta[locale];
+const nav = localizedNav[locale];
 const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const otherLocale: Locale = locale === 'en' ? 'es' : 'en';
+const languageHref = languageSwitchPath ?? localizedPath(Astro.url.pathname, otherLocale);
+const contactHref = localizedPath('/contact/', locale);
 ---
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/" aria-label={`${site.name} — home`}>
+    <a class="brand" href={localizedPath('/', locale)} aria-label={`${site.name} — ${copy.homeAria}`}>
       {site.name}
     </a>
-    <nav class="site-nav" aria-label="Main">
+    <nav class="site-nav" aria-label={copy.mainNav}>
       {nav.map((item) => {
         const href = item.href.replace(/\/$/, '') || '/';
         const active = current === href || current.startsWith(href + '/');
-        return (
-          <a href={item.href} aria-current={active ? 'page' : undefined}>
-            {item.label}
-          </a>
-        );
+        return <a href={item.href} aria-current={active ? 'page' : undefined}>{item.label}</a>;
       })}
     </nav>
-    <a class="btn btn--solid nav-cta" href="/contact/">
-      <span class="cta-full">Start a project</span>
-      <span class="cta-short">Start</span>
-    </a>
+    <div class="site-tools">
+      <button
+        class="tool-button theme-toggle"
+        type="button"
+        aria-label={copy.themeAria}
+        data-light-label={copy.themeLight}
+        data-dark-label={copy.themeDark}
+      >
+        <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.5"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+        <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 15.4A8.5 8.5 0 0 1 8.6 4a8.5 8.5 0 1 0 11.4 11.4Z"></path>
+        </svg>
+      </button>
+      <a
+        class="tool-button language-toggle"
+        href={languageHref}
+        aria-label={copy.switchAria}
+        data-locale-choice={otherLocale}
+      >{copy.switchLabel}</a>
+      <a class="btn btn--solid nav-cta" href={contactHref}>
+        <span class="cta-full">{copy.startProject}</span>
+        <span class="cta-short">{copy.startShort}</span>
+      </a>
+    </div>
   </div>
 </header>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const button = document.querySelector('.theme-toggle');
+    const update = () => {
+      if (!(button instanceof HTMLButtonElement)) return;
+      const isDark = root.dataset.theme === 'dark';
+      button.setAttribute('aria-label', isDark ? button.dataset.lightLabel : button.dataset.darkLabel);
+      button.setAttribute('aria-pressed', String(!isDark));
+    };
+    button?.addEventListener('click', () => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      root.style.colorScheme = next;
+      try { localStorage.setItem('theme', next); } catch {}
+      update();
+    });
+    document.querySelector('.language-toggle')?.addEventListener('click', (event) => {
+      const target = event.currentTarget;
+      if (target instanceof HTMLElement && target.dataset.localeChoice) {
+        try { localStorage.setItem('locale', target.dataset.localeChoice); } catch {}
+      }
+    });
+    update();
+  })();
+</script>

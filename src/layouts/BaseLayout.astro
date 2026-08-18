@@ -5,6 +5,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
+import { localeMeta, localizedPath, type Locale } from '../i18n';
 
 interface Props {
   title: string;
@@ -12,6 +13,9 @@ interface Props {
   jsonLd?: object | object[];
   ogType?: string;
   path?: string;
+  locale?: Locale;
+  alternateEnPath?: string;
+  alternateEsPath?: string;
 }
 
 const {
@@ -20,12 +24,23 @@ const {
   jsonLd,
   ogType = 'website',
   path,
+  locale = 'en',
+  alternateEnPath,
+  alternateEsPath,
 } = Astro.props;
 
-const canonical = new URL(path ?? Astro.url.pathname, site.url);
+const copy = localeMeta[locale];
+const canonicalPath = path ?? Astro.url.pathname;
+const canonical = new URL(canonicalPath, site.url);
+const englishPath = alternateEnPath ?? localizedPath(canonicalPath, 'en');
+const spanishPath = alternateEsPath ?? localizedPath(canonicalPath, 'es');
+const englishUrl = new URL(englishPath, site.url);
+const spanishUrl = new URL(spanishPath, site.url);
 const fullTitle = title.includes(site.name) ? title : `${title} — ${site.name}`;
 const ogImage = new URL('/og.jpg', site.url);
-const ogImageAlt = `${site.name} — ${site.tagline}`;
+const ogImageAlt = locale === 'es'
+  ? `${site.name} — Sitios web que la gente puede encontrar. Software hecho para durar.`
+  : `${site.name} — ${site.tagline}`;
 
 const ldArray = jsonLd
   ? Array.isArray(jsonLd)
@@ -35,14 +50,40 @@ const ldArray = jsonLd
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={copy.htmlLang} data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <script is:inline>
+      (() => {
+        let theme;
+        try { theme = localStorage.getItem('theme'); } catch {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+    {Astro.url.pathname === '/' && (
+      <script is:inline>
+        (() => {
+          let choice;
+          try { choice = localStorage.getItem('locale'); } catch {}
+          const wantsSpanish = navigator.languages?.some((language) => language.toLowerCase().startsWith('es'))
+            ?? navigator.language.toLowerCase().startsWith('es');
+          if (choice === 'es' || (!choice && wantsSpanish)) location.replace('/es/');
+        })();
+      </script>
+    )}
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={englishUrl} />
+    <link rel="alternate" hreflang="es-MX" href={spanishUrl} />
+    <link rel="alternate" hreflang="x-default" href={englishUrl} />
     <meta name="generator" content={Astro.generator} />
 
     <meta property="og:site_name" content={site.name} />
@@ -54,7 +95,8 @@ const ldArray = jsonLd
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogImageAlt} />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={copy.ogLocale} />
+    <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_MX'} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
@@ -69,7 +111,7 @@ const ldArray = jsonLd
       alternateName: site.handle,
       url: site.url,
       email: `mailto:${site.email}`,
-      jobTitle: 'Full-Stack Developer',
+      jobTitle: locale === 'es' ? 'Desarrollador full-stack' : 'Full-Stack Developer',
       address: {
         '@type': 'PostalAddress',
         addressCountry: 'MX',
@@ -100,11 +142,11 @@ const ldArray = jsonLd
       FIRST VIEWPORT: Sticky frosted header. Huge left-stacked offer. Dark field. One violet tab at the bottom: WORK / 04 FILES. Primary action is Start a project in the header.
       FORM: Expediente (grounded 4), staging offer-then-rising-files, seed 8c2f6b41.
     -->
-    <a class="skip-link" href="#main">Skip to content</a>
-    <Header />
+    <a class="skip-link" href="#main">{copy.skip}</a>
+    <Header locale={locale} languageSwitchPath={locale === 'es' ? englishPath : spanishPath} />
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer locale={locale} />
   </body>
 </html>

@@ -1,13 +1,23 @@
 ---
-const cells = [
-  { k: 'Hours', d: 'When you are open.' },
-  { k: 'Map', d: 'Where to find you.' },
-  { k: 'Contact', d: 'How to reach you.' },
-  { k: 'Search', d: 'How Google reads you.' },
-];
+import type { Locale } from '../i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const cells = locale === 'es'
+  ? [
+      { k: 'Horario', d: 'Cuándo está abierto.' },
+      { k: 'Mapa', d: 'Dónde encontrarlo.' },
+      { k: 'Contacto', d: 'Cómo comunicarse.' },
+      { k: 'Búsqueda', d: 'Cómo lo interpreta Google.' },
+    ]
+  : [
+      { k: 'Hours', d: 'When you are open.' },
+      { k: 'Map', d: 'Where to find you.' },
+      { k: 'Contact', d: 'How to reach you.' },
+      { k: 'Search', d: 'How Google reads you.' },
+    ];
 ---
 
-<div class="plate" aria-label="What a found website includes">
+<div class="plate" aria-label={locale === 'es' ? 'Qué incluye un sitio web fácil de encontrar' : 'What a found website includes'}>
   {cells.map((c) => (
     <div class="plate-cell">
       <p class="tab-label">{c.k}</p>

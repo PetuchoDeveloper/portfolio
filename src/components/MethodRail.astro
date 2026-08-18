@@ -1,13 +1,23 @@
 ---
-const steps = [
-  { k: 'Scope', d: 'Written plan, price, date.' },
-  { k: 'Preview', d: 'A live link every week.' },
-  { k: 'Tests', d: 'Proof, not promises.' },
-  { k: 'Handover', d: 'Your repo. Your domain.' },
-];
+import type { Locale } from '../i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const steps = locale === 'es'
+  ? [
+      { k: 'Alcance', d: 'Plan, precio y fecha por escrito.' },
+      { k: 'Avance', d: 'Un enlace funcional cada semana.' },
+      { k: 'Revisión', d: 'Pruebo el trabajo antes de publicar.' },
+      { k: 'Entrega', d: 'Tu repositorio. Tu dominio.' },
+    ]
+  : [
+      { k: 'Scope', d: 'Written plan, price, date.' },
+      { k: 'Preview', d: 'A live link every week.' },
+      { k: 'Checks', d: 'I test the work before launch.' },
+      { k: 'Handover', d: 'Your repo. Your domain.' },
+    ];
 ---
 
-<ol class="rail" aria-label="How an engagement runs">
+<ol class="rail" aria-label={locale === 'es' ? 'Cómo se desarrolla un proyecto' : 'How an engagement runs'}>
   {steps.map((s) => (
     <li class="rail-step">
       <span class="tab-label">{s.k}</span>

@@ -1,7 +1,15 @@
 ---
-import { nav, site } from '../data/site';
+import { site } from '../data/site';
+import { localeMeta, localizedNav, localizedPath, type Locale } from '../i18n';
 
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const copy = localeMeta[locale];
+const nav = localizedNav[locale];
 const year = new Date().getFullYear();
+const tagline = locale === 'es'
+  ? 'Sitios web fáciles de encontrar. Software hecho para durar.'
+  : site.tagline;
 ---
 
 <footer class="site-footer">
@@ -9,29 +17,27 @@ const year = new Date().getFullYear();
     <div class="footer-cols">
       <div style="max-width:26rem">
         <p class="col-label">{site.name}</p>
-        <p class="muted" style="font-size:0.9375rem">{site.tagline}</p>
+        <p class="muted" style="font-size:0.9375rem">{tagline}</p>
       </div>
       <div>
-        <p class="col-label">Site</p>
+        <p class="col-label">{copy.site}</p>
         <ul>
-          {nav.map((item) => (
-            <li><a href={item.href}>{item.label}</a></li>
-          ))}
-          <li><a href="/contact/">Contact</a></li>
+          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+          <li><a href={localizedPath('/contact/', locale)}>{copy.contact}</a></li>
         </ul>
       </div>
       <div>
-        <p class="col-label">Elsewhere</p>
+        <p class="col-label">{copy.elsewhere}</p>
         <ul>
           <li><a href={site.github} rel="me noopener" target="_blank">GitHub</a></li>
-          <li><a href={`mailto:${site.email}`}>Email</a></li>
+          <li><a href={`mailto:${site.email}`}>{copy.email}</a></li>
         </ul>
       </div>
       <div>
-        <p class="col-label">Contact</p>
+        <p class="col-label">{copy.contact}</p>
         <ul>
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li class="muted">{site.location} · {site.languages.join(' / ')}</li>
+          <li class="muted">{site.location} · {copy.languages.join(' / ')}</li>
         </ul>
       </div>
     </div>
@@ -39,8 +45,8 @@ const year = new Date().getFullYear();
     <p class="footer-wordmark" aria-hidden="true">{site.name.toUpperCase()}</p>
 
     <div class="footer-meta">
-      <span>© {year} {site.name}. All rights reserved.</span>
-      <span>Built with Astro · No trackers, no cookies.</span>
+      <span>© {year} {site.name}. {copy.rights}</span>
+      <span>{copy.built}</span>
     </div>
   </div>
 </footer>

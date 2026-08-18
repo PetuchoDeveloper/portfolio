@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Still from '../../components/Still.astro';
 import AnonPlate from '../../components/AnonPlate.astro';
+import { site } from '../../data/site';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -11,6 +12,7 @@ const jsonLd = {
   description:
     'Anonymous teacher-evaluation platform for a public university in Mexico: opaque respondent credentials, immutable submissions, Django + React, with 2,500+ automated tests.',
   operatingSystem: 'Web',
+  url: site.sedLiveUrl,
 };
 ---
 
@@ -29,7 +31,7 @@ const jsonLd = {
       <p class="lede" style="margin-top:1.5rem">
         SED is the evaluation system for a public university in Mexico:
         students, teachers, and staff evaluate teaching performance every
-        term — without anyone being able to trace a response back to a person.
+        term without storing a link between a response and a person's identity.
       </p>
       <p class="chips" style="color:var(--ink-soft)">
         <span>Django + DRF</span>
@@ -38,21 +40,36 @@ const jsonLd = {
         <span>Redis + Celery</span>
         <span>Docker / AWS</span>
       </p>
-      <p class="lede" style="margin-top:1.5rem">
-        I bring this same discipline to a small-business website: written
-        scope, weekly proof, and a handover you own.
+      <p style="margin-top:1.5rem">
+        <a class="btn btn--solid" href={site.sedLiveUrl} target="_blank" rel="noreferrer">
+          Open the live system
+        </a>
       </p>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(2rem,4vw,3rem)">
+    <div class="wrap">
+      <Still
+        product
+        src="/images/sed/landing.webp"
+        alt="Live SED landing page with two entries: evaluate teachers, or open the admin panel."
+        width={1400}
+        height={953}
+        caption="Live landing on the current deployment. Two audiences, one system."
+      />
     </div>
   </section>
 
   <section style="padding-bottom:clamp(2rem,4vw,3rem)">
     <div class="wrap media-split" style="margin-top:0">
       <Still
-        src="/images/credential.webp"
-        alt="Conceptual image generated for this page; not a photograph of the live system."
+        product
+        src="/images/sed/eval.webp"
+        alt="Respondent screen: enter an institutional access code to start an anonymous evaluation."
         width={1400}
-        height={933}
-        caption="A blank credential. No name. That is the point."
+        height={875}
+        caption="Respondent entry. One opaque code. No account."
       />
       <div>
         <p class="file-kicker">By construction</p>
@@ -79,11 +96,31 @@ const jsonLd = {
 
       <h2>What I built</h2>
       <p>
-        A full-stack platform with two completely separate faces: an admin
+        A full-stack platform with two separate sides: an admin
         console for catalogs, teaching assignments, survey instruments,
-        credentials, and analytics — and a respondent flow that works with a
+        credentials, and analytics, plus a respondent flow that works with a
         single opaque credential and leaves no identifying trail.
       </p>
+    </div>
+    <div class="wrap media-split" style="margin-top:2rem">
+      <Still
+        product
+        src="/images/sed/dashboard.webp"
+        alt="Coordinator dashboard with period metrics, category averages, and academy results."
+        width={1400}
+        height={784}
+        caption="Coordinator dashboard. Burner period data from a local capture."
+      />
+      <Still
+        product
+        src="/images/sed/instruments.webp"
+        alt="Instrument management screen with a 360 evaluation package and create-instrument actions."
+        width={1400}
+        height={784}
+        caption="Survey instruments and 360 packages. Burner labels left visible."
+      />
+    </div>
+    <div class="wrap prose">
       <ul>
         <li>
           <strong>Opaque credential system:</strong> respondents redeem a
@@ -92,13 +129,13 @@ const jsonLd = {
         </li>
         <li>
           <strong>Immutable submissions:</strong> once an evaluation is
-          submitted it cannot be edited or deleted — the dataset the
-          institution reports on is provably the dataset that was collected.
+          submitted it cannot be edited or deleted. The dataset the
+          institution reports on remains the dataset that was collected.
         </li>
         <li>
-          <strong>Survey engine:</strong> configurable instruments — matrix
+          <strong>Survey engine:</strong> configurable instruments with matrix
           questions, Likert scales, open text, theory/practical classification
-          — published per evaluation period with a strict lifecycle:
+          questions. Each instrument follows a strict lifecycle:
           draft → published → closed, with soft-deletes instead of hard
           erasure.
         </li>
@@ -109,11 +146,11 @@ const jsonLd = {
       </ul>
 
       <h2>Engineering standards</h2>
-      <p>This project runs on discipline, not heroics:</p>
+      <p>The project has checks at each stage of development and release:</p>
       <ul>
         <li><strong>1,750+ backend tests</strong> and <strong>830+ frontend tests</strong>, run in CI on every change.</li>
-        <li><strong>Strict bundle budgets</strong> — every JavaScript chunk measured and capped, so slow devices in campus Wi-Fi still load fast.</li>
-        <li><strong>Security review as a standing practice:</strong> auth boundaries, session handling, and data storage are audited continuously, with findings tracked and fixed, not buried.</li>
+        <li><strong>Strict bundle budgets:</strong> every JavaScript chunk is measured and capped for slower devices and campus Wi-Fi.</li>
+        <li><strong>Ongoing security review:</strong> authentication boundaries, sessions, and data storage are reviewed throughout development. Findings are tracked until they are resolved.</li>
         <li><strong>Observability built in:</strong> health checks, request tracing, and metrics wired to monitoring from day one.</li>
         <li><strong>Reproducible deployment:</strong> Docker images built in CI, promoted through environments, released to AWS with an audited pipeline.</li>
       </ul>
@@ -125,10 +162,16 @@ const jsonLd = {
 
       <h2>Result</h2>
       <p>
-        A platform the institution can run term after term: anonymous by
-        design, immutable by default, and maintained through automated tests
-        rather than tribal knowledge. The architecture documentation alone
-        lets a new engineer onboard without a guided tour.
+        The institution can use the platform for each evaluation period. The
+        respondent flow does not collect a person's identity, submitted
+        evaluations cannot be changed, and automated tests protect the main
+        workflows. Architecture documentation gives new engineers a place to
+        start without relying on an oral handover.
+      </p>
+      <p>
+        The current deployment is live at
+        <a class="link-arrow" href={site.sedLiveUrl} target="_blank" rel="noreferrer">{site.sedLiveUrl.replace('https://', '')}</a>.
+        Admin and evaluation entry require institutional credentials.
       </p>
     </div>
   </section>
@@ -136,9 +179,9 @@ const jsonLd = {
   <section style="padding-bottom:clamp(4rem,8vw,6rem)">
     <div class="wrap">
       <div class="folder folder--orchid">
-        <h2 class="h2">Need a platform you can trust with sensitive data?</h2>
+        <h2 class="h2">Building software that handles sensitive data?</h2>
         <p class="muted" style="margin-top:1rem">
-          Anonymity, auditability, and uptime are design decisions — not afterthoughts.
+          Tell me what the system must protect and how people will use it.
         </p>
         <a class="btn btn--solid" style="margin-top:1.75rem" href="/contact/">Talk about your project</a>
       </div>
