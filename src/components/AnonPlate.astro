@@ -1,12 +1,21 @@
 ---
-const steps = [
-  { k: 'Token', d: 'A server-issued credential. No name on it.' },
-  { k: 'Session', d: 'Redeemed once. Leaves no account trail.' },
-  { k: 'File', d: 'The answer is written. Then it cannot change.' },
-];
+import type { Locale } from '../i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const steps = locale === 'es'
+  ? [
+      { k: 'Token', d: 'El servidor emite una credencial sin nombre.' },
+      { k: 'Sesión', d: 'La persona la canjea una vez, sin crear una cuenta.' },
+      { k: 'Registro', d: 'La respuesta se guarda y ya no puede cambiar.' },
+    ]
+  : [
+      { k: 'Token', d: 'The server issues a credential without a name.' },
+      { k: 'Session', d: 'The respondent redeems it once without creating an account.' },
+      { k: 'File', d: 'The answer is written. Then it cannot change.' },
+    ];
 ---
 
-<ol class="rail anon-rail" aria-label="How anonymity is built">
+<ol class="rail anon-rail" aria-label={locale === 'es' ? 'Cómo se construye el anonimato' : 'How anonymity is built'}>
   {steps.map((s, i) => (
     <li class="rail-step">
       <span class="tab-label">{String(i + 1).padStart(2, '0')}</span>

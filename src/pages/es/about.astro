@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout
+  title="Acerca de mí"
+  description="Desarrollador full-stack en México. Construyo sitios para pequeños negocios y aplicaciones web para instituciones, en español e inglés."
+  locale="es"
+  path="/es/about/"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="display" style="max-width:16ch">Reviso mi trabajo antes de darlo por terminado.</h1>
+      <div class="prose" style="margin-top:2rem">
+        <p>Soy {site.name}, desarrollador full-stack en México. Trabajo con clientes de cualquier lugar, en español e inglés.</p>
+        <p>
+          Mi experiencia viene del software para instituciones, incluidos sistemas que manejan respuestas anónimas y registros sensibles. Ese trabajo me enseñó a definir el alcance antes de escribir código, probar cada cambio y revisar la seguridad durante todo el desarrollo.
+        </p>
+        <p>
+          Aplico los mismos hábitos en proyectos para clientes. Un sitio para un pequeño negocio no necesita miles de pruebas. Sí necesita funcionar en teléfonos reales, cargar rápido, explicar el negocio con claridad y dar información limpia a los buscadores. Verifico todo eso antes de publicarlo.
+        </p>
+        <h2>Con qué trabajo</h2>
+        <ul>
+          <li><strong>Frontend:</strong> React, TypeScript y Astro. Uso páginas estáticas cuando son la mejor opción.</li>
+          <li><strong>Backend:</strong> Django, FastAPI, PostgreSQL, Redis y Celery.</li>
+          <li><strong>Operaciones:</strong> Docker, AWS (EC2, ECR, SSM), procesos de CI/CD y monitoreo.</li>
+          <li><strong>Seguridad:</strong> revisión de autenticación y sesiones, además de estudio continuo de seguridad en contratos inteligentes.</li>
+        </ul>
+        <h2>Cómo se desarrolla un proyecto</h2>
+        <ol>
+          <li>Un alcance por escrito: qué se construirá, cuándo y por cuánto.</li>
+          <li>Una versión funcional cada semana para que puedas probar el avance.</li>
+          <li>Lanzamiento con pruebas, documentación y monitoreo listos.</li>
+          <li>Entrega completa: tu repositorio, tu hospedaje y tus cuentas.</li>
+        </ol>
+        <p>Si así es como esperas que se construya el software, <a href="/es/contact/">hablemos</a>.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

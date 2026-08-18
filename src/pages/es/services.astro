@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { servicesEs as services } from '../../data/site';
+import Still from '../../components/Still.astro';
+import SitePlate from '../../components/SitePlate.astro';
+---
+
+<BaseLayout
+  title="Servicios"
+  description="Sitios web para pequeños negocios y aplicaciones web full-stack. Alcance por escrito, avances funcionales cada semana y entrega completa."
+  locale="es"
+  path="/es/services/"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="display">Dos formas de ayudarte.</h1>
+      <p class="lede" style="margin-top:1.5rem">
+        Empezamos con un alcance, precio y fecha de entrega por escrito. Cada semana recibes una versión funcional. Al terminar, el código, el dominio y las cuentas de hospedaje quedan en tus manos.
+      </p>
+      <div class="media-split">
+        <Still src="/images/shopfront.webp" alt="Imagen conceptual generada para esta página; no es una fotografía de un cliente." width={1400} height={788} caption="El primer servicio: un sitio que tus clientes pueden encontrar." />
+        <SitePlate locale="es" />
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(4rem,8vw,6rem)">
+    <div class="wrap">
+      {services.map((s, i) => (
+        <article id={s.slug} class:list={['folder', i === 0 && 'folder--orchid']} style="margin-top:1.25rem">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.75rem">
+            <h2 class="h2" style="font-size:clamp(1.5rem,3vw,2.25rem)">{s.name}</h2>
+            <span class="tag">{s.priority}</span>
+          </div>
+          <p class="muted" style="margin-top:1rem; max-width:60ch">{s.summary}</p>
+          <p class="tab-label" style="margin-top:2rem">Qué recibes</p>
+          <ul style="margin-top:0.75rem; padding-left:1.25rem; display:grid; gap:0.5rem; max-width:62ch">
+            {s.deliverables.map((d) => <li class="muted">{d}</li>)}
+          </ul>
+        </article>
+      ))}
+
+      <article class="folder" style="margin-top:1.25rem">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.75rem">
+          <h2 class="h2" style="font-size:clamp(1.5rem,3vw,2.25rem)">Revisión de seguridad</h2>
+          <span class="tag">Incluida en aplicaciones full-stack</span>
+        </div>
+        <p class="muted" style="margin-top:1rem; max-width:60ch">
+          No vendo auditorías de seguridad por separado. Antes de publicar una aplicación reviso su autenticación, sesiones, secretos y manejo de datos sensibles. Mi estudio de seguridad en contratos inteligentes también entrena mi forma de leer código: busco cómo puede fallar o usarse mal.
+        </p>
+      </article>
+
+      <div class="folder folder--orchid" style="margin-top:2rem">
+        <h2 class="h2">¿No sabes exactamente qué necesitas?</h2>
+        <p class="muted" style="margin-top:1rem">Describe el problema. Te diré con claridad si puedo ayudarte.</p>
+        <a class="btn btn--solid" style="margin-top:1.75rem" href="/es/contact/">Hablemos</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

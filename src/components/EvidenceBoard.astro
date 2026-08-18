@@ -1,0 +1,253 @@
+---
+/* Evidence board — tilted exhibit cards pinned and joined by thread.
+   The dossier collects what it finds: a flower, a web, a FOUND stamp. */
+import type { Locale } from '../i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const copy = locale === 'es'
+  ? { exhibitA: 'Evidencia A', exhibitB: 'Evidencia B', case: 'Caso 001', found: 'ENCONTRADO', note: 'Visible donde buscan sus clientes.' }
+  : { exhibitA: 'Exhibit A', exhibitB: 'Exhibit B', case: 'Case 001', found: 'FOUND', note: 'Visible where customers look.' };
+---
+
+<div class="board" aria-hidden="true">
+  <!-- Thread connecting the pins -->
+  <svg class="board-thread" viewBox="0 0 520 560" fill="none">
+    <path d="M 130 95 Q 260 60, 385 130" />
+    <path d="M 385 130 Q 330 260, 265 340" />
+    <path d="M 130 95 Q 160 220, 265 340" />
+  </svg>
+
+  <!-- Exhibit A: pressed flower -->
+  <div class="evidence evidence--a">
+    <span class="pin"></span>
+    <p class="evidence-tag">{copy.exhibitA}</p>
+    <svg class="evidence-sketch" viewBox="0 0 80 80" fill="none">
+      <!-- stem -->
+      <path d="M 40 72 Q 37 53 40 34" />
+      <!-- leaves -->
+      <path d="M 38 56 Q 32 51 27 49 Q 29 55 38 56 Z" />
+      <path d="M 41 47 Q 49 42 55 39 Q 53 46 41 47 Z" />
+      <!-- petals -->
+      <ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(-2 40 22)" />
+      <ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(74 40 22)" />
+      <ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(143 40 22)" />
+      <ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(219 40 22)" />
+      <ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(286 40 22)" />
+      <circle cx="40" cy="22" r="3" />
+    </svg>
+  </div>
+
+  <!-- Exhibit B: web fragment -->
+  <div class="evidence evidence--b">
+    <span class="pin"></span>
+    <p class="evidence-tag">{copy.exhibitB}</p>
+    <svg class="evidence-sketch" viewBox="0 0 80 80" fill="none">
+      <!-- corner web -->
+      <line x1="74" y1="6" x2="63.06" y2="68.04" />
+      <line x1="74" y1="6" x2="35.43" y2="51.96" />
+      <line x1="74" y1="6" x2="10.1" y2="29.26" />
+      <line x1="74" y1="6" x2="18.31" y2="0.15" />
+      <path d="M 69.83 29.64 Q 65.2 24.87 57.93 25.15" />
+      <path d="M 48.93 35.88 Q 46.15 25.5 35.47 20.02" />
+      <path d="M 24.2 24.13 Q 28.86 11.54 20.3 0.36" />
+      <!-- drop thread -->
+      <line x1="48.93" y1="35.88" x2="36" y2="46" />
+      <!-- tiny spider -->
+      <ellipse cx="36" cy="52" rx="4" ry="5" />
+      <circle cx="36" cy="46" r="2.5" />
+      <path d="M 33 49 L 27 45 L 17 41" />
+      <path d="M 32 50 L 26 49 L 16 48" />
+      <path d="M 32 54 L 26 55 L 16 58" />
+      <path d="M 33 56 L 28 60 L 18 65" />
+      <path d="M 39 49 L 45 45 L 55 41" />
+      <path d="M 40 50 L 46 49 L 56 48" />
+      <path d="M 40 54 L 46 55 L 56 58" />
+      <path d="M 39 56 L 44 60 L 54 65" />
+    </svg>
+  </div>
+
+  <!-- Found card -->
+  <div class="evidence evidence--found">
+    <span class="pin"></span>
+    <p class="evidence-status">{copy.case}</p>
+    <p class="stamp">{copy.found}</p>
+    <p class="evidence-note">{copy.note}</p>
+  </div>
+</div>
+
+<style>
+  .board {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 13 / 14;
+  }
+
+  .board-thread {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  .board-thread path {
+    stroke: color-mix(in srgb, var(--violet) 38%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: none;
+  }
+
+  .evidence {
+    position: absolute;
+    background: var(--onyx-2);
+    border: 1px solid var(--line-strong);
+    padding: 1.6rem 1.2rem 1.2rem;
+    box-shadow: 0 10px 32px rgb(0 0 0 / 0.4);
+    transition: transform 300ms ease, box-shadow 300ms ease;
+  }
+  .evidence:hover {
+    box-shadow: 0 16px 44px rgb(0 0 0 / 0.5);
+  }
+
+  .pin {
+    position: absolute;
+    top: 0.55rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--violet);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.6);
+  }
+
+  .evidence-tag {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    margin-bottom: 0.75rem;
+  }
+
+  .evidence-sketch {
+    display: block;
+    width: 80px;
+    height: 80px;
+  }
+  .evidence-sketch line,
+  .evidence-sketch path,
+  .evidence-sketch ellipse,
+  .evidence-sketch circle {
+    stroke: color-mix(in srgb, var(--violet) 62%, var(--bone));
+    stroke-width: 1.4;
+    fill: none;
+  }
+  .evidence-sketch circle:last-child { fill: color-mix(in srgb, var(--violet) 62%, var(--bone)); }
+
+  .evidence--a {
+    top: 4%;
+    left: 4%;
+    transform: rotate(-4deg);
+    z-index: 1;
+  }
+  .evidence--a:hover { transform: rotate(-2deg) translateY(-3px); }
+
+  .evidence--b {
+    top: 12%;
+    right: 2%;
+    transform: rotate(3deg);
+    z-index: 2;
+  }
+  .evidence--b:hover { transform: rotate(1.5deg) translateY(-3px); }
+
+  .evidence--found {
+    bottom: 16%;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1.5deg);
+    z-index: 3;
+    text-align: center;
+    padding: 2rem 2.2rem 1.4rem;
+    min-width: 200px;
+  }
+  .evidence--found:hover { transform: translateX(-50%) rotate(-0.5deg) translateY(-4px); }
+
+  .evidence-status {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    margin-bottom: 0.9rem;
+  }
+
+  .stamp {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-weight: 800;
+    font-size: 1.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--violet);
+    border: 2.5px solid var(--violet);
+    border-radius: 4px;
+    padding: 0.35em 0.6em;
+    transform: rotate(-6deg);
+    opacity: 0.92;
+  }
+
+  .evidence-note {
+    margin-top: 0.9rem;
+    font-size: 0.75rem;
+    color: var(--bone-soft);
+    font-style: italic;
+  }
+
+  @media (max-width: 860px) {
+    .board {
+      width: 90vw;
+      height: min(44vw, 22vh);
+      max-width: none;
+      aspect-ratio: auto;
+    }
+    .evidence {
+      padding: 6vw 3vw 3vw;
+    }
+    .evidence-sketch {
+      width: 14vw;
+      height: 14vw;
+    }
+    .evidence--a {
+      top: 0;
+      left: 0;
+    }
+    .evidence--b {
+      top: 4%;
+      right: 0;
+    }
+    .evidence--found {
+      bottom: 0;
+      min-width: 38vw;
+      padding: 6vw 3vw 3vw;
+    }
+    .stamp { font-size: 4.4vw; }
+  }
+
+  @media (min-width: 641px) and (max-width: 860px) {
+    .board {
+      width: min(72vw, 54vh);
+      height: min(28vw, 28vh);
+    }
+    .evidence {
+      padding: 1.3rem 1rem 1rem;
+    }
+    .evidence-sketch {
+      width: 70px;
+      height: 70px;
+    }
+    .evidence--found {
+      min-width: 180px;
+      padding: 1.7rem 1.5rem 1.1rem;
+    }
+    .stamp { font-size: 1.35rem; }
+  }
+</style>

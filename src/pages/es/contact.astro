@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout
+  title="Contacto"
+  description={`Contacta a ${site.name} para hablar de un sitio web o una aplicación. Respuesta en un día hábil, en español o inglés.`}
+  locale="es"
+  path="/es/contact/"
+>
+  <section class="page-hero">
+    <div class="wrap split">
+      <div>
+        <h1 class="display" style="max-width:12ch">Cuéntame qué necesitas construir.</h1>
+        <p class="lede" style="margin-top:1.5rem">
+          Bastan unas líneas: qué es el proyecto, para quién es y cuándo te gustaría publicarlo. Respondo en un día hábil, en español o inglés.
+        </p>
+        <div style="margin-top:2.25rem; display:grid; gap:1rem; max-width:34rem">
+          <div class="folder" style="padding:1.15rem 1.35rem">
+            <p class="tab-label">Correo · la vía más rápida</p>
+            <a class="h3" style="text-decoration:none; color:var(--orchid)" href={`mailto:${site.email}`}>{site.email}</a>
+          </div>
+          <div class="folder" style="padding:1.15rem 1.35rem">
+            <p class="tab-label">Qué incluir</p>
+            <p class="muted" style="font-size:0.9375rem">Tipo de proyecto · fecha aproximada · rango de presupuesto, si ya lo tienes</p>
+          </div>
+          <div class="folder" style="padding:1.15rem 1.35rem">
+            <p class="tab-label">Tiempo de respuesta</p>
+            <p class="muted" style="font-size:0.9375rem">En un día hábil · {site.location} (GMT-6)</p>
+          </div>
+        </div>
+      </div>
+
+      <form class="folder" action={`mailto:${site.email}`} method="get" enctype="text/plain" style="display:grid; gap:1rem" aria-label="Consulta sobre un proyecto">
+        <p class="tab-label">O prepara el correo aquí</p>
+        <label class="field"><span class="muted">Tu nombre</span><input name="name" required autocomplete="name" /></label>
+        <label class="field"><span class="muted">Tu correo</span><input name="email" type="email" required autocomplete="email" /></label>
+        <label class="field">
+          <span class="muted">¿Qué necesitas?</span>
+          <textarea name="body" rows="6" required placeholder="Un sitio para mi panadería. Necesito publicarlo antes de la temporada navideña…"></textarea>
+        </label>
+        <button class="btn btn--solid" type="submit">Abrir borrador de correo</button>
+        <p class="muted" style="font-size:0.8125rem">
+          Este formulario no envía ni guarda tus datos. Abre un borrador en tu aplicación de correo. También puedes escribir directamente a {site.email}.
+        </p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>

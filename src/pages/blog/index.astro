@@ -2,21 +2,21 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog')).sort(
+const posts = (await getCollection('blog')).filter((post) => post.data.lang === 'en').sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
 <BaseLayout
   title="Blog"
-  description="Notes on web development, SEO, and building software that holds up — from a full-stack developer in Mexico."
+  description="Notes on web development, technical SEO, performance, and lessons from production projects."
 >
   <section class="page-hero">
     <div class="wrap">
-      <h1 class="display">Notes on the craft.</h1>
+      <h1 class="display">Notes from the work.</h1>
       <p class="lede" style="margin-top:1.5rem">
-        Practical writing from real projects — performance, SEO, and the
-        discipline that keeps software alive.
+        What I learn while working on performance, technical SEO, and
+        production software.
       </p>
 
       <div class="post-list" style="margin-top:3rem">

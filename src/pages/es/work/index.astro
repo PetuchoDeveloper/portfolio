@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Still from '../../../components/Still.astro';
+import { site } from '../../../data/site';
+---
+
+<BaseLayout
+  title="Trabajo"
+  description="Trabajo seleccionado en software institucional, infraestructura de video, operaciones para marketplaces y verificación de automatizaciones."
+  locale="es"
+  path="/es/work/"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="display">Archivos seleccionados.</h1>
+      <p class="lede" style="margin-top:1.5rem">
+        El caso de SED está listo. Los otros tres siguen en redacción, así que mantuve sus descripciones breves y concretas.
+      </p>
+      <div style="margin-top:2rem; max-width:42rem">
+        <Still src="/images/folders.webp" alt="Imagen conceptual generada para esta página; no es una fotografía de un cliente." width={1400} height={933} caption="Cuatro archivos. Un caso publicado." />
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(4rem,8vw,6rem)">
+    <div class="wrap" style="display:grid; gap:1.25rem">
+      <a class="folder folder--orchid" href="/es/work/sed/" style="text-decoration:none">
+        <p class="tab-label">Principal · Institucional</p>
+        <h2 class="h2" style="margin-top:0.8rem; font-size:clamp(1.6rem,3vw,2.4rem)">SED — Sistema de Evaluación Docente</h2>
+        <p class="muted" style="margin-top:0.85rem; max-width:60ch">
+          Plataforma de evaluación anónima para una universidad pública mexicana. Credenciales opacas, respuestas inmutables, más de 2,500 pruebas automatizadas y CI/CD completo hacia AWS.
+        </p>
+        <p style="margin-top:1.25rem">Leer el caso →</p>
+      </a>
+      <p>
+        <a class="link-arrow" href={site.sedLiveUrl} target="_blank" rel="noreferrer">Abrir el sistema en operación →</a>
+      </p>
+
+      <article class="folder">
+        <p class="tab-label">Caso de estudio en proceso</p>
+        <h2 class="h2" style="margin-top:0.8rem; font-size:clamp(1.6rem,3vw,2.4rem)">Infraestructura de video</h2>
+        <p class="muted" style="margin-top:0.85rem; max-width:60ch">Backend en Django, frontend en React y un worker de transcodificación en Rust, desplegados en la nube. El caso se publicará próximamente.</p>
+      </article>
+
+      <article class="folder">
+        <p class="tab-label">Caso de estudio en proceso</p>
+        <h2 class="h2" style="margin-top:0.8rem; font-size:clamp(1.6rem,3vw,2.4rem)">Plataforma de operaciones para marketplaces</h2>
+        <p class="muted" style="margin-top:0.85rem; max-width:60ch">Software operativo para vendedores que trabajan en marketplaces de América Latina. El producto se diseña primero en español y la demanda se valida antes de desarrollar la versión de producción.</p>
+      </article>
+
+      <article class="folder">
+        <p class="tab-label">Caso de estudio en proceso</p>
+        <h2 class="h2" style="margin-top:0.8rem; font-size:clamp(1.6rem,3vw,2.4rem)">Control de verificación para automatizaciones</h2>
+        <p class="muted" style="margin-top:0.85rem; max-width:60ch">Una etapa independiente que revisa el resultado registrado antes de que un flujo automatizado pueda reportar éxito o modificar datos reales.</p>
+      </article>
+
+      <p class="muted" style="font-size:0.875rem">Estoy revisando qué puedo publicar sin exponer datos privados de clientes. Puedo explicar el trabajo técnico en una llamada.</p>
+    </div>
+  </section>
+</BaseLayout>

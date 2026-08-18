@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Page not found" description="This page doesn't exist.">
+<BaseLayout title="Page not found" description="This page does not exist." path="/404.html" alternateEsPath="/es/404/">
   <section class="page-hero" style="min-height:60vh; display:flex; align-items:center">
     <div class="wrap">
       <h1 class="display">
@@ -11,7 +11,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p class="lede" style="margin-top:1.5rem">
         The page you're looking for doesn't exist or has moved.
       </p>
-      <a class="btn btn--solid" style="margin-top:2.25rem" href="/">Back to the blotter</a>
+      <a class="btn btn--solid" style="margin-top:2.25rem" href="/">Back to the homepage</a>
     </div>
   </section>
 </BaseLayout>
