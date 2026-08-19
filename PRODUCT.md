@@ -30,7 +30,6 @@ Static Astro site, zero client JS by default, self-hosted fonts, no trackers, no
 - Security review is included in full-stack builds, not a standalone paid audit.
 - Smart-contract study is credibility only.
 - Handle is "Petucho". Location: Mexico. Languages: English and Spanish.
-- Domain `petucho.dev` and email `hello@petucho.dev` are placeholders until the owner replaces them.
 - Do not invent clients, testimonials, prices, or outcome metrics.
 
 ## Brand Commitments

@@ -40,7 +40,7 @@ Este punto es fácil de pasar por alto. Algunos constructores de sitios no te de
 
 Si estás pagando un sitio web, deberías ser dueño del dominio, del código y del hosting. Exígelo antes de firmar.
 
-## En corto
+## En resumen
 
 El posicionamiento depende de más que una lista técnica. Aun así, los buscadores necesitan texto rastreable, una estructura de página clara, metadatos útiles y un sitio que funcione bien en un teléfono. Corrige eso antes de irte detrás de trucos.
 

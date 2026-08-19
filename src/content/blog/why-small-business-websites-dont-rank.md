@@ -56,7 +56,7 @@ what you can fix later and makes changing providers harder.
 If you're paying for a website, you should own the domain, the code, and the
 hosting. Insist on it before you sign anything.
 
-## The short version
+## In a nutshell
 
 Search rankings depend on more than a technical checklist. But search engines
 still need crawlable text, clear page structure, useful metadata, and a site

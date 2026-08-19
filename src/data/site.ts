@@ -1,6 +1,6 @@
 /**
  * Single source of truth for site identity.
- * TODO(owner): update handle, email, and links here — every page reads from this file.
+
  */
 export const site = {
   name: 'Petucho',
@@ -8,8 +8,7 @@ export const site = {
   tagline: 'Websites people can find. Software built to last.',
   description:
     'Petucho is a full-stack developer in Mexico who builds fast websites for small businesses and reliable web applications for institutions.',
-  // TODO(owner): put your real contact email before launch.
-  email: 'hello@petucho.dev',
+  email: 'petucho.dev@proton.me',
   location: 'Mexico',
   languages: ['English', 'Spanish'],
   github: 'https://github.com/PetuchoDeveloper',
@@ -76,10 +75,10 @@ export const servicesEs = [
     name: 'Aplicaciones web full-stack',
     priority: 'Principal',
     summary:
-      'Aplicaciones web desarrolladas desde el prototipo hasta el lanzamiento, con frontend en React, backend en Django o FastAPI, PostgreSQL y un proceso automatizado de despliegue.',
+      'Aplicaciones web desarrolladas desde el prototipo hasta el lanzamiento, con frontend en React, backend en Django, PostgreSQL y un proceso automatizado de despliegue.',
     deliverables: [
       'Frontends en React o Next.js con presupuestos estrictos de rendimiento',
-      'Backends en Django o FastAPI con pruebas automatizadas',
+      'Backends en Django con pruebas automatizadas',
       'Diseño de base de datos, tareas en segundo plano y contratos de API',
       'Despliegues con Docker en AWS, EC2 o tu VPS',
       'Revisión de autenticación, sesiones, secretos y protección de datos antes del lanzamiento',
