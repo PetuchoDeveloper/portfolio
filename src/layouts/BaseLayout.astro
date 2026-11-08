@@ -5,7 +5,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
-import { localeMeta, localizedPath, type Locale } from '../i18n';
+import { localeMeta, localizedNav, localizedPath, type Locale } from '../i18n';
 
 interface Props {
   title: string;
@@ -47,6 +47,74 @@ const ldArray = jsonLd
     ? jsonLd
     : [jsonLd]
   : [];
+
+// One connected graph per page: stable @ids let search engines tie every page,
+// the business and the blog author to the same person.
+const personId = `${site.url}/#person`;
+const websiteId = `${site.url}/#website`;
+const pageId = `${canonical.href}#webpage`;
+const segments = localizedPath(canonicalPath, 'en').split('/').filter(Boolean);
+const parent = segments.length > 1
+  ? localizedNav[locale].find((item) => item.href === localizedPath(`/${segments[0]}/`, locale))
+  : undefined;
+const crumbs = segments.length
+  ? [
+      { name: locale === 'es' ? 'Inicio' : 'Home', url: new URL(localizedPath('/', locale), site.url).href },
+      ...(parent ? [{ name: parent.label, url: new URL(parent.href, site.url).href }] : []),
+      { name: title, url: canonical.href },
+    ]
+  : [];
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': personId,
+      name: site.name,
+      alternateName: site.handle,
+      url: site.url,
+      email: `mailto:${site.email}`,
+      jobTitle: locale === 'es' ? 'Desarrollador full-stack' : 'Full-Stack Developer',
+      address: { '@type': 'PostalAddress', addressCountry: 'MX' },
+      knowsAbout: [
+        'Web development',
+        'Search engine optimization',
+        'React',
+        'Django',
+        'Astro',
+        'PostgreSQL',
+        'Web application security',
+      ],
+      sameAs: [site.github],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      url: site.url,
+      name: site.name,
+      inLanguage: ['en', 'es-MX'],
+      publisher: { '@id': personId },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': pageId,
+      url: canonical.href,
+      name: fullTitle,
+      description,
+      inLanguage: copy.htmlLang,
+      isPartOf: { '@id': websiteId },
+      ...(crumbs.length ? { breadcrumb: { '@id': `${canonical.href}#breadcrumb` } } : {}),
+    },
+    ...(crumbs.length
+      ? [{
+          '@type': 'BreadcrumbList',
+          '@id': `${canonical.href}#breadcrumb`,
+          itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.url })),
+        }]
+      : []),
+    ...ldArray.map(({ '@context': _context, ...node }: Record<string, unknown>) => node),
+  ],
+};
 ---
 
 <!doctype html>
@@ -104,32 +172,7 @@ const ldArray = jsonLd
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogImageAlt} />
 
-    <script type="application/ld+json" set:html={JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: site.name,
-      alternateName: site.handle,
-      url: site.url,
-      email: `mailto:${site.email}`,
-      jobTitle: locale === 'es' ? 'Desarrollador full-stack' : 'Full-Stack Developer',
-      address: {
-        '@type': 'PostalAddress',
-        addressCountry: 'MX',
-      },
-      knowsAbout: [
-        'Web development',
-        'Search engine optimization',
-        'React',
-        'Django',
-        'Astro',
-        'PostgreSQL',
-        'Web application security',
-      ],
-      sameAs: [site.github],
-    })} />
-    {ldArray.map((ld) => (
-      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
-    ))}
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
 
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />

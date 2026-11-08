@@ -15,6 +15,17 @@ const posts = (await getCollection('blog'))
 const heroJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
+  '@id': `${site.url}/#business`,
+  founder: { '@id': `${site.url}/#person` },
+  address: { '@type': 'PostalAddress', addressCountry: 'MX' },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.name, description: s.summary, url: `${site.url}/es/services/#${s.slug}` },
+    })),
+  },
   name: site.name,
   description: 'Sitios web para pequeños negocios y aplicaciones web confiables, desarrollados en México para clientes de cualquier lugar.',
   url: `${site.url}/es/`,
@@ -36,7 +47,7 @@ const concept = 'Imagen conceptual generada para esta página; no es una fotogra
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <p class="file-kicker">Expediente — Petucho</p>
+        <p class="file-kicker">Expediente — Kevin Varick (PetuchoDeveloper)</p>
         <h1 class="display">
           Sitios web<br />fáciles de<br />encontrar.
         </h1>

@@ -3,11 +3,11 @@
 
  */
 export const site = {
-  name: 'Petucho',
+  name: 'Kevin Varick',
   handle: 'Petucho',
   tagline: 'Websites people can find. Software built to last.',
   description:
-    'Petucho is a full-stack developer in Mexico who builds fast websites for small businesses and reliable web applications for institutions.',
+    'Kevin Varick is a full-stack developer in Mexico who builds fast websites for small businesses and reliable web applications for institutions.',
   email: 'petucho.dev@proton.me',
   location: 'Mexico',
   languages: ['English', 'Spanish'],

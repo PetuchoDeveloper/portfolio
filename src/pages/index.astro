@@ -15,6 +15,17 @@ const posts = (await getCollection('blog'))
 const heroJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
+  '@id': `${site.url}/#business`,
+  founder: { '@id': `${site.url}/#person` },
+  address: { '@type': 'PostalAddress', addressCountry: 'MX' },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Services',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.name, description: s.summary, url: `${site.url}/services/#${s.slug}` },
+    })),
+  },
   name: site.name,
   description: site.description,
   url: site.url,

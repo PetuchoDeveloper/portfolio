@@ -1,4 +1,4 @@
-# Petucho — Portfolio
+# Kevin Varick — Portfolio
 
 Personal portfolio site: built to win freelancing clients and rank in search.
 
