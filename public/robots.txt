@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://petucho.dev/sitemap-index.xml
+Sitemap: https://kevinvarick.dev/sitemap-index.xml

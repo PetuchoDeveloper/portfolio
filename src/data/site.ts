@@ -12,7 +12,7 @@ export const site = {
   location: 'Mexico',
   languages: ['English', 'Spanish'],
   github: 'https://github.com/PetuchoDeveloper',
-  url: 'https://petucho.dev',
+  url: 'https://kevinvarick.dev',
   // Current SED production host (GitHub SED_DOMAIN_NAME / live smoke target).
   sedLiveUrl: 'https://98.95.232.141.sslip.io/',
 } as const;
