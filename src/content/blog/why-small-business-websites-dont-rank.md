@@ -1,66 +1,30 @@
 ---
-title: "Five technical reasons a small-business website may not rank"
+title: "Your site is not getting traffic? Here are the 5 most common causes"
 description: "A practical check for crawlable text, metadata, page speed, focused service pages, and site ownership."
 pubDate: 2026-08-14
 tags: [SEO, small-business]
 ---
 
-Some small-business websites look fine but give search engines very little to
-work with. The problem is often technical rather than visual.
+## 1. Your site is all images
 
-These are the five checks I start with.
+While having images can make your site pretty. using images for phone numbers, mails or names cant get to the crawler. if you have a menu and you have it as an image instead of text it makes it harder for search engines to index, so everything that's key to your business must be in the page’s HTML
 
-## 1. The site is built from images
+## 2. You don't hand the crawlers your site structure
 
-A phone number inside an image is not useful as a phone link, and a photo of a
-menu is harder for search engines and screen readers to understand. Important
-information should be text in the page's HTML.
+If you have a site but your maintainer or yourself forgot to add sitemaps. robots.txt, CANONICAL DNS records and semantic HTML the search engines dont have a clue what your site is for and what searches must show it. its like asking you to go to an hospital on an unknown city without a map. you may eventually get there but wouldnt it be easier if you had something to see the way?
 
-The fix is ordinary: real text in the HTML, useful headings, and working links.
-Images should *illustrate* the content, not *be* the content.
+## 3. Load time
 
-## 2. There's no structure for search engines to trust
+You know the feeling. wanting to get into a site and seeing a loader spinner that takes ages to load. Let's be real. Our time is so limited we will abandon the site before it loads. Your clients will too!
 
-Technical SEO includes a few mostly invisible parts: a sitemap, a robots file,
-canonical URLs, and structured data that says "this is a local business,
-here is its address, here is what it does."
+Having a site without compressed assets and lacking lazy loading techniques makes it slow on phones
 
-These files do not guarantee a ranking. They make the site easier to crawl and
-reduce ambiguity about the business and its pages.
+## 4. Pages are not specific
 
-## 3. Pages take five seconds to load on a phone
+You promise quality, service and excellence. Millions do too! but that doesn't tell me as a visitor what your business does. instead use phrases that actually show what you offer. change Quality, Service and Excellence for “Bakery based in Texas: custom cakes and daily bread” that way i know: youre a bakery. you make custom cakes and have bread, if I need some ill get to you!
 
-A heavy template, oversized photos, and several tracking scripts can make a
-page slow on a phone. Visitors may leave before it becomes usable, and poor
-page experience can also hurt search performance.
+## 5. You don't have ownership
 
-The first fixes are usually fewer scripts, properly sized images, and simple
-hosting. I set a performance budget for each site and test it on mobile-sized
-screens before launch.
+There are people that build sites and don't let you choose your hosting, export your content or even look at the code. that doesnt leave you much headroom to correct things or. as a non technical owner. to ask someone else to fix it. In my opinion, if you pay for a website you should have the code, hosting and domain to your name.
 
-## 4. Every page tries to rank for everything
-
-A page that only promises "quality, service, and excellence" says little about
-the business. A title such as "Bakery in Guadalajara: custom cakes and daily
-bread" names the service and the location.
-
-Good SEO copywriting is just honest specificity: name the service, name the
-place, say it plainly.
-
-## 5. Nobody owns the site
-
-This one is easy to miss. Some site builders do not let you export your
-content, change your hosting, or add the technical pieces above. That limits
-what you can fix later and makes changing providers harder.
-
-If you're paying for a website, you should own the domain, the code, and the
-hosting. Insist on it before you sign anything.
-
-## In a nutshell
-
-Search rankings depend on more than a technical checklist. But search engines
-still need crawlable text, clear page structure, useful metadata, and a site
-that works well on a phone. Fix those basics before chasing tricks.
-
-I run this check at the start of every website project. If you want me to look
-at yours, send me the URL and tell me which customers you want to reach.
+If you have a site that’s not performing you can check [my services](/services/). I offer you to audit it and help your site get seen by your potential customers.
