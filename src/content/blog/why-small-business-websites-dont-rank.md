@@ -1,6 +1,6 @@
 ---
 title: "Your site is not getting traffic? Here are the 5 most common causes"
-description: "A practical check for crawlable text, metadata, page speed, focused service pages, and site ownership."
+description: "Quick guide to make your business site rank"
 pubDate: 2026-08-14
 tags: [SEO, small-business]
 ---
