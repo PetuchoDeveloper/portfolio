@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "sf mono",
+        "createdAt": "2026-11-12T23:06:38.030Z",
+        "reason": "model: the code tile uses the same system monospace stack global.css already uses for .prose code; DESIGN.md names it"
+      }
+    ]
+  }
+}

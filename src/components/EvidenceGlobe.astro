@@ -1,0 +1,722 @@
+---
+/* Evidence globe: the web as a sphere of evidence tiles. Scrolling narrows the
+   search: decor tiles scatter, the found files fly into a curved strip.
+   Without JS (or with reduced motion) it renders as a still globe plus a
+   horizontal list of the same files. */
+import { site } from '../data/site';
+import { localizedPath, type Locale } from '../i18n';
+
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const es = locale === 'es';
+const path = (p: string) => localizedPath(p, locale);
+
+const copy = es
+  ? {
+      caseLine: ['Expediente 001', 'Kevin Varick', 'Desarrollador full-stack', 'México · ES / EN'],
+      title: ['Sitios web', 'fáciles de', 'encontrar.'],
+      lede: 'Desarrollo sitios web rápidos para pequeños negocios y aplicaciones web confiables para instituciones. Desde México, en español o inglés.',
+      start: 'Cuéntame tu proyecto',
+      hint: ['Arrastra para girar', 'Desliza para buscar'],
+      tab: 'Trabajo / 04 archivos',
+      workTitle: 'Un caso de estudio está listo. Los otros tres siguen en proceso.',
+      workLink: 'Abrir el archivo de proyectos',
+      cardsAria: 'Proyectos encontrados',
+      found: 'ENCONTRADO',
+    }
+  : {
+      caseLine: ['Case file 001', 'Kevin Varick', 'Full-stack developer', 'Mexico · EN / ES'],
+      title: ['Websites', 'that get', 'found.'],
+      lede: 'I build fast websites for small businesses and reliable web applications for institutions. From Mexico, in English or Spanish.',
+      start: 'Start a project',
+      hint: ['Drag to turn', 'Scroll to search'],
+      tab: 'Work / 04 files',
+      workTitle: 'One case study is ready. Three are still being written.',
+      workLink: 'Open the work folder',
+      cardsAria: 'Found work',
+      found: 'FOUND',
+    };
+
+const cards = [
+  {
+    tab: 'SED', tone: 'panel', img: '/images/cards/sed-landing.webp', w: 880, h: 599,
+    title: es ? 'SED — Sistema de Evaluación Docente' : 'SED — Teacher Evaluation System',
+    sub: es ? 'Evaluaciones anónimas para una universidad pública.' : 'Anonymous evaluations for a public university.',
+    cta: es ? 'Leer el caso' : 'Read the case', href: path('/work/sed/'),
+  },
+  {
+    tab: 'SED · 02', tone: 'panel', img: '/images/cards/sed-eval.webp', w: 880, h: 550,
+    title: es ? 'Entrada a la evaluación' : 'Evaluation entry',
+    sub: es ? 'Cada estudiante entra con un código de acceso.' : 'Each student enters with an access code.',
+    cta: es ? 'Leer el caso' : 'Read the case', href: path('/work/sed/'),
+  },
+  {
+    tab: 'SED · 03', tone: 'panel', img: '/images/cards/sed-admin.webp', w: 880, h: 550,
+    title: es ? 'Acceso administrativo' : 'Admin sign-in',
+    sub: es ? 'Solo cuentas institucionales.' : 'Institutional accounts only.',
+    cta: es ? 'Leer el caso' : 'Read the case', href: path('/work/sed/'),
+  },
+  {
+    tab: 'SED · 04', tone: 'panel', img: '/images/cards/sed-dashboard.webp', w: 880, h: 493,
+    title: es ? 'Tablero de resultados' : 'Results dashboard',
+    sub: es ? 'Promedios por categoría y periodo.' : 'Averages by category and period.',
+    cta: es ? 'Leer el caso' : 'Read the case', href: path('/work/sed/'),
+  },
+  {
+    tab: 'Tau', tone: 'violet', word: 'Tau',
+    title: es ? 'Tau — caso en proceso' : 'Tau — write-up in progress',
+    sub: es ? 'Plataforma de VOD: Django, React y un worker en Rust.' : 'VOD platform: Django, React and a Rust worker.',
+    cta: es ? 'Ver archivos' : 'See the files', href: path('/work/'),
+  },
+  {
+    tab: es ? 'Siguiente' : 'Next', tone: 'kraft', word: es ? 'Tu negocio' : 'Your business',
+    title: es ? 'Este archivo sigue abierto.' : 'This file is still open.',
+    sub: es ? 'Cuéntame tu proyecto. Respondo en un día hábil.' : 'Tell me about your project. I reply within one business day.',
+    cta: es ? 'Empezar' : 'Start a project', href: path('/contact/'),
+  },
+];
+
+// Sphere slots: latitude bands sized so tiles of 112x84 sit edge to edge at R=280.
+const R = 280, TW = 112, TH = 84, GAP = 10;
+const step = (TH + GAP) / R;
+const slots: { lon: number; lat: number; row: number }[] = [];
+for (let k = -4; k <= 4; k++) {
+  const lat = k * step;
+  const n = Math.max(3, Math.floor((2 * Math.PI * R * Math.cos(lat)) / (TW + GAP)));
+  for (let j = 0; j < n; j++) {
+    slots.push({ lon: ((j + (k % 2 ? 0.5 : 0)) / n) * 360, lat: (lat * 180) / Math.PI, row: k });
+  }
+}
+// Six found files spread over the three middle bands.
+const pickRow = (row: number, frac: number) => {
+  const band = slots.filter((s) => s.row === row);
+  return slots.indexOf(band[Math.round(frac * (band.length - 1))]);
+};
+const cardSlots = [pickRow(0, 0.05), pickRow(-1, 0.3), pickRow(1, 0.45), pickRow(0, 0.62), pickRow(-1, 0.8), pickRow(1, 0.95)];
+
+const img = (src: string, pos = '50% 50%') => ({ kind: 'img', src: `/images/globe/${src}.webp`, pos });
+const label = (tone: string, k: string, d: string) => ({ kind: 'label', tone, k, d });
+const words = (tone: string, t: string) => ({ kind: 'words', tone, t });
+const designs: Record<string, string>[] = [
+  img('sed-landing', '50% 20%'), { kind: 'stamp', t: copy.found }, label('kraft', es ? 'Horario' : 'Hours', es ? 'Cuándo está abierto.' : 'When you are open.'),
+  img('shopfront', '22% 40%'), { kind: 'glyph', tone: 'violet', g: 'K' }, { kind: 'num', tone: 'bone', n: '1,750+', d: es ? 'pruebas de backend · SED' : 'backend tests · SED' },
+  img('found-street', '62% 50%'), { kind: 'sketch', which: 'a', t: es ? 'Evidencia A' : 'Exhibit A' }, { kind: 'serp' },
+  img('folders', '55% 45%'), label('onyx', es ? 'Alcance' : 'Scope', es ? 'Plan, precio y fecha por escrito.' : 'Written plan, price, date.'), { kind: 'field', tone: 'violet' },
+  img('sed-eval', '78% 40%'), { kind: 'code' }, label('bone', es ? 'Mapa' : 'Map', es ? 'Dónde encontrarlo.' : 'Where to find you.'),
+  img('credential', '40% 50%'), { kind: 'glyph', tone: 'kraft', g: '§' }, { kind: 'sketch', which: 'b', t: es ? 'Evidencia B' : 'Exhibit B' },
+  img('sed-admin', '22% 50%'), { kind: 'num', tone: 'kraft', n: '830+', d: es ? 'pruebas de frontend · SED' : 'frontend tests · SED' }, label('violet', es ? 'Avance' : 'Preview', es ? 'Un enlace funcional cada semana.' : 'A live link every week.'),
+  img('sed-dashboard', '50% 30%'), { kind: 'ruled', t: es ? 'Cliente' : 'Client' }, { kind: 'field', tone: 'kraft' },
+  img('sed-instruments', '40% 40%'), label('onyx', es ? 'Búsqueda' : 'Search', es ? 'Cómo lo interpreta Google.' : 'How Google reads you.'), words('bone', 'Django · React · Astro'),
+  img('shopfront', '86% 45%'), label('kraft', es ? 'Entrega' : 'Handover', es ? 'Tu repositorio. Tu dominio.' : 'Your repo. Your domain.'), { kind: 'glyph', tone: 'onyx', g: 'V' },
+  img('found-street', '30% 75%'), words('violet', es ? 'ES / EN' : 'EN / ES'), label('bone', es ? 'Contacto' : 'Contact', es ? 'Cómo comunicarse.' : 'How to reach you.'),
+  img('folders', '82% 62%'), words('onyx', es ? 'Sin rastreadores. Sin cookies.' : 'No trackers. No cookies.'), label('kraft', es ? 'Revisión' : 'Checks', es ? 'Pruebo antes de publicar.' : 'I test before launch.'),
+  img('sed-landing', '50% 85%'), { kind: 'case', t: es ? 'Caso 001' : 'Case 001' }, words('kraft', 'PostgreSQL · Rust'),
+  img('credential', '82% 38%'), { kind: 'glyph', tone: 'bone', g: '№' }, words('onyx', es ? 'Hecho en México' : 'Made in Mexico'),
+  img('sed-landing', '18% 62%'), img('shopfront', '52% 88%'), img('found-street', '82% 28%'), img('folders', '24% 38%'),
+  img('credential', '14% 82%'), img('sed-eval', '18% 50%'), img('sed-admin', '84% 52%'), img('sed-dashboard', '14% 48%'),
+];
+// Spread repeats: each slot takes the least-used design whose copies sit farthest
+// away on the sphere. Seeded, so every build is identical.
+let seed = 0x8c2f6b41;
+const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32);
+const unit = (s: { lon: number; lat: number }) => {
+  const la = (s.lat * Math.PI) / 180, lo = (s.lon * Math.PI) / 180;
+  return [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)];
+};
+const placed: number[][][] = designs.map(() => []);
+const pick: number[] = [];
+for (const i of slots.map((_, i) => i).sort(() => rand() - 0.5)) {
+  const v = unit(slots[i]);
+  let best = 0, bestScore = -Infinity;
+  designs.forEach((_, d) => {
+    const near = placed[d].reduce((m, p) => Math.max(m, p[0] * v[0] + p[1] * v[1] + p[2] * v[2]), -1);
+    const score = -placed[d].length * 10 - near + rand() * 0.05;
+    if (score > bestScore) { bestScore = score; best = d; }
+  });
+  placed[best].push(v);
+  pick[i] = best;
+}
+const tiles = slots.map((slot, i) => ({ ...slot, card: cardSlots.indexOf(i), d: designs[pick[i]] }));
+const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? '';
+---
+
+<section class="scene" data-scene aria-labelledby="hero-title">
+  <div class="scene-pin">
+    <div class="case-line wrap" data-case-line aria-hidden="true">
+      {copy.caseLine.map((part) => <span>{part}</span>)}
+    </div>
+
+    <div class="hero-copy wrap" data-hero-copy>
+      <h1 id="hero-title" class:list={['display', 'hero-title', es && 'hero-title--long']}>
+        {copy.title.map((line, i) => (
+          <span class="line" style={`--i:${i}`}>{line}</span>
+        ))}
+      </h1>
+      <p class="lede hero-lede">{copy.lede}</p>
+      <div class="hero-actions">
+        <a class="btn btn--solid" href={path('/contact/')}>{copy.start}</a>
+        <a class="btn" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+    </div>
+
+    <div class="globe-stage" data-globe aria-hidden="true">
+      <div class="world" data-world style={`--R:${R}px`}>
+        {tiles.map((t) => (
+          <div
+            class:list={['tile', `tile--${t.d.kind}`, t.d.tone && `tone--${t.d.tone}`]}
+            style={`--lon:${t.lon.toFixed(2)};--lat:${t.lat.toFixed(2)}`}
+            data-tile
+            data-cardslot={t.card >= 0 ? t.card : undefined}
+          >
+            {t.card >= 0 ? (
+              cards[t.card].img
+                ? <img src={cardImg(t.card)} alt="" width="112" height="84" decoding="async" />
+                : <span class="tile-word">{cards[t.card].word}</span>
+            ) : t.d.kind === 'img' ? (
+              <img src={t.d.src} alt="" width="112" height="84" decoding="async" style={`object-position:${t.d.pos}`} />
+            ) : t.d.kind === 'stamp' ? (
+              <span class="tile-stamp">{t.d.t}</span>
+            ) : t.d.kind === 'label' ? (
+              <><span class="tile-k">{t.d.k}</span><span class="tile-d">{t.d.d}</span></>
+            ) : t.d.kind === 'num' ? (
+              <><span class="tile-n">{t.d.n}</span><span class="tile-d">{t.d.d}</span></>
+            ) : t.d.kind === 'glyph' ? (
+              <span class="tile-g">{t.d.g}</span>
+            ) : t.d.kind === 'words' ? (
+              <span class="tile-w">{t.d.t}</span>
+            ) : t.d.kind === 'case' ? (
+              <><span class="tile-k">{t.d.t}</span><span class="tile-hole"></span></>
+            ) : t.d.kind === 'ruled' ? (
+              <><span class="tile-k">{t.d.t}</span><span class="tile-rules"></span></>
+            ) : t.d.kind === 'serp' ? (
+              <><span class="serp-url">kevinvarick.dev</span><span class="serp-title">{copy.title.join(' ')}</span><span class="tile-d">{site.tagline}</span></>
+            ) : t.d.kind === 'code' ? (
+              <code>{'{'}<br />&nbsp;"@type": "ProfessionalService",<br />&nbsp;"areaServed": "Worldwide"<br />{'}'}</code>
+            ) : t.d.kind === 'sketch' ? (
+              <>
+                <span class="tile-k">{t.d.t}</span>
+                {t.d.which === 'a' ? (
+                  <svg viewBox="0 0 80 80" fill="none"><path d="M40 72Q37 53 40 34M38 56Q32 51 27 49Q29 55 38 56ZM41 47Q49 42 55 39Q53 46 41 47Z" /><ellipse cx="40" cy="22" rx="4.5" ry="9" /><ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(72 40 22)" /><ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(144 40 22)" /><ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(216 40 22)" /><ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(288 40 22)" /></svg>
+                ) : (
+                  <svg viewBox="0 0 80 80" fill="none"><path d="M74 6L63 68M74 6L35 52M74 6L10 29M74 6L18 0M70 30Q65 25 58 25M49 36Q46 25 35 20M24 24Q29 12 20 0M49 36L36 46" /><ellipse cx="36" cy="52" rx="4" ry="5" /><path d="M33 49L27 45L17 41M32 54L26 55L16 58M39 49L45 45L55 41M40 54L46 55L56 58" /></svg>
+                )}
+              </>
+            ) : (
+              <span class="tile-tab"></span>
+            )}
+          </div>
+        ))}
+      </div>
+      <p class="globe-hint">
+        <span>{copy.hint[0]}</span><span>{copy.hint[1]}</span>
+      </p>
+    </div>
+
+    <div class="work-head wrap" data-work-head>
+      <p class="work-tab">{copy.tab}</p>
+      <h2 class="h2">{copy.workTitle}</h2>
+      <a class="link-arrow" href={path('/work/')}>{copy.workLink} <span aria-hidden="true">→</span></a>
+    </div>
+
+    <ol class="cards" data-cards aria-label={copy.cardsAria}>
+      {cards.map((c, i) => {
+        const slot = slots[cardSlots[i]];
+        return (
+          <li class:list={['card', `card--${c.tone}`]} data-card={i} style={`--lon:${slot.lon.toFixed(2)};--lat:${slot.lat.toFixed(2)}`}>
+            <a class="card-body" href={c.href}>
+              <span class="card-tab">{c.tab}</span>
+              <span class="card-media">
+                {c.img
+                  ? <img src={c.img} alt="" width={c.w} height={c.h} decoding="async" />
+                  : <span class="card-word">{c.word}</span>}
+                {i === 0 && <span class="card-stamp" aria-hidden="true">{copy.found}</span>}
+              </span>
+              <span class="card-cap">
+                <strong>{c.title}</strong>
+                <span>{c.sub}</span>
+                <em>{c.cta} <span aria-hidden="true">→</span></em>
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>
+
+<script>
+  import { mountGlobe } from '../scripts/globe';
+  document.querySelectorAll<HTMLElement>('[data-scene]').forEach(mountGlobe);
+</script>
+
+<style>
+  /* ---------- Static layout (no JS, reduced motion) ---------- */
+  .scene {
+    position: relative;
+    --tile-w: 112px;
+    --tile-h: 84px;
+    --card-w: min(400px, 78vw);
+    --card-h: calc(var(--card-w) * 0.75);
+  }
+  .scene-pin {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-areas: 'line line' 'copy globe' 'work work' 'cards cards';
+    padding-block: clamp(1rem, 3vw, 2rem) clamp(3rem, 8vw, 6rem);
+  }
+
+  .case-line {
+    grid-area: line;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.6rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+  }
+  .case-line span:first-child { color: var(--violet); }
+  .case-line span:last-child { margin-left: auto; }
+
+  .hero-copy {
+    grid-area: copy;
+    align-self: end;
+    width: auto;
+    margin-left: max(1.25rem, calc((100vw - var(--wrap)) / 2));
+    margin-right: 0;
+    padding-block: clamp(2rem, 6vh, 4rem) clamp(1rem, 4vh, 2rem);
+  }
+  .hero-title {
+    font-size: clamp(3.1rem, min(11.5vw, 15.5svh), 8.75rem);
+  }
+  .hero-title--long { font-size: clamp(2.6rem, min(9.4vw, 12.6svh), 7rem); }
+  .hero-title .line {
+    display: block;
+    white-space: nowrap;
+    animation: line-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(120ms + var(--i) * 90ms);
+  }
+  @keyframes line-in {
+    from { opacity: 0; filter: blur(14px); transform: translateY(0.35em); }
+  }
+  .hero-lede {
+    margin-top: clamp(1.1rem, 2.4vh, 1.6rem);
+    max-width: 44ch;
+    font-size: clamp(1rem, 1.35vw, 1.1875rem);
+    animation: line-in 900ms 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: clamp(1.25rem, 3vh, 2rem);
+    animation: line-in 900ms 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .globe-stage {
+    grid-area: globe;
+    position: relative;
+    min-height: 620px;
+    perspective: 1800px;
+    --k: 1;
+  }
+  .world {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-style: preserve-3d;
+    transform: rotateX(-14deg) rotateY(-28deg);
+  }
+  .tile {
+    position: absolute;
+    left: calc(var(--tile-w) / -2);
+    top: calc(var(--tile-h) / -2);
+    width: var(--tile-w);
+    height: var(--tile-h);
+    overflow: hidden;
+    border-radius: 2px;
+    backface-visibility: hidden;
+    transform: rotateY(calc(var(--lon) * 1deg)) rotateX(calc(var(--lat) * -1deg)) translateZ(calc(var(--R) * var(--k))) scale(var(--k));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 7px 8px;
+    font-size: 8.5px;
+    line-height: 1.25;
+    contain: layout paint;
+  }
+  .tile img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Tiles are physical evidence: their paper stays the same in both themes. */
+  .tone--bone, .tile--stamp, .tile--serp, .tile--ruled, .tile--case { background: #ECE7DE; color: #17130F; }
+  .tone--kraft { background: #CDB68B; color: #17130F; }
+  .tone--violet { background: #7C4FE0; color: #FFFFFF; }
+  .tone--onyx, .tile--code, .tile--sketch { background: #1E1E21; color: #ECE7DE; }
+  .tile--img { background: #2A2A2D; }
+  .tile { outline: 1px solid rgb(0 0 0 / 0.14); outline-offset: -1px; }
+
+  .tile-k {
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-size: 7.5px;
+  }
+  .tile-d { opacity: 0.78; }
+  .tile-n {
+    font-family: var(--font-display);
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .tile-g {
+    margin: auto;
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .tile-w {
+    margin-block: auto;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 560;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+  }
+  .tile-word {
+    margin: auto;
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 600;
+  }
+  .tile--stamp { align-items: center; justify-content: center; }
+  .tile-stamp {
+    border: 2px solid #7C4FE0;
+    color: #7C4FE0;
+    border-radius: 3px;
+    padding: 4px 7px;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    transform: rotate(-8deg);
+  }
+  .tile--sketch svg { width: 46px; height: 46px; margin: auto; }
+  .tile--sketch path, .tile--sketch ellipse { stroke: #A88BEF; stroke-width: 1.6; }
+  .tile--code code {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 7.5px;
+    line-height: 1.45;
+    color: #CDBBF7;
+    margin-block: auto;
+  }
+  .serp-url { font-size: 7.5px; opacity: 0.7; }
+  .serp-title { color: #5B33C4; font-size: 11px; font-weight: 600; line-height: 1.15; }
+  .tile-hole {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #1E1E21;
+    align-self: flex-end;
+  }
+  .tile-rules {
+    flex: 1;
+    margin-top: 6px;
+    background: linear-gradient(#17130F33 1px, transparent 1px) 0 0 / 100% 11px;
+  }
+  .tile--field::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    width: 44px;
+    height: 9px;
+    background: rgb(0 0 0 / 0.16);
+    clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 100%, 0 100%);
+  }
+
+  .globe-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 0.25rem;
+    transform: translateX(-50%);
+    display: none;
+    gap: 1.4rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    white-space: nowrap;
+  }
+
+  .work-head {
+    grid-area: work;
+    margin-top: clamp(3rem, 8vw, 5rem);
+  }
+  .work-head .h2 { max-width: 20ch; margin-top: 1.1rem; }
+  .work-head .link-arrow { display: inline-block; margin-top: 1rem; }
+  .work-tab {
+    display: inline-flex;
+    align-items: center;
+    height: var(--tab-h);
+    padding: 0 1.4rem;
+    background: var(--violet);
+    color: var(--on-violet);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 100%, 0 100%);
+  }
+
+  .cards {
+    grid-area: cards;
+    list-style: none;
+    padding: 0 max(1.25rem, calc((100vw - var(--wrap)) / 2));
+    margin-top: 2rem;
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--violet) transparent;
+  }
+  .card {
+    flex: 0 0 var(--card-w);
+    width: var(--card-w);
+    height: var(--card-h);
+    scroll-snap-align: start;
+  }
+  .card-body {
+    position: relative;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: 100%;
+    background: var(--panel);
+    color: var(--bone);
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: border-color 200ms ease;
+  }
+  .card--violet .card-body { background: var(--violet); color: var(--on-violet); border-color: var(--violet-deep); }
+  .card--kraft .card-body { background: #CDB68B; color: #17130F; border-color: #A8915F; }
+  .card-tab {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 14px;
+    padding: 3px 14px 4px;
+    background: inherit;
+    font-size: 0.625rem;
+    font-weight: 650;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 8px 100%);
+  }
+  .card-media {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+  }
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0%;
+    transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-word {
+    font-family: var(--font-display);
+    font-size: calc(var(--card-w) * 0.2);
+    font-weight: 620;
+    letter-spacing: -0.035em;
+    line-height: 0.9;
+    text-align: center;
+    padding-inline: 1rem;
+  }
+  .card--kraft .card-word { font-size: calc(var(--card-w) * 0.13); }
+  .card-cap {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.8rem 1rem 0.9rem;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  }
+  .card-cap strong { font-size: 0.9375rem; font-weight: 650; letter-spacing: -0.01em; }
+  .card-cap > span { opacity: 0.8; }
+  .card-cap em {
+    font-style: normal;
+    font-weight: 650;
+    margin-top: 0.3rem;
+    color: var(--violet);
+  }
+  .card--violet .card-cap em, .card--kraft .card-cap em { color: inherit; }
+  .card-cap em span { display: inline-block; transition: transform 200ms ease; }
+  .card-body:hover { border-color: var(--violet); }
+  .card-body:hover img { transform: scale(1.04); }
+  .card-body:hover em span { transform: translateX(4px); }
+
+  .card-stamp {
+    position: absolute;
+    right: 8%;
+    bottom: 12%;
+    border: 3px solid var(--violet);
+    color: var(--violet);
+    background: color-mix(in srgb, #ECE7DE 82%, transparent);
+    border-radius: 4px;
+    padding: 0.3em 0.6em;
+    font-size: calc(var(--card-w) * 0.07);
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    transform: rotate(-9deg);
+    opacity: 0.94;
+  }
+
+  /* ---------- Live (JS) mode ---------- */
+  .scene.is-live { height: calc(100svh + var(--travel, 260svh)); }
+  .is-live .scene-pin {
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100svh - var(--header-h));
+    display: block;
+    padding: 0;
+    overflow: hidden;
+  }
+  .is-live .case-line {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    top: 0;
+  }
+  .is-live .hero-copy {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0 0 clamp(2rem, 7svh, 4.5rem) max(1.25rem, calc((100vw - var(--wrap)) / 2));
+    width: min(48rem, 60vw);
+    will-change: transform, opacity;
+  }
+  .is-live .globe-stage {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  .is-live .globe-stage.is-dragging { cursor: grabbing; }
+  .is-live .world { transform: none; }
+  .is-live .tile { will-change: transform, opacity; }
+  .is-live [data-cardslot] { display: none; }
+  .is-live .globe-hint { display: flex; bottom: clamp(1rem, 3svh, 2rem); left: auto; right: max(1.25rem, calc((100vw - var(--wrap)) / 2)); transform: none; }
+  .globe-hint span + span::before {
+    content: '';
+    display: inline-block;
+    width: 1.6rem;
+    height: 1px;
+    margin-right: 1.4rem;
+    vertical-align: middle;
+    background: currentColor;
+  }
+
+  .is-live .work-head {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    top: clamp(2.5rem, 9svh, 5.5rem);
+    margin: 0 auto;
+    opacity: 0;
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    column-gap: 2rem;
+  }
+  .is-live .work-head .work-tab { grid-column: 1 / -1; justify-self: start; }
+  .is-live .work-head.is-on { pointer-events: auto; }
+  .is-live .cards {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    display: block;
+    perspective: 1800px;
+    pointer-events: none;
+  }
+  .is-live .card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: calc(var(--card-h) / -2) 0 0 calc(var(--card-w) / -2);
+    backface-visibility: hidden;
+  }
+  .is-live .cards.is-on .card { pointer-events: auto; }
+  .is-live .card-cap, .is-live .card-tab { transition: opacity 300ms ease; }
+  .is-live .card:not(.is-flat) .card-cap,
+  .is-live .card:not(.is-flat) .card-tab { opacity: 0; }
+  .is-live .card .card-stamp { opacity: 0; }
+  .is-live .card.is-found .card-stamp { animation: stamp 620ms cubic-bezier(0.2, 0, 0, 1) both; }
+  .is-live .card.is-found .card-body { animation: thud 520ms 160ms ease-out both; }
+  @keyframes stamp {
+    0% { opacity: 0; transform: rotate(-22deg) scale(2.6); }
+    55% { opacity: 1; transform: rotate(-8deg) scale(0.94); }
+    100% { opacity: 0.94; transform: rotate(-9deg) scale(1); }
+  }
+  @keyframes thud {
+    0%, 100% { transform: none; }
+    30% { transform: translate3d(0, 3px, 0) scale(0.985); }
+    60% { transform: translate3d(0, -1px, 0); }
+  }
+
+  @media (max-width: 860px) {
+    .scene-pin {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'line' 'copy' 'globe' 'work' 'cards';
+    }
+    .case-line { flex-wrap: nowrap; }
+    .case-line span:nth-child(2), .case-line span:nth-child(3) { display: none; }
+    .is-live .globe-hint { display: none; }
+    .hero-copy { margin-right: 1.25rem; }
+    .globe-stage { min-height: 360px; --k: 0.55; }
+    .is-live .hero-copy {
+      top: 3.25rem;
+      bottom: auto;
+      width: auto;
+      right: 0;
+      padding: 0 1.25rem;
+    }
+    .hero-title { font-size: clamp(2.6rem, 12.5vw, 4.4rem); }
+    .hero-title--long { font-size: clamp(2.2rem, 10.6vw, 3.8rem); }
+    .hero-lede { font-size: 0.9875rem; }
+    .is-live .work-head { grid-template-columns: 1fr; top: 2.5rem; }
+    .is-live .work-head .link-arrow { justify-self: start; }
+    .work-head .h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  }
+  @media (max-width: 860px) and (max-height: 720px) {
+    .hero-lede { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-title .line, .hero-lede, .hero-actions { animation: none; }
+  }
+</style>

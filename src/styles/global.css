@@ -18,6 +18,8 @@
   --violet: #7C4FE0;
   --violet-deep: #6936CC;
   --on-violet: #FFFFFF;
+  --desk: #0B0B0C;
+  --shade: #000;
   --orchid: var(--violet);
   --ink-soft: var(--bone-soft);
 
@@ -37,6 +39,26 @@ html {
   background: var(--onyx);
   color-scheme: dark;
   scroll-behavior: smooth;
+  scrollbar-color: color-mix(in srgb, var(--violet) 70%, var(--onyx)) var(--onyx);
+  overflow-x: clip;
+}
+
+/* Page changes file the old sheet away and slide the next one up (Chrome, Safari). */
+@view-transition { navigation: auto; }
+.site-header { view-transition-name: site-header; }
+::view-transition-group(site-header) { animation: none; }
+::view-transition-old(root) {
+  animation: sheet-out 380ms cubic-bezier(0.7, 0, 0.84, 0) both;
+  transform-origin: 50% 100%;
+}
+::view-transition-new(root) {
+  animation: sheet-in 640ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes sheet-out {
+  to { transform: perspective(1400px) rotateX(12deg) scale(0.9); opacity: 0; filter: brightness(0.6); }
+}
+@keyframes sheet-in {
+  from { transform: translateY(14vh); opacity: 0; }
 }
 
 html[data-theme='light'] {
@@ -51,6 +73,8 @@ html[data-theme='light'] {
   --violet: #6A4A8A;
   --violet-deep: #4E326C;
   --on-violet: #F7F2E8;
+  --desk: #CBBE9F;
+  --shade: #3B2C14;
 }
 
 body {
@@ -210,7 +234,12 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
   color: var(--bone-soft);
   transition: color 150ms ease;
 }
-.site-nav a:hover { color: var(--bone); }
+.site-nav a {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  padding-block: 0.3rem;
+  transition: color 150ms ease, background-size 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.site-nav a:hover { color: var(--bone); background-size: 100% 1px; }
 .site-nav a[aria-current='page'] { color: var(--violet); }
 
 @media (max-width: 760px) {
@@ -309,54 +338,6 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
 }
 .link-arrow:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-/* ---------- Hero blotter ---------- */
-.hero {
-  min-height: calc(100svh - var(--header-h));
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: clamp(2rem, 6vw, 4.5rem) 0 calc(var(--tab-h) + 2.85rem);
-}
-
-.hero .display { max-width: 11ch; }
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: clamp(2rem, 5vw, 4rem);
-  align-items: center;
-  width: min(var(--wrap), calc(100% - 2.5rem));
-}
-
-.hero-copy .file-kicker { margin-bottom: 1.2rem; }
-
-.hero-board { display: flex; justify-content: flex-end; }
-
-/* Short laptop (1366x768): last English line sits on the Work tab. Lift the block. */
-@media (min-width: 861px) and (max-height: 820px) {
-  .hero {
-    justify-content: center;
-    padding-top: 5vh;
-    padding-bottom: calc(var(--tab-h) + 5vh);
-  }
-}
-
-@media (max-width: 860px) {
-  .hero {
-    padding-block: 3vh calc(var(--tab-h) + 11vh);
-  }
-  .hero-grid {
-    width: calc(100% - 10vw);
-    grid-template-columns: 1fr;
-    gap: 2vh;
-    align-items: end;
-  }
-  .hero .display { font-size: 12.5vw; }
-  .hero-board { order: 1; justify-content: center; }
-  .hero-copy { order: 2; }
-  .hero-board .board-thread { display: none; }
-}
-
 /* ---------- Rising files (sticky dossier stack) ---------- */
 .file-stack {
   position: relative;
@@ -391,7 +372,19 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
   position: fixed;
   right: 0;
   left: 0;
+  /* The covered file lies back into the drawer while the next one rises. */
+  transform-origin: 50% 100%;
+  transform: perspective(1600px) rotateX(calc(var(--cover, 0) * 8deg)) scale(calc(1 - var(--cover, 0) * 0.09));
 }
+.file.is-pinned::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--shade);
+  opacity: calc(var(--cover, 0) * 0.5);
+  pointer-events: none;
+}
+.file-stage:has(.file.is-pinned) { background: var(--desk); }
 
 .file.is-passed { visibility: hidden; }
 
@@ -584,7 +577,9 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
   position: relative;
   z-index: 3;
   background: var(--onyx);
+  padding-top: clamp(4rem, 8vw, 6rem);
 }
+html[data-theme='light'] .notes-section { background: transparent; }
 .page-hero .display {
   font-size: clamp(2.4rem, 6.5vw, 5rem);
   line-height: 0.92;
@@ -650,27 +645,54 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
   outline-offset: 2px;
 }
 
-/* ---------- Footer ---------- */
+/* ---------- Footer: the ink pad ---------- */
 .site-footer {
+  position: relative;
+  min-height: min(100svh, 56rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  padding-block: clamp(4rem, 9vw, 7rem) clamp(1.25rem, 3vw, 2rem);
   border-top: 1px solid var(--line);
-  padding-block: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 4vw, 2.5rem);
+  touch-action: pan-y;
+  overflow: hidden;
 }
-
-.footer-wordmark {
+.ink-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+  cursor: crosshair;
+}
+html[data-theme='light'] .ink-canvas { mix-blend-mode: multiply; }
+.footer-top, .footer-wordmark { position: relative; }
+.footer-top {
+  display: grid;
+  gap: 2.5rem 4rem;
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .footer-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+}
+.footer-lead {
   font-family: var(--font-display);
-  font-weight: 620;
-  letter-spacing: -0.04em;
-  line-height: 0.8;
-  font-size: clamp(3.6rem, 14vw, 10rem);
-  color: color-mix(in srgb, var(--violet) 26%, var(--onyx));
-  user-select: none;
+  font-size: clamp(2rem, 4.4vw, 3.6rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
-
+.footer-hint {
+  margin-block: 0.9rem 1.6rem;
+  max-width: 36ch;
+  color: var(--bone-soft);
+  font-size: 0.9375rem;
+}
 .footer-cols {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem 4rem;
-  margin-bottom: clamp(2rem, 6vw, 4rem);
+  gap: 2rem 3.5rem;
 }
 .footer-cols .col-label {
   font-size: 0.6875rem;
@@ -680,16 +702,26 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
   margin-bottom: 0.75rem;
 }
 .footer-cols ul { list-style: none; padding: 0; display: grid; gap: 0.4rem; }
-.footer-cols a { color: var(--bone-soft); text-decoration: none; }
+.footer-cols a { color: var(--bone); text-decoration: none; }
 .footer-cols a:hover { color: var(--violet); }
 
+.footer-wordmark {
+  font-family: var(--font-display);
+  font-weight: 640;
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+  font-size: clamp(3.4rem, 14vw, 12.5rem);
+  color: var(--bone);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
 .footer-meta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-basis: 100%;
+  display: grid;
+  gap: 0.2rem;
   color: var(--bone-soft);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 /* ---------- Prose ---------- */
@@ -744,7 +776,10 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
   text-decoration: none;
   transition: background 150ms ease;
 }
-.post-row:hover { background: color-mix(in srgb, var(--violet) 5%, transparent); }
+.post-row:hover { background: color-mix(in srgb, var(--violet) 6%, transparent); }
+.post-row > * { transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1); }
+.post-row:hover > div { transform: translateX(0.75rem); }
+.post-row:hover > time { transform: translateX(-0.75rem); }
 @media (min-width: 720px) {
   .post-row { grid-template-columns: 1fr auto; align-items: baseline; }
 }
@@ -764,6 +799,8 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
 .skip-link:focus { top: 1rem; }
 
 @media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  .file.is-pinned { transform: none; }
   html { scroll-behavior: auto; }
   .file { position: relative; top: auto; }
   .folder:hover { transform: none; }

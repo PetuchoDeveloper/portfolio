@@ -1,53 +1,72 @@
 ---
-name: Expediente
-description: "A papelería desk-blotter system for websites that get found."
+name: Dark Dossier
+description: "A case file that moves: evidence on a desk, a globe of pages, and an ink pad to leave a mark."
 colors:
-  primary: "#6a4a8a"
-  paper: "#f3efe6"
-  paper-2: "#e8e2d4"
-  kraft: "#cbb892"
-  ink: "#14110c"
-  ink-soft: "#3a342c"
-  line: "#1a1712"
-  orchid: "#6a4a8a"
-  orchid-deep: "#4e326c"
-  on-orchid: "#f3efe6"
+  onyx: "#161616"
+  onyx-2: "#1B1B1D"
+  panel: "#202022"
+  panel-2: "#242427"
+  line: "#2E2E31"
+  line-strong: "#3D3D42"
+  bone: "#ECE7DE"
+  bone-soft: "#A8A296"
+  violet: "#7C4FE0"
+  violet-deep: "#6936CC"
+  on-violet: "#FFFFFF"
+  desk: "#0B0B0C"
+  paper: "#F3EFE6"
+  paper-2: "#EAE4D7"
+  kraft: "#D2C2A2"
+  kraft-2: "#DDD2BE"
+  paper-line: "#C7BFAF"
+  paper-line-strong: "#777065"
+  ink: "#17130F"
+  ink-soft: "#5D564D"
+  manganese: "#6A4A8A"
+  manganese-deep: "#4E326C"
+  on-manganese: "#F7F2E8"
+  paper-desk: "#CBBE9F"
+  tile-bone: "#ECE7DE"
+  tile-kraft: "#CDB68B"
+  tile-violet: "#7C4FE0"
+  tile-onyx: "#1E1E21"
 typography:
   display:
-    fontFamily: "'Bodoni Moda Variable', 'Bodoni Moda', 'Times New Roman', serif"
-    fontSize: "clamp(3.6rem, 13vw, 9.25rem)"
-    fontWeight: 700
-    lineHeight: 0.84
-    letterSpacing: "-0.03em"
+    fontFamily: "'Fraunces Variable', 'Fraunces', 'Times New Roman', serif"
+    fontSize: "clamp(3.1rem, min(11.5vw, 15.5svh), 8.75rem)"
+    fontWeight: 640
+    lineHeight: 0.88
+    letterSpacing: "-0.035em"
   headline:
-    fontFamily: "'Bodoni Moda Variable', 'Bodoni Moda', 'Times New Roman', serif"
-    fontSize: "3.25rem"
-    fontWeight: 700
+    fontFamily: "'Fraunces Variable', 'Fraunces', 'Times New Roman', serif"
+    fontSize: "clamp(1.9rem, 4vw, 3.3rem)"
+    fontWeight: 600
     lineHeight: 1.02
     letterSpacing: "-0.025em"
+  wordmark:
+    fontFamily: "'Fraunces Variable', 'Fraunces', 'Times New Roman', serif"
+    fontSize: "clamp(3.4rem, 14vw, 12.5rem)"
+    fontWeight: 640
+    lineHeight: 0.8
+    letterSpacing: "-0.04em"
   title:
-    fontFamily: "'Archivo Variable', 'Archivo', system-ui, sans-serif"
+    fontFamily: "'Geist Variable', 'Geist', system-ui, sans-serif"
     fontSize: "1.2rem"
     fontWeight: 650
     lineHeight: 1.25
     letterSpacing: "-0.015em"
   body:
-    fontFamily: "'Archivo Variable', 'Archivo', system-ui, sans-serif"
+    fontFamily: "'Geist Variable', 'Geist', system-ui, sans-serif"
     fontSize: "1.0625rem"
     fontWeight: 400
     lineHeight: 1.65
   label:
-    fontFamily: "'Archivo Variable', 'Archivo', system-ui, sans-serif"
+    fontFamily: "'Geist Variable', 'Geist', system-ui, sans-serif"
     fontSize: "0.6875rem"
     fontWeight: 600
-    letterSpacing: "0.18em"
-  field:
-    fontFamily: "'Archivo Variable', 'Archivo', system-ui, sans-serif"
-    fontSize: "0.9375rem"
-    fontWeight: 400
-    lineHeight: 1.65
+    letterSpacing: "0.2em"
   button:
-    fontFamily: "'Archivo Variable', 'Archivo', system-ui, sans-serif"
+    fontFamily: "'Geist Variable', 'Geist', system-ui, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 600
     lineHeight: 1.65
@@ -58,203 +77,170 @@ rounded:
 spacing:
   wrap: "1180px"
   page-gutter: "1.25rem"
-  layout-gap: "clamp(1rem, 4vw, 2rem)"
   header-height: "4.25rem"
   tab-height: "2.15rem"
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-orchid}"
+    backgroundColor: "{colors.violet}"
+    textColor: "{colors.on-violet}"
     typography: "{typography.button}"
     rounded: "{rounded.sm}"
     padding: "0.7rem 1.2rem"
-  button-primary-hover:
-    backgroundColor: "{colors.orchid-deep}"
-    textColor: "{colors.on-orchid}"
   button-secondary:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
+    backgroundColor: "transparent"
+    textColor: "{colors.bone}"
     typography: "{typography.button}"
     rounded: "{rounded.sm}"
     padding: "0.7rem 1.2rem"
-  button-secondary-hover:
-    backgroundColor: "{colors.paper-2}"
-    textColor: "{colors.ink}"
-  input-field:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    typography: "{typography.field}"
-    rounded: "{rounded.sm}"
-    padding: "0.7rem 0.9rem"
-  folder:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
+  file:
+    backgroundColor: "{colors.onyx-2}"
+    textColor: "{colors.bone}"
     rounded: "{rounded.none}"
-    padding: "clamp(1.5rem, 3vw, 2.25rem)"
-  folder-orchid:
-    backgroundColor: "{colors.orchid}"
-    textColor: "{colors.on-orchid}"
-    rounded: "{rounded.none}"
-    padding: "clamp(1.5rem, 3vw, 2.25rem)"
-  folder-kraft:
-    backgroundColor: "{colors.kraft}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-    padding: "clamp(1.5rem, 3vw, 2.25rem)"
-  navigation:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink-soft}"
-    height: "{spacing.header-height}"
-    padding: "0 1.25rem"
   file-tab:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
+    backgroundColor: "{colors.violet}"
+    textColor: "{colors.on-violet}"
     typography: "{typography.label}"
     height: "{spacing.tab-height}"
     padding: "0 1.4rem"
-  tag:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-    padding: "0.2rem 0.6rem"
+  evidence-tile:
+    width: "112px"
+    height: "84px"
+    rounded: "{rounded.sm}"
+  work-card:
+    backgroundColor: "{colors.panel}"
+    textColor: "{colors.bone}"
+    rounded: "{rounded.sm}"
 ---
 
-# Design System: Expediente
+# Design System: Dark Dossier
 
 ## Overview
 
-**Creative North Star: "Expediente / papelería desk blotter"**
+**Creative North Star: "The case file that finds you."**
 
-Expediente treats the site as a sheet of careful paperwork on a real desk: warm paper, warm-black ink, and a single uncommon purple that reads like a folder field. It is editorial without becoming precious—large type carries the offer, while labels, rules, and tabs make the work feel filed, inspectable, and ready to ship.
+The site is a dossier on a desk. Its offer is one line, "Websites that get found", and the whole page acts it out: the web is a globe of evidence, scrolling narrows the search, and what is left are the found files. Then the files lie back into a drawer one by one, and the page ends at an ink pad where the visitor leaves a mark next to the email action.
 
-The world is intentionally not a dark name-role-cards portfolio. It leaves air in the first viewport, uses no gradients, and gets depth from paper texture, tonal surfaces, hairline borders, and the overlap of rising files. The home story moves from the offer to proof to a clear email action without adding decorative noise.
+Two grounds carry the same world. Dark is matte onyx with bone type. Light is paper and kraft with ink type. The theme follows the visitor's system setting until they choose one in the header. Clearance purple is the one identity color in both.
 
 **Key Characteristics:**
-- Paper-first surfaces with a repeated `paper.webp` desk texture.
-- Bodoni Moda for display and Archivo for body copy, labels, and controls.
-- Manganese purple as a rare folder field, action color, link color, and focus color.
-- Hairline ink rules, square folders, gently softened 2px controls, and die-cut tabs.
-- Sticky, rising files that make the work feel organized rather than card-grid generic.
+- One authored moment per region: globe (top), receding files (middle), ink pad (end). Everything else is quiet.
+- Evidence is physical: tiles, stamps, die-cut tabs and kraft cards keep their own paper colors in both themes.
+- Fraunces carries every display voice; Geist carries every functional voice.
+- Square sheets, 2px controls, hairline rules. Depth comes from 3D space and tone, not from card shadows.
 
 ## Colors
 
-The palette is warm, paper-first, and restrained. Purple is a field and an action—not a background gradient—and the two ink tones keep the page legible without introducing a second brand color.
+### Grounds
+- **Onyx / Paper** (`onyx`, `paper`): the desk the page sits on. The light ground has the `/paper.webp` texture.
+- **Panel / Kraft** (`panel`, `kraft`): plates, cards and the Method file.
+- **Desk** (`desk`, `paper-desk`): shows only behind a file that recedes in the file stack.
 
-### Primary
-- **Manganese Purple** (`colors.orchid`): The main folder field, solid primary action, selected text surface, link accent, and focus-ring color.
-- **Deep Manganese** (`colors.orchid-deep`): The pressed/hover state and the darker edge used to finish purple surfaces.
+### Type
+- **Bone / Ink** (`bone`, `ink`): headings and primary copy.
+- **Bone soft / Ink soft** (`bone-soft`, `ink-soft`): ledes, labels, metadata.
 
-### Secondary
-- **Kraft Paper** (`colors.kraft`): The warm alternate file surface used to separate method content from the paper and purple files.
+### Identity
+- **Clearance purple** (`violet` dark, `manganese` light): primary action, file tabs, the Start file, links, focus ring, selection, scrollbar thumb, the FOUND stamp.
 
-### Neutral
-- **Warm Paper** (`colors.paper`): The default desk, file, folder, and form background.
-- **Paper Shadow** (`colors.paper-2`): The quiet tonal shift for button hover and code surfaces.
-- **Warm Black Ink** (`colors.ink`): Headlines, primary copy, and structural text.
-- **Soft Ink** (`colors.ink-soft`): Supporting copy, labels, metadata, and secondary navigation text.
-- **Hairline** (`colors.line`): One-pixel rules and boundaries.
-- **On Orchid** (`colors.on-orchid`): Inverse text and controls on purple fields; it intentionally shares the paper color.
+### Evidence tiles (theme-independent)
+`tile-bone`, `tile-kraft`, `tile-violet`, `tile-onyx`. The globe tiles are objects, so they do not change with the theme.
+
+### Inks (ink pad only)
+- Light, multiply on paper: violet `#9271E8`, kraft gold `#DDB264`, indigo `#5A4C9C`, orchid `#D07CB6`.
+- Dark, screen on onyx: violet `#6A43D2`, kraft `#9C7535`, bone `#7D776B`, orchid `#93397C`.
+These are the only place the palette goes past purple + kraft. They stay inside the footer.
 
 ### Named Rules
-**The Purple Folder Rule.** Purple should read as a tangible folder field or a deliberate action. Do not dilute its rarity with gradients, decoration, or an all-purple page.
-
-**The Paper-First Rule.** When a surface has no stronger semantic reason to change, it stays paper.
+**The Purple Folder Rule.** Purple is a field or an action, never a wash or decoration.
+**The Evidence Rule.** A tile, stamp or card keeps its paper color in both themes; the ground around it changes.
 
 ## Typography
 
-**Display Font:** Bodoni Moda Variable (with Bodoni Moda, Times New Roman, serif fallbacks)
-**Body Font:** Archivo Variable (with Archivo, system-ui, sans-serif fallbacks)
-**Label/Mono Font:** Archivo Variable is also the label face; code uses the system monospace stack from the stylesheet.
+**Display:** Fraunces Variable. **UI:** Geist Variable. Code tiles and prose code use the system monospace stack.
 
-**Character:** Bodoni Moda supplies the editorial contrast and the unmistakable oversized voice. Archivo keeps the interface practical: labels are compact and tracked, body copy is quiet, and actions read like clear paperwork rather than product chrome.
+- **Display** (640, `clamp(3.1rem, min(11.5vw, 15.5svh), 8.75rem)`, lh 0.88, -0.035em): the hero offer, one line per span, no wrapping. The Spanish title uses `.hero-title--long` (`clamp(2.6rem, min(9.4vw, 12.6svh), 7rem)`).
+- **Headline** (600, `clamp(1.9rem, 4vw, 3.3rem)`, lh 1.02): file and section headings.
+- **Wordmark** (640, `clamp(3.4rem, 14vw, 12.5rem)`): footer name over the ink.
+- **Title** (650, 1.2rem): post rows and compact headings.
+- **Body** (400, 1.0625rem, lh 1.65): ledes held near 44–58ch.
+- **Label** (600, 0.6875rem, 0.2em, uppercase): tabs, the case line, column labels, hints.
+- **Tile type** (7.5–52px): decorative type inside 112×84 evidence tiles only.
 
-### Hierarchy
-- **Display** (700, `clamp(3.25rem, 11vw, 8.25rem)`, line-height `0.86`, letter-spacing `-0.03em`): The left-stacked hero offer and large page titles.
-- **Headline** (700, `clamp(1.85rem, 4vw, 3.25rem)`, line-height `1.02`, letter-spacing `-0.025em`): File headings, folder headings, and major section titles.
-- **Title** (650, `1.2rem`, line-height `1.25`, letter-spacing `-0.015em`): Process headings and compact work titles.
-- **Body** (400, `1.0625rem`, line-height `1.65`): Explanatory copy, with ledes held to roughly 58–60ch and prose capped near 68ch.
-- **Label** (600, `0.6875rem`, letter-spacing `0.18em`, uppercase): Tabs, file kickers, footer labels, and small editorial metadata. Navigation uses the same face at `0.16em` tracking; the wordmark uses `0.75rem` and `0.18em`.
-
-### Named Rules
-**The Two Inks Rule.** Bodoni carries display emphasis; Archivo carries every functional or explanatory voice. Do not introduce a third type family for UI decoration.
+**The Two Inks Rule.** Fraunces for display, Geist for function. No third family.
 
 ## Layout
 
-The layout is a centered paper desk rather than a card grid. The shared wrapper is `min(1180px, 100% - 2.5rem)`, centered with a `1.25rem` mobile gutter. The sticky header is `4.25rem` high. The main hero fills `calc(100svh - 4.25rem)`, aligns its display offer to the bottom, and leaves deliberate empty paper above it.
+Centered wrap `min(1180px, 100% - 2.5rem)`. Sticky translucent header 4.25rem (8.25rem on phones, where nav scrolls on its own row).
 
-The home surface uses a negative `-2.75rem` file-stack offset followed by full-viewport-height files that stick below the header as the visitor scrolls. File and folder padding expands with `clamp()` rather than switching to a dense dashboard rhythm. Content stays readable at roughly 58–68ch. Work and post rows become two-column layouts at `720px`; the process grid and method rail become columns at `800px`; the page split becomes two columns at `880px`. Below `640px`, navigation can scroll horizontally and labels shrink. The Start action stays pinned outside the scrolling nav.
+Home, top to bottom:
+1. **Scene** (`EvidenceGlobe.astro`): a sticky stage of `100svh` inside a section `100svh + 270svh` tall (330svh on phones). Case line on top, the offer bottom-left, the globe right (below the copy on phones).
+2. **File stack** (`HomePage.astro`): Offer, Method (kraft), Start (purple). Each file is at least one viewport tall and pins while the next one rises.
+3. **Notes**: post rows.
+4. **Footer ink pad** (`Footer.astro`): "Leave a mark." + Start a project on the left, link columns on the right, wordmark at the bottom over the ink band.
+
+Breakpoints: 860px switches the scene to one column; 900px puts the footer in two columns.
 
 ## Elevation & Depth
 
-This is flat by default. There are no gradients and no decorative floating-card shadows. Depth comes from the repeated paper texture, the paper/kraft/purple tonal shifts, one-pixel rules, and the controlled overlap of sticky files. The translucent header uses a paper color mix so the desk remains present while content passes beneath it.
-
-### Shadow Vocabulary
-- **File overlap** (`box-shadow: 0 -18px 28px rgb(20 17 12 / 0.08)`): The only structural shadow; it separates each rising file from the one it covers.
-
-### Named Rules
-**The Flat Desk Rule.** Keep surfaces flat at rest. Use texture, tone, rules, and the file overlap shadow to make depth—not gradients, glass, or generic elevation presets.
+Flat at rest. Depth is spatial: the globe and the work strip live in a `perspective: 1800px` stage, and a covered file tilts back (`rotateX` up to 8deg, scale to 0.91, shade overlay to 50%) over the desk color. The rising file casts the one structural shadow (`0 -24px 40px rgb(0 0 0 / 0.4)`).
 
 ## Shapes
 
-Folders and files are square sheets with a one-pixel ink boundary. Controls and fields use the only recurring radius in the system: a restrained `2px`. Tags are outlined rectangles, not pills. The signature tab is a die-cut silhouette: a centered label sits in a `2.15rem` strip with clipped `12px` top corners, an inherited surface color, and no bottom border so it reads as a sheet tab.
-
-Chips are not rounded chips in the usual product-UI sense. They are inline words separated by a hairline rule and padding. The paper grain is a repeated image surface (`/paper.webp`, `1800px` background size), not a decorative gradient.
-
-### Named Rules
-**The Die-Cut Rule.** Use the clipped tab silhouette for filing cues; do not turn every control into a pill or rounded card.
+Files and folders are square. Controls, tiles and cards use 2px. The die-cut tab is `polygon(12px 0, calc(100% - 12px) 0, 100% 100%, 0 100%)`; work cards carry a smaller inverted tab. Stamps are outlined, rotated -8 to -9deg.
 
 ## Components
 
-### Buttons
-- **Character:** Direct, ink-on-paper actions with one unmistakable purple primary.
-- **Shape:** A near-square control with a `2px` radius, one-pixel ink border, and `0.7rem 1.2rem` padding.
-- **Primary:** `colors.orchid` background with `colors.on-orchid` text; the nav CTA uses the compact `0.5rem 0.9rem` padding, `0.6875rem` text, `0.12em` tracking, and uppercase treatment.
-- **Hover / Focus:** Primary shifts to `colors.orchid-deep`; secondary shifts to `colors.paper-2`. All focus-visible states use a `2px` purple outline with `3px` offset.
-- **Inverse:** On a purple file, the solid button reverses to paper background and deep-purple text; the outline button uses paper borders and text.
+### Evidence globe (`EvidenceGlobe.astro`, `scripts/globe.ts`)
+- 82 slots in latitude bands (R 280px, 112×84 tiles), six of them are the work cards. Designs are assigned at build time so repeats sit far apart.
+- Tile kinds: image crop, label (plate and method words), number (SED test counts), glyph, words, stamp, SERP snippet (the site's own title), JSON-LD code, exhibit sketches, ruled client card, die-cut field.
+- No JS or reduced motion: a still CSS sphere and a horizontal, scroll-snapped card list. Same content.
 
-### Chips
-- **Style:** Inline Archivo text at `0.875rem`, transparent by default, with `0.45rem 1.25rem` flex gaps.
-- **State:** Each item after the first receives a one-pixel `currentColor` left rule and `1.25rem` left padding. They identify technologies or deliverables; they are not filter pills.
+### Work cards
+Six case cards (SED ×4 screenshots, Tau pending, "This file is still open" → contact). Each card is a real link. Focusing one scrolls the scene to where it is in view.
 
-### Cards / Containers
-- **Character:** A folder is a sheet, not a floating card.
-- **Corner Style:** Square (`0px`) for folders and files; only controls use `2px`.
-- **Background:** `colors.paper` by default, `colors.orchid` for highlighted fields, and `colors.kraft` for the method file.
-- **Shadow Strategy:** No local shadow on folders. File overlap uses the single shadow defined in Elevation & Depth.
-- **Border:** One-pixel `colors.line` boundary; purple surfaces use `colors.orchid-deep` at their top/tab boundary.
-- **Internal Padding:** `clamp(1.5rem, 3vw, 2.25rem)` for folder cards; full files use larger viewport-relative padding.
+### File stack
+Die-cut tab, headline, content. Tabs name the file; no eyebrow above headings.
 
-### Inputs / Fields
-- **Style:** Paper background, one-pixel ink border, `2px` radius, and `0.7rem 0.9rem` internal padding. The label wrapper is a grid with a `0.35rem` gap.
-- **Focus:** Two-pixel purple outline with a two-pixel offset; no glow or border animation.
-- **Error / Disabled:** No bespoke error or disabled skin is implemented; preserve the same paper-and-ink language if those states are added.
+### Ink pad (`scripts/inkpad.ts`)
+WebGL2 stable fluids, no library. Four inks in RGBA, drops are source flows that push older ink into rings, a fixed paper-fibre noise makes ragged soak lines, gradient rims darken edges. The canvas blends with the page (multiply on paper, screen on onyx). Links and buttons stay clickable on top.
 
-### Navigation
-- **Style:** Sticky header at the top of the paper, with a 1px bottom rule and a paper `color-mix()` background. The brand is uppercase Archivo at `0.75rem`, 700 weight, and `0.18em` tracking. Links are uppercase, `0.6875rem`, 600 weight, and `0.16em` tracking.
-- **States:** Default navigation is soft ink; hover and current-page states use warm black. The CTA is the compact solid purple button.
-- **Mobile:** At `640px`, links may scroll horizontally and reduce to `0.625rem`. The CTA stays visible: full “Start a project” on wide screens, compact “Start” at `720px` and below.
+### Buttons, plates, rails, stills, prose
+Unchanged from the earlier dossier: solid purple primary, outline secondary, hairline plates (Hours/Map/Contact/Search), method rail (Scope/Preview/Checks/Handover), captioned stills that say when an image is a generated concept.
 
-### File Stack / Die-Cut Tab
-The signature component is a sequence of sticky files. Each file is at least one viewport tall, begins with a one-pixel top rule, and sticks below the header while the next file rises over it. Its tab is positioned `2.15rem` above the sheet, inherits the sheet color, uses a one-pixel boundary, and clips its top corners with `polygon(12px 0, calc(100% - 12px) 0, 100% 100%, 0 100%)`. The first purple tab is the memorable `Work / 04 files` filing cue; later tabs reuse the same geometry for Offer, How I work, and Start.
+## Motion
 
-### Stills
-Generated photographs live under `/images/` as WebP (`shopfront`, `folders`, `found-street`, `credential`). They sit inside files, never in the first viewport. Caption them as conceptual when a viewer could mistake them for a client photo. No faces, logos, or readable in-image text.
+| Moment | Trigger | Material | Timing |
+|---|---|---|---|
+| Hero type | load | line blur 14px → 0, rise 0.35em | 900ms, 90ms stagger, `cubic-bezier(.16,1,.3,1)` |
+| Globe assembly | load | tiles fly in as shards, left to right | 1.1s each, expo out, ~1s sweep |
+| Globe idle | always (in view) | 5°/s spin, drag with inertia, pointer tilts pitch ±5° | per frame |
+| Search | scroll P 0.05–0.43 | decor tiles scatter past the camera; cards fly to a curved strip | cubic in-out per tile |
+| Strip | scroll P 0.45–0.98 | strip slides on a 2200px drum | linear to scroll |
+| FOUND | SED card lands | stamp 2.6× → 1×, card thud | 620ms |
+| File recession | covered file | tilt back, scale, shade | linked to scroll |
+| Page change | navigation | old sheet tilts away, new sheet rises (`@view-transition`) | 380ms out, 640ms in |
+| Ink | drag / tap | fluid simulation | runs 2.5–5s after input, then sleeps |
 
-### Plates
-Hairline grids, not cartoon scenes: Hours/Map/Contact/Search, Token/Session/File, and Scope/Preview/Tests/Handover. Type and rules only.
+Rules:
+- Each pose is position + quaternion + scale; blend poses, never strings of transforms.
+- Loops run only while their section is in view and the tab is visible. The ink sim sleeps when idle.
+- `prefers-reduced-motion`: no globe engine (still sphere + list), no file tilt, no view transitions, no type entrance; the ink pad still answers input and seeds its band without animation.
+
+## Assets
+
+- `public/images/globe/*.webp`: 360px resizes (sharp, webp q70) of the existing stills and SED screenshots in `public/images/` and `public/images/sed/`.
+- `public/images/cards/*.webp`: 880px resizes (sharp, webp q74) of the SED product screenshots.
+- No generated or stock rasters were added in the motion redesign.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** let `colors.paper` and the repeated paper texture be the default canvas.
-- **Do** use Bodoni Moda for the display/headline hierarchy and Archivo for body, labels, navigation, and controls.
-- **Do** reserve `colors.orchid` for folder fields, primary actions, links, selection, and focus; use `colors.orchid-deep` for their pressed/edge state.
-- **Do** keep structure visible with one-pixel ink rules and use the `2px` radius only where the CSS already does.
-- **Do** use the file/tab geometry and rising sticky overlap when a surface needs to feel like an Expediente, not a generic list of cards.
+- Keep one authored moment per region and let the rest be quiet.
+- Keep evidence physical: paper colors, stamps, tabs, real screenshots, honest captions.
+- Label generated images as concepts.
 
 ### Don't:
-- **Don't** bring back a dark name-role-cards portfolio or replace the paper desk with a dark app-shell treatment.
-- **Don't** add gradients, glossy glass, or a new shadow vocabulary.
-- **Don't** turn the purple accent into a full-page wash, decorative pattern, or pill system.
-- **Don't** substitute rounded cards for the square folder/file silhouette or replace hairline rules with heavy separators.
-- **Don't** introduce another display or UI type family without changing the established two-font system deliberately.
+- Don't add an eyebrow label above a heading; the tab or case line does that job.
+- Don't add a second 3D or WebGL effect between the globe and the footer.
+- Don't invent proof: no client logos, testimonials, prices or outcome numbers.
+- Don't spread the ink colors outside the footer.

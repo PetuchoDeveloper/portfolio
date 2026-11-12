@@ -22,6 +22,8 @@ export const localeMeta = {
     themeLight: 'Use light mode',
     themeDark: 'Use dark mode',
     languages: ['English', 'Spanish'],
+    leaveMark: 'Leave a mark.',
+    inkHint: 'Drag or tap anywhere down here to drop ink. Then tell me about your project.',
   },
   es: {
     htmlLang: 'es-MX',
@@ -44,6 +46,8 @@ export const localeMeta = {
     themeLight: 'Usar modo claro',
     themeDark: 'Usar modo oscuro',
     languages: ['Inglés', 'Español'],
+    leaveMark: 'Deja tu marca.',
+    inkHint: 'Arrastra o toca en cualquier lugar de aquí abajo para dejar tinta. Después cuéntame tu proyecto.',
   },
 } as const;
 

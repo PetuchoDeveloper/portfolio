@@ -1,0 +1,196 @@
+---
+/* Home page body shared by / and /es/. */
+import { getCollection } from 'astro:content';
+import { site, services, servicesEs } from '../data/site';
+import { localizedPath, type Locale } from '../i18n';
+import EvidenceGlobe from './EvidenceGlobe.astro';
+import Still from './Still.astro';
+import SitePlate from './SitePlate.astro';
+import MethodRail from './MethodRail.astro';
+
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const es = locale === 'es';
+const path = (p: string) => localizedPath(p, locale);
+const offer = (es ? servicesEs : services)[0];
+
+const copy = es
+  ? {
+      concept: 'Imagen conceptual generada para esta página; no es una fotografía de un cliente.',
+      offerTab: 'Servicios',
+      offerTitle: 'Un sitio que tus clientes sí pueden encontrar.',
+      shopCaption: 'Un negocio fácil de encontrar. Imagen conceptual, no es el local de un cliente.',
+      apps: 'También desarrollo aplicaciones full-stack. Esos proyectos incluyen una revisión de seguridad antes del lanzamiento.',
+      offerLink: 'Ver los dos servicios',
+      methodTab: 'Cómo trabajo',
+      methodTitle: 'Ves el proyecto mientras toma forma.',
+      methodLede: 'Primero acordamos el alcance. Después recibes una versión funcional cada semana.',
+      startTab: 'Empezar',
+      startTitle: '¿Tienes un proyecto? Cuéntame.',
+      startLede: 'Respondo en un día hábil, en español o inglés.',
+      start: 'Cuéntame tu proyecto',
+      streetCaption: 'La puerta que sí encuentran. Imagen conceptual.',
+      notesTitle: 'Notas desde el trabajo.',
+      allNotes: 'Todas las notas',
+    }
+  : {
+      concept: 'Conceptual image generated for this page; not a client photograph.',
+      offerTab: 'Offer',
+      offerTitle: 'A site customers can actually find.',
+      shopCaption: 'A shop that can be found. Generated concept, not a client storefront.',
+      apps: 'I also build full-stack applications. Those projects include a security review before launch.',
+      offerLink: 'See both offers',
+      methodTab: 'How I work',
+      methodTitle: 'You see the work as it takes shape.',
+      methodLede: 'We agree on the scope first. Then you get a working preview each week.',
+      startTab: 'Start',
+      startTitle: 'Have a project? Tell me about it.',
+      startLede: 'I reply within one business day. English or Spanish.',
+      start: 'Start a project',
+      streetCaption: 'The one door that gets found. Generated concept.',
+      notesTitle: 'Notes from the work.',
+      allNotes: 'All notes',
+    };
+
+const posts = (await getCollection('blog'))
+  .filter((post) => post.data.lang === locale)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<EvidenceGlobe locale={locale} />
+
+<div class="file-stack">
+  <div class="file-stage">
+    <article class="file" id="offer">
+      <p class="file-tab tab-label">{copy.offerTab}</p>
+      <div class="wrap">
+        <h2 class="h2">{copy.offerTitle}</h2>
+        <p class="lede" style="margin-top:1.1rem">{offer.summary}</p>
+        <div class="media-split">
+          <Still src="/images/shopfront.webp" alt={copy.concept} width={1400} height={788} caption={copy.shopCaption} />
+          <div>
+            <SitePlate locale={locale} />
+            <p class="muted" style="margin-top:1.5rem">{copy.apps}</p>
+            <p style="margin-top:1.25rem">
+              <a class="link-arrow" href={path('/services/')}>{copy.offerLink} <span aria-hidden="true">→</span></a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="file-stage">
+    <article class="file file--kraft" id="method">
+      <p class="file-tab tab-label">{copy.methodTab}</p>
+      <div class="wrap">
+        <h2 class="h2">{copy.methodTitle}</h2>
+        <p class="lede" style="margin-top:1.1rem; margin-bottom:1.75rem">{copy.methodLede}</p>
+        <MethodRail locale={locale} />
+      </div>
+    </article>
+  </div>
+
+  <div class="file-stage">
+    <article class="file file--orchid" id="start">
+      <p class="file-tab tab-label">{copy.startTab}</p>
+      <div class="wrap">
+        <div class="media-split" style="margin-top:0">
+          <div>
+            <h2 class="h2">{copy.startTitle}</h2>
+            <p class="lede" style="margin-top:1.1rem">{copy.startLede}</p>
+            <div style="display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:2rem">
+              <a class="btn btn--solid" href={path('/contact/')}>{copy.start}</a>
+              <a class="btn" href={`mailto:${site.email}`}>{site.email}</a>
+            </div>
+          </div>
+          <Still src="/images/found-street.webp" alt={copy.concept} width={1400} height={933} caption={copy.streetCaption} />
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+{posts.length > 0 && (
+  <section class="page-hero notes-section">
+    <div class="wrap">
+      <h2 class="h2">{copy.notesTitle}</h2>
+      <div class="post-list" style="margin-top:1.75rem">
+        {posts.map((post) => (
+          <a class="post-row" href={path(`/blog/${post.id.split('/').at(-1)}/`)}>
+            <div>
+              <h3 class="h3">{post.data.title}</h3>
+              <p class="muted" style="font-size:0.9375rem">{post.data.description}</p>
+            </div>
+            <time datetime={post.data.pubDate.toISOString()}>
+              {post.data.pubDate.toLocaleDateString(es ? 'es-MX' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </time>
+          </a>
+        ))}
+      </div>
+      <p style="margin-top:1.5rem">
+        <a class="link-arrow" href={path('/blog/')}>{copy.allNotes} <span aria-hidden="true">→</span></a>
+      </p>
+    </div>
+  </section>
+)}
+
+<script>
+  // Rising files: each file pins while the next one rises over it; the covered
+  // file recedes in 3D (--cover goes 0 → 1 while it is covered).
+  type Item = { file: HTMLElement; pinAt: number; releaseAt: number; pinnedTop: number; state: string };
+  let files: Item[] = [];
+  let frame = 0;
+
+  const update = () => {
+    frame = 0;
+    for (const item of files) {
+      const y = window.scrollY;
+      const next = y < item.pinAt ? 'flow' : y < item.releaseAt ? 'pinned' : 'passed';
+      if (next === 'pinned') {
+        item.file.style.setProperty('--cover', ((y - item.pinAt) / (item.releaseAt - item.pinAt)).toFixed(4));
+      }
+      if (next === item.state) continue;
+      item.file.classList.toggle('is-pinned', next === 'pinned');
+      item.file.classList.toggle('is-passed', next === 'passed');
+      if (next === 'pinned') item.file.style.top = `${item.pinnedTop}px`;
+      else {
+        item.file.style.removeProperty('top');
+        item.file.style.removeProperty('--cover');
+      }
+      item.state = next;
+    }
+  };
+
+  const measure = () => {
+    document.querySelectorAll<HTMLElement>('.file').forEach((file) => {
+      file.classList.remove('is-pinned', 'is-passed');
+      file.style.removeProperty('top');
+      file.style.removeProperty('--cover');
+    });
+    const stages = [...document.querySelectorAll<HTMLElement>('.file-stage')];
+    stages.forEach((stage) => stage.style.removeProperty('height'));
+    files = stages.slice(0, -1).map((stage, index) => {
+      const file = stage.querySelector<HTMLElement>('.file')!;
+      const top = stage.getBoundingClientRect().top + window.scrollY;
+      stage.style.height = `${stage.offsetHeight}px`;
+      return {
+        file,
+        pinAt: top + file.offsetHeight - window.innerHeight,
+        releaseAt: stages[index + 1].getBoundingClientRect().top + window.scrollY,
+        pinnedTop: window.innerHeight - file.offsetHeight,
+        state: 'flow',
+      };
+    });
+    update();
+  };
+
+  const observer = new ResizeObserver(measure);
+  document.querySelectorAll('.file').forEach((file) => observer.observe(file));
+  // The globe scene above changes height once its script runs; re-measure then.
+  document.querySelectorAll('[data-scene]').forEach((scene) => observer.observe(scene));
+  window.addEventListener('resize', measure, { passive: true });
+  window.addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(update); }, { passive: true });
+  measure();
+</script>

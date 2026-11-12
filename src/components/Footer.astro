@@ -12,13 +12,15 @@ const tagline = locale === 'es'
   : site.tagline;
 ---
 
-<footer class="site-footer">
-  <div class="wrap">
+<footer class="site-footer" data-inkpad>
+  <canvas class="ink-canvas" aria-hidden="true"></canvas>
+  <div class="wrap footer-top">
+    <div class="footer-mark">
+      <p class="footer-lead">{copy.leaveMark}</p>
+      <p class="footer-hint">{copy.inkHint}</p>
+      <a class="btn btn--solid" href={localizedPath('/contact/', locale)}>{copy.startProject}</a>
+    </div>
     <div class="footer-cols">
-      <div style="max-width:26rem">
-        <p class="col-label">{site.name}</p>
-        <p class="muted" style="font-size:0.9375rem">{tagline}</p>
-      </div>
       <div>
         <p class="col-label">{copy.site}</p>
         <ul>
@@ -40,13 +42,17 @@ const tagline = locale === 'es'
           <li class="muted">{site.location} · {copy.languages.join(' / ')}</li>
         </ul>
       </div>
-    </div>
-
-    <p class="footer-wordmark" aria-hidden="true">{site.name.toUpperCase()}</p>
-
-    <div class="footer-meta">
-      <span>© {year} {site.name}. {copy.rights}</span>
-      <span>{copy.built}</span>
+      <div class="footer-meta">
+        <span>© {year} {site.name}. {tagline}</span>
+        <span>{copy.built}</span>
+      </div>
     </div>
   </div>
+
+  <p class="wrap footer-wordmark" aria-hidden="true">{site.name}</p>
 </footer>
+
+<script>
+  import { mountInkpad } from '../scripts/inkpad';
+  document.querySelectorAll<HTMLElement>('[data-inkpad]').forEach(mountInkpad);
+</script>
