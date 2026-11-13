@@ -69,8 +69,13 @@ const TIMELINE = {
   copyOut: [0, 0.14],
   center: [0.02, 0.28],
   head: [0.33, 0.42],
-  slide: [0.45, 0.98],
 } as const;
+// Scroll covers the timeline only up to the landed strip (P 0.5); from there the carousel moves the files.
+const SPAN = 0.5;
+const LANDED = 0.44;
+// Autoplay: one file every AUTO_EVERY s while idle; any carousel input pauses it for AUTO_RESUME s.
+const AUTO_EVERY = 4.5;
+const AUTO_RESUME = 6;
 
 export function mountGlobe(scene: HTMLElement) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -81,7 +86,11 @@ export function mountGlobe(scene: HTMLElement) {
   const head = scene.querySelector<HTMLElement>('[data-work-head]');
   const caseLine = scene.querySelector<HTMLElement>('[data-case-line]');
   const hint = scene.querySelector<HTMLElement>('.globe-hint');
-  if (!pin || !stage || !list || !copy || !head) return;
+  const nav = scene.querySelector<HTMLElement>('[data-carousel-nav]');
+  if (!pin || !stage || !list || !copy || !head || !nav) return;
+  const bars = [...nav.querySelectorAll<HTMLButtonElement>('[data-go]')];
+  const status = nav.querySelector<HTMLElement>('[data-carousel-status]');
+  const play = nav.querySelector<HTMLButtonElement>('[data-play]');
 
   let seed = 0x5eed;
   const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32);
@@ -105,10 +114,12 @@ export function mountGlobe(scene: HTMLElement) {
     ...[...list.querySelectorAll<HTMLElement>('[data-card]')].map((el, i) => make(el, i)),
   ];
   const cards = tiles.filter((t) => t.card >= 0);
+  const n = cards.length;
+  const wrap = (v: number) => ((v % n) + n) % n;
   scene.classList.add('is-live');
 
   // ---------- layout ----------
-  let vw = 0, vh = 0, mobile = false, R = 280, k = 1, cardW = 400, gap = 28, Rc = 2000, x0 = 0, oEnd = 0, stripY = 0, dist = 1;
+  let vw = 0, vh = 0, mobile = false, R = 280, k = 1, cardW = 400, gap = 28, Rc = 2000, x0 = 0, lo = 0, stripY = 0, dist = 1;
   let heroC: V3 = [0, 0, 0];
   const layout = () => {
     vw = pin.clientWidth;
@@ -121,28 +132,52 @@ export function mountGlobe(scene: HTMLElement) {
     Rc = mobile ? 1100 : 2200;
     scene.style.setProperty('--card-w', `${cardW}px`);
     const margin = mobile ? 0 : Math.max(20, (vw - 1180) / 2);
+    // Phones centre the current file; desktop aligns it with the heading. The wrap seam (lo) sits off screen.
     x0 = mobile ? 0 : -vw / 2 + margin + cardW / 2;
-    oEnd = mobile ? cards.length - 1 : Math.max(0, cards.length - 1 - (vw - 2 * margin - cardW) / (cardW + gap));
-    stripY = vh * (mobile ? 0.13 : 0.17);
+    lo = mobile ? -n / 2 : -1.5;
+    // The strip and its controls share the room under the heading, centred in it.
+    const cardH = (list.querySelector<HTMLElement>('[data-card]')?.offsetHeight ?? cardW * 0.75);
+    const headBottom = head.offsetTop + head.offsetHeight;
+    const navH = nav.offsetHeight + 16;
+    stripY = headBottom + Math.max(16, (vh - headBottom - cardH - navH) / 2) + cardH / 2 - vh / 2;
+    scene.style.setProperty('--strip-y', `${stripY.toFixed(1)}px`);
     const copyBottom = copy.offsetTop + copy.offsetHeight;
     heroC = mobile ? [0, Math.max(copyBottom + R * 1.02 + 8, vh - R - 64) - vh / 2, 0] : [vw * 0.23, vh * 0.03, 0];
-    scene.style.setProperty('--travel', mobile ? '330svh' : '270svh');
+    scene.style.setProperty('--travel', mobile ? '170svh' : '140svh');
     dist = Math.max(1, scene.offsetHeight - pin.offsetHeight);
   };
 
   // ---------- state ----------
   let yaw = -24, pitch = -14, vYaw = 0, pitchAim = -14;
   let dragging = false, lastX = 0, lastY = 0, lastT = 0;
+  // Carousel offset in cards, unbounded: `swipe` follows the pointer, then eases to `swipeAim`.
+  let swipe = 0, swipeAim = 0, swiping = false, swiped = false, sX = 0, s0 = 0, sV = 0, sT = 0, current = -1;
+  // Autoplay state: hover and focus on the files hold it; the pause button stops it until play.
+  let autoT = 0, lastInput = -Infinity, hovering = false, focused = false, stopped = false, autoOn = false;
+  const touch = () => { lastInput = performance.now(); };
   const born = performance.now();
   let prev = born;
   let running = false;
   let raf = 0;
 
-  const progress = () => clamp((pin.getBoundingClientRect().top - scene.getBoundingClientRect().top) / dist);
-  const stripPose = (i: number, o: number): [V3, Q] => {
-    const x = (i - o) * (cardW + gap) + x0;
+  const progress = () => clamp((pin.getBoundingClientRect().top - scene.getBoundingClientRect().top) / dist) * SPAN;
+  // Slot of file i on the drum, wrapped into [lo, lo + n) so the strip loops.
+  const slot = (i: number, o: number) => wrap(i - o - lo) + lo;
+  const stripPose = (d: number): [V3, Q] => {
+    const x = d * (cardW + gap) + x0;
     const th = x / Rc;
     return [[Rc * Math.sin(th), stripY, Rc * (Math.cos(th) - 1)], qAxis(0, 1, 0, th / D2R)];
+  };
+  const show = (i: number) => {
+    current = i;
+    bars.forEach((b, j) => (j === i ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')));
+    if (status && list.classList.contains('is-on')) status.textContent = bars[i]?.getAttribute('aria-label') ?? '';
+  };
+  // Go to file i the short way round.
+  const goToFile = (i: number) => {
+    let d = wrap(i - Math.round(swipeAim));
+    if (d > n / 2) d -= n;
+    swipeAim = Math.round(swipeAim) + d;
   };
 
   const frame = (now: number) => {
@@ -163,7 +198,8 @@ export function mountGlobe(scene: HTMLElement) {
     const m = inOut(range(P, TIMELINE.center[0], TIMELINE.center[1]));
     const center = lerp3(heroC, [0, stripY, 0], m);
     const qPitch = qAxis(1, 0, 0, pitch);
-    const o = oEnd * range(P, TIMELINE.slide[0], TIMELINE.slide[1]);
+    if (!swiping) swipe += (swipeAim - swipe) * Math.min(1, dt * 9);
+    const o = swipe;
     let flat = 0;
 
     for (const t of tiles) {
@@ -186,17 +222,19 @@ export function mountGlobe(scene: HTMLElement) {
 
       if (isCard) {
         const u = inOut(range(P, 0.1 + t.card * 0.03, 0.28 + t.card * 0.03));
+        const d = slot(t.card, o);
         if (u > 0) {
-          const [sp, sq] = stripPose(t.card, o);
+          const [sp, sq] = stripPose(d);
           p = lerp3(p, sp, u);
           p[2] += Math.sin(Math.PI * u) * 380;
           q = qSlerp(q, sq, u);
           s = lerp(s, 1, u);
-          alpha = lerp(alpha, 1, u);
+          // A file fades out just before it jumps across the wrap seam (only visible on very wide screens).
+          alpha = lerp(alpha, clamp(Math.min(d - lo, lo + n - d) / 0.45), u);
         }
         if (u > 0.98) flat++;
         t.el.classList.toggle('is-flat', u > 0.98);
-        if (t.card === 0) t.el.classList.toggle('is-found', u > 0.995 && o < 1.4);
+        if (t.card === 0) t.el.classList.toggle('is-found', u > 0.995 && Math.abs(d) < 1.4);
       } else {
         const u = range(P, 0.05 + xs * 0.14 + t.r * 0.04, 0.21 + xs * 0.14 + t.r * 0.04);
         if (u >= 1) {
@@ -225,7 +263,22 @@ export function mountGlobe(scene: HTMLElement) {
     head.style.opacity = h.toFixed(3);
     head.style.transform = `translate3d(0, ${((1 - h) * 24).toFixed(1)}px, 0)`;
     head.classList.toggle('is-on', h > 0.5);
-    list.classList.toggle('is-on', flat === cards.length);
+    list.classList.toggle('is-on', flat === n);
+    nav.classList.toggle('is-on', flat === n);
+    const auto = flat === n && !stopped && !hovering && !focused && !swiping && now - lastInput > AUTO_RESUME * 1000;
+    if (auto !== autoOn) {
+      autoOn = auto;
+      autoT = 0;
+      // A moving carousel does not announce each file; a still one does.
+      status?.setAttribute('aria-live', auto ? 'off' : 'polite');
+    }
+    if (auto && (autoT += dt) >= AUTO_EVERY) {
+      autoT = 0;
+      swipeAim = Math.round(swipeAim) + 1;
+    }
+    nav.style.setProperty('--auto', auto ? (autoT / AUTO_EVERY).toFixed(3) : '1');
+    const at = wrap(Math.round(swipe));
+    if (at !== current) show(at);
 
     if (running) raf = requestAnimationFrame(frame);
   };
@@ -275,25 +328,106 @@ export function mountGlobe(scene: HTMLElement) {
   stage.addEventListener('pointerup', release);
   stage.addEventListener('pointercancel', release);
 
-  // Keyboard: focusing a file scrolls the search to where that file is in view.
+  // Carousel: drag or swipe the landed strip sideways; vertical touch moves stay native scroll (touch-action: pan-y).
+  list.addEventListener('pointerdown', (e) => {
+    if (e.button > 0) return;
+    touch();
+    swiping = true;
+    swiped = false;
+    sX = e.clientX;
+    s0 = swipe;
+    sV = 0;
+    sT = performance.now();
+  });
+  list.addEventListener('pointermove', (e) => {
+    if (!swiping) return;
+    const dx = e.clientX - sX;
+    if (!swiped && Math.abs(dx) < 8) return;
+    if (!swiped) { swiped = true; list.setPointerCapture(e.pointerId); list.classList.add('is-dragging'); }
+    const now = performance.now();
+    const next = s0 - dx / (cardW + gap);
+    sV = (next - swipe) / Math.max(8, now - sT);
+    sT = now;
+    swipe = next;
+  });
+  const settle = () => {
+    if (!swiping) return;
+    touch();
+    swiping = false;
+    list.classList.remove('is-dragging');
+    // A flick carries on to the next file; a slow drag snaps to the nearest one.
+    if (swiped) swipeAim = Math.round(swipe + clamp(sV * 180, -1, 1));
+  };
+  list.addEventListener('pointerup', settle);
+  list.addEventListener('pointercancel', settle);
+  // A drag must not open the file under the pointer; keyboard clicks (detail 0) always pass.
+  list.addEventListener('click', (e) => { if (swiped && e.detail) { e.preventDefault(); e.stopPropagation(); } }, true);
+  list.addEventListener('dragstart', (e) => e.preventDefault());
+  // Trackpads: a sideways two-finger swipe moves the strip, then it snaps.
+  let wheelT = 0;
+  list.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    touch();
+    swiping = true;
+    swipe += e.deltaX / (cardW + gap);
+    clearTimeout(wheelT);
+    wheelT = window.setTimeout(() => { swiping = false; swipeAim = Math.round(swipe); }, 140);
+  }, { passive: false });
+  nav.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+    if (!b) return;
+    if (b === play) {
+      stopped = !stopped;
+      lastInput = -Infinity;
+      nav.classList.toggle('is-stopped', stopped);
+      play.setAttribute('aria-label', (stopped ? play.dataset.playLabel : play.dataset.pauseLabel) ?? '');
+      return;
+    }
+    touch();
+    if (b.dataset.step) swipeAim = Math.round(swipeAim) + Number(b.dataset.step);
+    else goToFile(Number(b.dataset.go));
+  });
+  // Hover or keyboard focus on the files holds the autoplay; it resumes after AUTO_RESUME s of idle.
+  list.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hovering = true; });
+  list.addEventListener('pointerleave', () => { if (hovering) { hovering = false; touch(); } });
+  list.addEventListener('focusout', (e) => {
+    if (list.contains(e.relatedTarget as Node | null)) return;
+    focused = false;
+    touch();
+  });
+
+  // Keyboard: focusing a file lands the search and turns the strip to it; arrow keys move between files.
   const goTo = (P: number) => {
     const stick = parseFloat(getComputedStyle(pin).top) || 0;
-    const y = scrollY + scene.getBoundingClientRect().top - stick + P * dist;
+    const y = scrollY + scene.getBoundingClientRect().top - stick + (P / SPAN) * dist;
     scrollTo({ top: y, behavior: 'instant' as ScrollBehavior });
   };
   list.addEventListener('focusin', (e) => {
     const li = (e.target as HTMLElement).closest<HTMLElement>('[data-card]');
     if (!li) return;
-    const i = Number(li.dataset.card);
-    const o = clamp(mobile ? i : i - 1, 0, oEnd);
-    goTo(oEnd ? lerp(TIMELINE.slide[0], TIMELINE.slide[1], o / oEnd) : TIMELINE.slide[0]);
+    focused = true;
+    goToFile(Number(li.dataset.card));
+    if (progress() < LANDED) goTo(LANDED);
   });
-  head.addEventListener('focusin', () => goTo(TIMELINE.slide[0]));
+  list.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const li = (e.target as HTMLElement).closest<HTMLElement>('[data-card]');
+    if (!li) return;
+    e.preventDefault();
+    touch();
+    const i = wrap(Number(li.dataset.card) + (e.key === 'ArrowRight' ? 1 : -1));
+    list.querySelector<HTMLElement>(`[data-card="${i}"] a`)?.focus({ preventScroll: true });
+  });
+  head.addEventListener('focusin', () => { if (progress() < LANDED) goTo(LANDED); });
+  nav.addEventListener('focusin', () => { if (progress() < LANDED) goTo(LANDED); });
 
-  new ResizeObserver(() => {
+  const ro = new ResizeObserver(() => {
     layout();
     if (!running) frame(performance.now());
-  }).observe(pin);
+  });
+  ro.observe(pin);
+  ro.observe(head);
   let inView = false;
   new IntersectionObserver(([entry]) => {
     inView = entry.isIntersecting;

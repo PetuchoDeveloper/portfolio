@@ -50,11 +50,11 @@ typography:
     lineHeight: 1.02
     letterSpacing: "-0.025em"
   wordmark:
-    fontFamily: "'Fraunces Variable', 'Fraunces', 'Times New Roman', serif"
-    fontSize: "clamp(3.4rem, 14vw, 12.5rem)"
-    fontWeight: 640
-    lineHeight: 0.8
-    letterSpacing: "-0.04em"
+    fontFamily: "'Geist Variable', 'Geist', system-ui, sans-serif"
+    fontSize: "min(calc((100cqw - 2.5rem) / 6.75), 11rem)"
+    fontWeight: 900
+    lineHeight: 0.78
+    letterSpacing: "-0.05em"
   title:
     fontFamily: "'Geist Variable', 'Geist', system-ui, sans-serif"
     fontSize: "1.2rem"
@@ -158,8 +158,9 @@ Two grounds carry the same world. Dark is matte onyx with bone type. Light is pa
 `tile-bone`, `tile-kraft`, `tile-violet`, `tile-onyx`. The globe tiles are objects, so they do not change with the theme.
 
 ### Inks (ink pad only)
-- Light, multiply on paper: violet `#9271E8`, kraft gold `#DDB264`, indigo `#5A4C9C`, orchid `#D07CB6`.
-- Dark, on onyx: violet `#7C4FE0`, kraft `#D9A04A`, bone `#B3A890`, orchid `#A8438E`. The shader mixes the onyx toward the ink and feeds the screen blend so the page lands exactly on that colour; rims gain chroma at the same lightness, never a bright outline.
+Riso-style inks: violet, warm, blue, pink. Each set sits at the opposite lightness to the footer type, so the type reads over any ink.
+- Light, multiply on paper: violet `#9B7BFF`, yellow `#FFE11A`, blue `#4DA3F5`, fluorescent pink `#FF48B0`. They overprint like riso layers (pink on yellow gives red-orange). Near-black type holds 5:1 or more on each ink.
+- Dark, on onyx: violet `#8A5CF6`, vermilion `#F0461E`, blue `#2F6BFF`, pink `#F2277E`. White type holds 3.8:1 or more on each ink at full strength and 5.7:1 or more where the ink is thin (the wordmark is large text, minimum 3:1). The old kraft and bone inks gave about 2:1 under bone type. The shader cubes the ink weights so each ink keeps its own hue where inks meet (no brown mix), mixes the onyx toward the ink and feeds the screen blend so the page lands exactly on that colour; rims gain chroma at the same lightness, never a bright outline.
 These are the only place the palette goes past purple + kraft. They stay inside the footer.
 
 ### Named Rules
@@ -172,20 +173,20 @@ These are the only place the palette goes past purple + kraft. They stay inside 
 
 - **Display** (640, `clamp(3.1rem, min(11.5vw, 15.5svh), 8.75rem)`, lh 0.88, -0.035em): the hero offer, one line per span, no wrapping. The Spanish title uses `.hero-title--long` (`clamp(2.6rem, min(9.4vw, 12.6svh), 7rem)`).
 - **Headline** (600, `clamp(1.9rem, 4vw, 3.3rem)`, lh 1.02): file and section headings.
-- **Wordmark** (640, `clamp(3.4rem, 14vw, 12.5rem)`): footer name over the ink.
+- **Wordmark** (Geist 900, uppercase, -0.05em, fitted to the footer width up to 11rem): footer name over the ink. Heavy, even strokes read over any ink; Fraunces hairlines did not. White on onyx, ink on paper.
 - **Title** (650, 1.2rem): post rows and compact headings.
 - **Body** (400, 1.0625rem, lh 1.65): ledes held near 44–58ch.
 - **Label** (600, 0.6875rem, 0.2em, uppercase): tabs, the case line, column labels, hints.
 - **Tile type** (7.5–52px): decorative type inside 112×84 evidence tiles only.
 
-**The Two Inks Rule.** Fraunces for display, Geist for function. No third family.
+**The Two Inks Rule.** Fraunces for display, Geist for function. No third family. The footer wordmark is the one display use of Geist.
 
 ## Layout
 
 Centered wrap `min(1180px, 100% - 2.5rem)`. Sticky translucent header 4.25rem (8.25rem on phones, where nav scrolls on its own row).
 
 Home, top to bottom:
-1. **Scene** (`EvidenceGlobe.astro`): a sticky stage of `100svh` inside a section `100svh + 270svh` tall (330svh on phones). Case line on top, the offer bottom-left, the globe right (below the copy on phones).
+1. **Scene** (`EvidenceGlobe.astro`): a sticky stage of `100svh` inside a section `100svh + 140svh` tall (`+ 170svh` on phones; scroll only lands the strip, the carousel moves it). Case line on top, the offer bottom-left, the globe right (below the copy on phones).
 2. **File stack** (`HomePage.astro`): Offer, Method (kraft), Start (purple). Each file is at least one viewport tall and pins while the next one rises.
 3. **Notes**: post rows.
 4. **Footer ink pad** (`Footer.astro`): "Leave a mark." + Start a project on the left, link columns on the right, wordmark at the bottom over the ink band.
@@ -208,7 +209,11 @@ Files and folders are square. Controls, tiles and cards use 2px. The die-cut tab
 - No JS or reduced motion: a still CSS sphere and a horizontal, scroll-snapped card list. Same content.
 
 ### Work cards
-Five cards that match the heading "One case study is ready. Three are still being written.": SED (FOUND), Tau, Marketplace operations, Automation verification gate (all three "write-up in progress", from /work), and "This file is still open" → contact. Each card is a real link with a die-cut tab, a face and a fixed caption row (`--cap-h`). In flight the card is clipped to its face; the caption opens when it lands. Focusing a card scrolls the scene to where it is in view.
+Five cards that match the heading "One case study is ready. Three are still being written.": SED (FOUND), Tau, Marketplace operations, Automation verification gate (all three "write-up in progress", from /work), and "This file is still open" → contact. Each card is a real link with a die-cut tab, a face and a fixed caption row (`--cap-h`: 6.6rem, 7.5rem up to 1100px, 8.2rem on phones, so wrapped titles in either language keep the call to action inside). In flight the card is clipped to its face; the caption opens when it lands. Focusing a card scrolls the scene to where it is in view.
+
+**Carousel.** Vertical scroll only flies the cards into the strip (timeline up to P 0.5; scene travel 140svh desktop, 170svh phone). From there the strip is a looping carousel on every screen: arrow buttons (44px, hairline, the authored arrow), five position bars (the current one violet and wider), drag or swipe (a flick goes one card, a slow drag snaps to the nearest), a sideways trackpad swipe, and Left/Right arrow keys between focused cards. Vertical touch moves stay native scroll (`touch-action: pan-y`). A drag never opens the card under the pointer. Focusing a card turns the strip to it the short way round; a polite live region names the current file. The wrap seam sits off screen (desktop window -1.5…3.5 cards from the heading-aligned slot, phones centred); a card fades out just before it crosses the seam. The strip and its controls are centred in the room under the heading.
+
+**Autoplay.** While nobody touches it, the carousel moves one file every 4.5s. The current bar is a violet track whose fill shows the time to the next file. A pointer hovering the files or keyboard focus on a file holds it; any carousel input (drag, swipe, trackpad, arrows, bars, keys) pauses it, and it resumes after 6s of idle. The pause/play button (first of the three 44px buttons) stops it until pressed again. While it plays the live region is `aria-live=off`, so files are not announced one after another. Reduced motion: no autoplay (the engine does not run).
 
 ### File stack
 Die-cut tab, headline, content. Tabs name the file; no eyebrow above headings.
@@ -230,7 +235,8 @@ Unchanged from the earlier dossier: solid purple primary, outline secondary, hai
 | Globe assembly | load | tiles fly in as shards, left to right | 1.1s each, expo out, ~1s sweep |
 | Globe idle | always (in view) | 5°/s spin, drag with inertia, pointer tilts pitch ±5° | per frame |
 | Search | scroll P 0.05–0.43 | decor tiles scatter past the camera; cards fly to a curved strip | cubic in-out per tile |
-| Strip | scroll P 0.45–0.98 | strip slides on a 2200px drum | linear to scroll |
+| Autoplay | idle 6s after the last input, no hover or focus on the files | one file every 4.5s; bar fill shows the time left | eases like a manual step |
+| Carousel | arrows, bars, drag/swipe, trackpad, keys | strip turns on a drum (2200px desktop, 1100px phone) and loops | eases to the snapped card (`dt * 9`); bar width 420ms expo out |
 | FOUND | SED card lands | stamp 2.6× → 1×, card thud | 620ms |
 | File recession | covered file | tilt back, scale, shade | linked to scroll |
 | Page change | navigation | old sheet tilts away, new sheet rises (`@view-transition`) | 380ms out, 640ms in |

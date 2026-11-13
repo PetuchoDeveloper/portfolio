@@ -114,8 +114,10 @@ void main() {
     o = vec4(exp(-hue * (body * cover + rim * 1.1)), 1.0);
   } else {
     // Onyx: mix the ground toward the ink; the rim gains chroma at the same lightness.
-    vec3 ink = (w.r * uC[0] + w.g * uC[1] + w.b * uC[2] + w.a * uC[3]) / max(c, 1e-3);
-    vec3 col = mix(uGround, ink, cover * (0.55 + 0.4 * smoothstep(0.1, 1.4, c)));
+    // Cubed weights keep each ink its own hue where inks meet, so the mix does not turn brown.
+    vec4 s = w * w * w;
+    vec3 ink = (s.r * uC[0] + s.g * uC[1] + s.b * uC[2] + s.a * uC[3]) / max(sum4(s), 1e-6);
+    vec3 col = mix(uGround, ink, cover * (0.74 + 0.24 * smoothstep(0.1, 1.4, c)));
     float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
     col = mix(col, clamp(l * 0.88 + (col - l) * 1.35, 0.0, 1.0), rim);
     // Screen blend with the page lands exactly on col.
@@ -126,9 +128,11 @@ void main() {
 type Hex = string;
 const clampN = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const rgb = (hex: Hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+// Riso-style inks: violet, warm, blue, pink. Dark inks hold white type at 3.8:1 or more (the wordmark is large text);
+// light inks hold the near-black type at 5:1 or more, and overprint like riso layers.
 const INKS = {
-  light: { ground: '#F3EFE6', inks: ['#9271E8', '#DDB264', '#5A4C9C', '#D07CB6'] },
-  dark: { ground: '#161616', inks: ['#7C4FE0', '#D9A04A', '#B3A890', '#A8438E'] },
+  light: { ground: '#F3EFE6', inks: ['#9B7BFF', '#FFE11A', '#4DA3F5', '#FF48B0'] },
+  dark: { ground: '#161616', inks: ['#8A5CF6', '#F0461E', '#2F6BFF', '#F2277E'] },
 };
 const ABSORB = (() => {
   const g = rgb(INKS.light.ground);
@@ -403,6 +407,8 @@ export function mountInkpad(root: HTMLElement) {
   root.addEventListener('pointerdown', (e) => {
     if (!vel || (e.target as HTMLElement).closest('a, button')) return;
     down = true;
+    // A stroke paints; it must not also select the footer text under it.
+    root.classList.add('is-inking');
     const [x, y] = pos(e);
     // Smaller and calmer on narrow screens, where the pad sits under the links.
     const unit = Math.min(1, canvas.clientWidth / 900);
@@ -422,7 +428,7 @@ export function mountInkpad(root: HTMLElement) {
     }
     last = [x, y];
   });
-  const up = () => { down = false; };
+  const up = () => { down = false; root.classList.remove('is-inking'); };
   root.addEventListener('pointerup', up);
   root.addEventListener('pointercancel', up);
   root.addEventListener('pointerleave', () => { up(); last = null; });

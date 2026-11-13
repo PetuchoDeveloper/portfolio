@@ -598,7 +598,8 @@ a:hover > .arrow { transform: translateX(3px); }
   background: var(--onyx);
   padding-top: clamp(4rem, 8vw, 6rem);
 }
-html[data-theme='light'] .notes-section { background: transparent; }
+/* Paper, not transparent: the receding kraft file behind must not show through under the Start file. */
+html[data-theme='light'] .notes-section { background: var(--onyx) url('/paper.webp') 0 0 / 1800px auto; }
 .page-hero .display {
   font-size: clamp(2.4rem, 6.5vw, 5rem);
   line-height: 0.92;
@@ -676,6 +677,7 @@ html[data-theme='light'] .notes-section { background: transparent; }
   border-top: 1px solid var(--line);
   touch-action: pan-y;
   overflow: hidden;
+  container-type: inline-size;
 }
 .ink-canvas {
   position: absolute;
@@ -724,17 +726,22 @@ html[data-theme='light'] .ink-canvas { mix-blend-mode: multiply; }
 .footer-cols a { color: var(--bone); text-decoration: none; }
 .footer-cols a:hover { color: var(--violet-text); }
 
+.site-footer.is-inking { -webkit-user-select: none; user-select: none; }
+/* Heavy, even strokes (no Fraunces hairlines) so the name reads over any ink. */
 .footer-wordmark {
-  font-family: var(--font-display);
-  font-weight: 640;
-  letter-spacing: -0.04em;
-  line-height: 0.8;
-  font-size: clamp(3.4rem, 14vw, 12.5rem);
-  color: var(--bone);
+  font-family: var(--font-ui);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 0.78;
+  /* The name is 6.66em wide; fit it to the wrap (100cqw is the footer width without a scrollbar). */
+  font-size: min(calc((100cqw - 2.5rem) / 6.75), 11rem);
+  color: #FFFFFF;
   user-select: none;
   pointer-events: none;
   white-space: nowrap;
 }
+html[data-theme='light'] .footer-wordmark { color: var(--bone); }
 .footer-meta {
   flex-basis: 100%;
   display: grid;

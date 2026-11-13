@@ -23,6 +23,12 @@ const copy = es
       workLink: 'Abrir el archivo de proyectos',
       cardsAria: 'Proyectos encontrados',
       found: 'ENCONTRADO',
+      file: (i: number, n: number, t: string) => `Archivo ${i} de ${n}: ${t}`,
+      pick: 'Elegir archivo',
+      prev: 'Archivo anterior',
+      next: 'Archivo siguiente',
+      pause: 'Pausar el carrusel',
+      play: 'Reproducir el carrusel',
     }
   : {
       caseLine: ['Case file 001', 'Kevin Varick', 'Full-stack developer', 'Mexico · EN / ES'],
@@ -34,6 +40,12 @@ const copy = es
       workLink: 'Open the work folder',
       cardsAria: 'Found work',
       found: 'FOUND',
+      file: (i: number, n: number, t: string) => `File ${i} of ${n}: ${t}`,
+      pick: 'Choose a file',
+      prev: 'Previous file',
+      next: 'Next file',
+      pause: 'Pause the carousel',
+      play: 'Play the carousel',
     };
 
 const pending = es ? 'Caso en proceso' : 'Write-up in progress';
@@ -211,7 +223,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
       <a class="link-arrow" href={path('/work/')}>{copy.workLink} <Arrow /></a>
     </div>
 
-    <ol class="cards" data-cards aria-label={copy.cardsAria}>
+    <ol class="cards" id="found-files" data-cards aria-label={copy.cardsAria}>
       {cards.map((c, i) => {
         const slot = slots[cardSlots[i]];
         return (
@@ -234,6 +246,23 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
         );
       })}
     </ol>
+
+    <div class="carousel-nav" data-carousel-nav>
+      <div class="carousel-bars" role="group" aria-label={copy.pick}>
+        {cards.map((c, i) => (
+          <button type="button" class="carousel-bar" data-go={i} aria-controls="found-files" aria-label={copy.file(i + 1, cards.length, c.title)} aria-current={i === 0 ? 'true' : undefined}></button>
+        ))}
+      </div>
+      <div class="carousel-arrows">
+        <button type="button" class="carousel-arrow carousel-play" data-play data-pause-label={copy.pause} data-play-label={copy.play} aria-controls="found-files" aria-label={copy.pause}>
+          <svg class="icon-pause" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5.5 3.5v9M10.5 3.5v9" /></svg>
+          <svg class="icon-play" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.2l7.5 4.8L5 12.8z" /></svg>
+        </button>
+        <button type="button" class="carousel-arrow carousel-arrow--prev" data-step="-1" aria-controls="found-files" aria-label={copy.prev}><Arrow /></button>
+        <button type="button" class="carousel-arrow" data-step="1" aria-controls="found-files" aria-label={copy.next}><Arrow /></button>
+      </div>
+      <p class="sr-only" aria-live="polite" data-carousel-status></p>
+    </div>
   </div>
 </section>
 
@@ -569,6 +598,8 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     display: block;
     padding: 0;
     overflow: hidden;
+    /* clip, not hidden: focusing an off-screen file must not scroll the pin sideways. */
+    overflow: clip;
   }
   .is-live .case-line {
     position: absolute;
@@ -642,12 +673,98 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     margin: calc(var(--card-h) / -2) 0 0 calc(var(--card-w) / -2);
     backface-visibility: hidden;
   }
-  .is-live .cards.is-on .card { pointer-events: auto; }
+  .is-live .cards.is-on .card { pointer-events: auto; touch-action: pan-y; }
+  .is-live .cards.is-dragging, .is-live .cards.is-dragging .card-body { cursor: grabbing; }
+
+  /* ---------- Carousel controls ---------- */
+  .carousel-nav { display: none; }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .is-live .carousel-nav {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    top: calc(50% + var(--strip-y, 0px) + var(--card-h) / 2 + 1rem);
+    width: min(var(--wrap), 100% - 2.5rem);
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    pointer-events: none;
+    transition: opacity 320ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .is-live .carousel-nav.is-on { opacity: 1; transform: none; pointer-events: auto; }
+  .carousel-bars { display: flex; margin-left: -6px; }
+  .carousel-bar {
+    position: relative;
+    width: clamp(1.5rem, 7.5vw, 2.75rem);
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  /* Same slot for every bar; the current one grows with a transform, not a width change. */
+  .carousel-bar::before {
+    content: '';
+    position: absolute;
+    inset: calc(50% - 1.5px) 6px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--bone-soft) 60%, transparent);
+    transform: scaleX(0.45);
+    transform-origin: 0 50%;
+    transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), background-color 200ms ease;
+  }
+  .carousel-bar:hover::before { background: var(--bone); }
+  /* The current bar is a violet track; its fill shows the time to the next file while the carousel plays (--auto 0 to 1). */
+  .carousel-bar[aria-current='true']::before { background: color-mix(in srgb, var(--violet) 34%, transparent); transform: none; }
+  .carousel-bar::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - 1.5px) 6px;
+    border-radius: 2px;
+    background: var(--violet);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+  .carousel-bar[aria-current='true']::after { transform: scaleX(var(--auto, 1)); }
+  .carousel-arrows { display: flex; gap: clamp(0.25rem, 1.5vw, 0.5rem); }
+  .carousel-play { margin-right: clamp(0.25rem, 1.5vw, 0.5rem); }
+  .carousel-play .icon-play, .is-stopped .carousel-play .icon-pause { display: none; }
+  .is-stopped .carousel-play .icon-play { display: block; }
+  .carousel-arrow {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--bone);
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 120ms ease;
+  }
+  .carousel-arrow:hover { background: var(--panel); border-color: var(--violet); color: var(--violet-text); }
+  .carousel-arrow:active { transform: translateY(1px) scale(0.97); }
+  .carousel-arrow :global(.arrow) { transition: transform 200ms ease; }
+  .carousel-arrow:hover :global(.arrow) { transform: translateX(3px); }
+  .carousel-arrow--prev :global(.arrow) { transform: rotate(180deg); }
+  .carousel-arrow--prev:hover :global(.arrow) { transform: rotate(180deg) translateX(3px); }
   .is-live .card-body {
     clip-path: inset(0 0 var(--cap-h) 0);
     transition: clip-path 520ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .is-live .card.is-flat .card-body { clip-path: inset(0); }
+  /* Open slightly past the edges so the keyboard focus ring (2px at 3px offset) is not clipped. */
+  .is-live .card.is-flat .card-body { clip-path: inset(-6px); }
   .is-live .card-cap, .is-live .card-tab { transition: opacity 300ms ease; }
   .is-live .card:not(.is-flat) .card-cap,
   .is-live .card:not(.is-flat) .card-tab { opacity: 0; }
@@ -689,6 +806,13 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     .is-live .work-head { grid-template-columns: 1fr; top: 2.5rem; }
     .is-live .work-head .link-arrow { justify-self: start; }
     .work-head .h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  }
+  /* Narrow cards wrap their titles (Spanish most); the caption row grows so the call to action stays inside. */
+  @media (max-width: 1100px) {
+    .scene { --cap-h: 7.5rem; }
+  }
+  @media (max-width: 860px) {
+    .scene { --cap-h: 8.2rem; }
   }
   @media (max-width: 860px) and (max-height: 720px) {
     .hero-lede { display: none; }
