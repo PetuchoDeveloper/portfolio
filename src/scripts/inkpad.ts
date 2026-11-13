@@ -22,7 +22,7 @@ const SPLAT = `${HEAD}
 uniform sampler2D uT;
 uniform vec2 uPoint;
 uniform vec4 uColor;
-uniform float uAspect, uRadius, uHard, uRough, uSeed;
+uniform float uAspect, uRadius, uHard, uRough, uSeed, uReplace;
 float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7)) + uSeed) * 43758.5453); }
 float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
   return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
@@ -32,7 +32,9 @@ void main() {
   float edge = 1.0 + uRough * (n(d * 2.5) * 0.55 + n(d * 7.0) * 0.3 + n(d * 19.0) * 0.15 - 0.5);
   float r = length(p) / (uRadius * edge);
   float m = mix(exp(-r * r * 3.0), 1.0 - smoothstep(0.84, 1.0, r), uHard);
-  o = texture(uT, vUv) + uColor * m;
+  // A drop displaces the ink under it (marbling); trails and forces add.
+  vec4 old = texture(uT, vUv);
+  o = mix(old + uColor * m, mix(old, uColor, m), uReplace);
 }`;
 const ADVECT = `${HEAD}
 uniform sampler2D uVel, uSrc;
@@ -89,7 +91,7 @@ uniform float uK;
 void main() { o = texture(uT, vUv) * uK; }`;
 const DISPLAY = `${HEAD}
 uniform sampler2D uDye;
-uniform vec3 uA[4];
+uniform vec3 uA[4], uC[4], uGround;
 uniform float uScreen, uAspect;
 float sum4(vec4 v) { return v.x + v.y + v.z + v.w; }
 float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -103,13 +105,22 @@ void main() {
   float fibre = n(q * 38.0) * 0.5 + n(q * 90.0) * 0.3 + n(q * 210.0) * 0.2;
   float line = 0.07 + (fibre - 0.5) * 0.09;
   float cover = smoothstep(line, line + 0.035, c);
-  vec3 hue = (w.r * uA[0] + w.g * uA[1] + w.b * uA[2] + w.a * uA[3]) / max(c, 1e-3);
   float body = 0.5 + 0.4 * smoothstep(0.1, 1.4, c);
   float g = length(vec2(sum4(texture(uDye, vR)) - sum4(texture(uDye, vL)), sum4(texture(uDye, vT)) - sum4(texture(uDye, vB))));
   float rim = smoothstep(0.04, 0.3, g) * cover;
-  vec3 A = hue * (body * cover + rim * 1.1);
-  vec3 t = exp(-A);
-  o = vec4(mix(t, 1.0 - t, uScreen), 1.0);
+  if (uScreen < 0.5) {
+    // Paper: pigment absorbs light; the rim holds more pigment, so it is darker.
+    vec3 hue = (w.r * uA[0] + w.g * uA[1] + w.b * uA[2] + w.a * uA[3]) / max(c, 1e-3);
+    o = vec4(exp(-hue * (body * cover + rim * 1.1)), 1.0);
+  } else {
+    // Onyx: mix the ground toward the ink; the rim gains chroma at the same lightness.
+    vec3 ink = (w.r * uC[0] + w.g * uC[1] + w.b * uC[2] + w.a * uC[3]) / max(c, 1e-3);
+    vec3 col = mix(uGround, ink, cover * (0.55 + 0.4 * smoothstep(0.1, 1.4, c)));
+    float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
+    col = mix(col, clamp(l * 0.88 + (col - l) * 1.35, 0.0, 1.0), rim);
+    // Screen blend with the page lands exactly on col.
+    o = vec4(clamp(1.0 - (1.0 - col) / (1.0 - uGround), 0.0, 1.0), 1.0);
+  }
 }`;
 
 type Hex = string;
@@ -117,15 +128,14 @@ const clampN = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const rgb = (hex: Hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
 const INKS = {
   light: { ground: '#F3EFE6', inks: ['#9271E8', '#DDB264', '#5A4C9C', '#D07CB6'] },
-  dark: { ground: '#161616', inks: ['#6A43D2', '#9C7535', '#7D776B', '#93397C'] },
+  dark: { ground: '#161616', inks: ['#7C4FE0', '#D9A04A', '#B3A890', '#A8438E'] },
 };
-const absorbance = (dark: boolean) => {
-  const set = dark ? INKS.dark : INKS.light;
-  const g = rgb(set.ground);
-  return set.inks.flatMap((ink) =>
-    rgb(ink).map((c, i) => (dark ? -Math.log(Math.min(1, Math.max(0.02, (1 - c) / (1 - g[i])))) : -Math.log(Math.min(1, Math.max(0.02, c / g[i]))))),
-  );
-};
+const ABSORB = (() => {
+  const g = rgb(INKS.light.ground);
+  return INKS.light.inks.flatMap((ink) => rgb(ink).map((c, i) => -Math.log(Math.min(1, Math.max(0.02, c / g[i])))));
+})();
+const DARK_INKS = INKS.dark.inks.flatMap(rgb);
+const DARK_GROUND = rgb(INKS.dark.ground);
 
 export function mountInkpad(root: HTMLElement) {
   const canvas = root.querySelector('canvas');
@@ -237,7 +247,7 @@ export function mountInkpad(root: HTMLElement) {
   // ---------- simulation ----------
   const drops: { x: number; y: number; q: number; t: number }[] = [];
   let seed = 1;
-  const splat = (field: ReturnType<typeof pair>, x: number, y: number, color: number[], radius: number, hard: number, rough: number) => {
+  const splat = (field: ReturnType<typeof pair>, x: number, y: number, color: number[], radius: number, hard: number, rough: number, replace = 0) => {
     const u = use(P.splat, tx(field.read));
     tex(u.uT, field.read);
     gl.uniform2f(u.uPoint, x, y);
@@ -246,16 +256,18 @@ export function mountInkpad(root: HTMLElement) {
     gl.uniform1f(u.uRadius, radius);
     gl.uniform1f(u.uHard, hard);
     gl.uniform1f(u.uRough, rough);
+    gl.uniform1f(u.uReplace, replace);
     gl.uniform1f(u.uSeed, (seed = (seed * 9301 + 49297) % 233280) / 233280 * 100);
     draw(field.write);
     field.swap();
   };
   const inkVec = (i: number, amount: number) => [0, 1, 2, 3].map((c) => (c === i % 4 ? amount : 0));
   // Sizes are CSS pixels, so a drop looks the same on a wide or a tall footer.
-  const drop = (x: number, y: number, ink: number, px = 50) => {
+  // bloom: how much the drop pushes older ink outward (marbling rings).
+  const drop = (x: number, y: number, ink: number, px = 50, bloom = 2.1) => {
     const r = px / canvas.clientHeight;
-    splat(dye, x, y, inkVec(ink, 1.15), r, 1, 0.55);
-    drops.push({ x, y, q: 2.1 * r * r, t: 0 });
+    splat(dye, x, y, inkVec(ink, 1.15), r, 1, 0.55, 1);
+    drops.push({ x, y, q: bloom * r * r, t: 0 });
     if (drops.length > 4) drops.shift();
   };
 
@@ -314,15 +326,13 @@ export function mountInkpad(root: HTMLElement) {
   };
 
   let dark = false;
-  let A = absorbance(false);
-  const theme = () => {
-    dark = document.documentElement.dataset.theme === 'dark';
-    A = absorbance(dark);
-  };
+  const theme = () => { dark = document.documentElement.dataset.theme === 'dark'; };
   const show = () => {
     const u = use(P.show, [2.2 / dye.read.w, 2.2 / dye.read.h]);
     tex(u.uDye, dye.read);
-    gl.uniform3fv(u.uA, A);
+    gl.uniform3fv(u.uA, ABSORB);
+    gl.uniform3fv(u.uC, DARK_INKS);
+    gl.uniform3fv(u.uGround, DARK_GROUND);
     gl.uniform1f(u.uScreen, dark ? 1 : 0);
     gl.uniform1f(u.uAspect, aspect);
     draw(null);
@@ -349,29 +359,40 @@ export function mountInkpad(root: HTMLElement) {
   let inkIndex = 0;
   const seedBand = () => {
     seeded = true;
-    // A band of drops along the bottom edge, behind the wordmark only.
+    // The band sits behind the wordmark only. It pools first (overlapping washes,
+    // ink wicking upward), then single drops land in it and push it into rings.
     const mark = root.querySelector('.footer-wordmark')?.getBoundingClientRect();
     const box = canvas.getBoundingClientRect();
     const band = mark ? clampN((box.bottom - mark.top) / box.height, 0.08, 0.4) : 0.25;
     const unitPx = Math.min(1, box.width / 900);
-    const n = Math.ceil(box.width / (110 * unitPx + 30)) + 2;
     const wave = (i: number, k: number) => (Math.sin(i * k) + 1) / 2;
-    const plan = Array.from({ length: n * 2 }, (_, j) => {
-      const i = j % n, low = j >= n;
-      return {
-        x: (i + 0.5 + (wave(i, 12.9898) - 0.5) * 0.7 + (low ? 0.5 : 0)) / n,
-        y: band * (low ? 0.08 + wave(i, 4.1) * 0.2 : 0.42 + wave(i, 78.233) * 0.4),
-        ink: [0, 3, 1, 0, 2, 0, 3, 1, 2][(i + (low ? 4 : 0)) % 9],
-        size: (58 + wave(i, 31.7) * 46) * (0.55 + 0.45 * unitPx),
-      };
-    });
+    const washR = band * 0.5;
+    const washes = Math.ceil(aspect / (washR * 0.8)) + 2;
+    const pool = () => {
+      for (let i = 0; i < washes; i++) {
+        const x = (i - 0.5) * ((washR * 0.8) / aspect);
+        splat(dye, x, band * (0.3 + wave(i, 7.3) * 0.12), inkVec([0, 3, 1, 0, 2][i % 5], 0.8), washR * (0.8 + wave(i, 3.1) * 0.35), 1, 0.7, 1);
+      }
+      for (let i = 0; i < washes; i++) {
+        splat(vel, (i + 0.5) / washes, band * 0.62, [0, (90 + wave(i, 5.7) * 140) * unitPx, 0, 0], 0.05, 0, 0);
+      }
+    };
+    const n = Math.ceil(box.width / (120 * unitPx + 30)) + 1;
+    const plan = Array.from({ length: n }, (_, i) => ({
+      x: (i + 0.5 + (wave(i, 12.9898) - 0.5) * 0.7) / n,
+      y: band * (0.25 + wave(i, 78.233) * 0.4),
+      ink: [0, 3, 1, 0, 2, 0, 3, 1, 2][i % 9],
+      size: (40 + wave(i, 31.7) * 34) * (0.6 + 0.4 * unitPx),
+    }));
     if (reduced) {
-      plan.forEach((d) => drop(d.x, d.y, d.ink, d.size));
+      pool();
+      plan.forEach((d) => drop(d.x, d.y, d.ink, d.size, 0.9));
       for (let i = 0; i < 90; i++) step(1 / 60);
       show();
       return;
     }
-    plan.forEach((d, i) => setTimeout(() => { drop(d.x, d.y, d.ink, d.size); wake(); }, 100 + i * 70));
+    setTimeout(() => { pool(); wake(); }, 60);
+    plan.forEach((d, i) => setTimeout(() => { drop(d.x, d.y, d.ink, d.size, 0.9); wake(); }, 260 + i * 110));
   };
 
   const pos = (e: PointerEvent) => {
@@ -383,7 +404,9 @@ export function mountInkpad(root: HTMLElement) {
     if (!vel || (e.target as HTMLElement).closest('a, button')) return;
     down = true;
     const [x, y] = pos(e);
-    drop(x, y, inkIndex++ % 4, e.pointerType === 'touch' ? 40 : 52);
+    // Smaller and calmer on narrow screens, where the pad sits under the links.
+    const unit = Math.min(1, canvas.clientWidth / 900);
+    drop(x, y, inkIndex++ % 4, (e.pointerType === 'touch' ? 30 : 44) * (0.55 + 0.45 * unit), 0.8 + 0.6 * unit);
     last = [x, y];
     wake();
   });

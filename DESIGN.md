@@ -13,6 +13,7 @@ colors:
   violet: "#7C4FE0"
   violet-deep: "#6936CC"
   on-violet: "#FFFFFF"
+  violet-text: "#A182F2"
   desk: "#0B0B0C"
   paper: "#F3EFE6"
   paper-2: "#EAE4D7"
@@ -25,6 +26,7 @@ colors:
   manganese: "#6A4A8A"
   manganese-deep: "#4E326C"
   on-manganese: "#F7F2E8"
+  manganese-text: "#553877"
   paper-desk: "#CBBE9F"
   tile-bone: "#ECE7DE"
   tile-kraft: "#CDB68B"
@@ -140,14 +142,15 @@ Two grounds carry the same world. Dark is matte onyx with bone type. Light is pa
 - **Bone soft / Ink soft** (`bone-soft`, `ink-soft`): ledes, labels, metadata.
 
 ### Identity
-- **Clearance purple** (`violet` dark, `manganese` light): primary action, file tabs, the Start file, links, focus ring, selection, scrollbar thumb, the FOUND stamp.
+- **Clearance purple** (`violet` dark, `manganese` light): fills only: primary action, file tabs, the Start file, the Tau card, focus ring, selection, scrollbar thumb, the FOUND stamp.
+- **Purple text** (`violet-text` dark, `manganese-text` light, CSS `--violet-text`): links, card calls to action, the case line, the current nav item. It holds 4.5:1 or more on every ground and plate; solid violet text does not.
 
 ### Evidence tiles (theme-independent)
 `tile-bone`, `tile-kraft`, `tile-violet`, `tile-onyx`. The globe tiles are objects, so they do not change with the theme.
 
 ### Inks (ink pad only)
 - Light, multiply on paper: violet `#9271E8`, kraft gold `#DDB264`, indigo `#5A4C9C`, orchid `#D07CB6`.
-- Dark, screen on onyx: violet `#6A43D2`, kraft `#9C7535`, bone `#7D776B`, orchid `#93397C`.
+- Dark, on onyx: violet `#7C4FE0`, kraft `#D9A04A`, bone `#B3A890`, orchid `#A8438E`. The shader mixes the onyx toward the ink and feeds the screen blend so the page lands exactly on that colour; rims gain chroma at the same lightness, never a bright outline.
 These are the only place the palette goes past purple + kraft. They stay inside the footer.
 
 ### Named Rules
@@ -192,17 +195,20 @@ Files and folders are square. Controls, tiles and cards use 2px. The die-cut tab
 
 ### Evidence globe (`EvidenceGlobe.astro`, `scripts/globe.ts`)
 - 82 slots in latitude bands (R 280px, 112×84 tiles), six of them are the work cards. Designs are assigned at build time so repeats sit far apart.
-- Tile kinds: image crop, label (plate and method words), number (SED test counts), glyph, words, stamp, SERP snippet (the site's own title), JSON-LD code, exhibit sketches, ruled client card, die-cut field.
+- Tile kinds: image crop (about 60% of tiles), label (plate and method words), number (SED test counts), glyph, words, stamp, SERP snippet (the site's own title), JSON-LD code, ruled client card. No picture-style SVG drawings.
 - No JS or reduced motion: a still CSS sphere and a horizontal, scroll-snapped card list. Same content.
 
 ### Work cards
-Six case cards (SED ×4 screenshots, Tau pending, "This file is still open" → contact). Each card is a real link. Focusing one scrolls the scene to where it is in view.
+Five cards that match the heading "One case study is ready. Three are still being written.": SED (FOUND), Tau, Marketplace operations, Automation verification gate (all three "write-up in progress", from /work), and "This file is still open" → contact. Each card is a real link with a die-cut tab, a face and a fixed caption row (`--cap-h`). In flight the card is clipped to its face; the caption opens when it lands. Focusing a card scrolls the scene to where it is in view.
 
 ### File stack
 Die-cut tab, headline, content. Tabs name the file; no eyebrow above headings.
 
 ### Ink pad (`scripts/inkpad.ts`)
-WebGL2 stable fluids, no library. Four inks in RGBA, drops are source flows that push older ink into rings, a fixed paper-fibre noise makes ragged soak lines, gradient rims darken edges. The canvas blends with the page (multiply on paper, screen on onyx). Links and buttons stay clickable on top.
+WebGL2 stable fluids, no library. Four inks in RGBA, drops are source flows that push older ink into rings, a fixed paper-fibre noise makes ragged soak lines, gradient rims darken edges. The canvas blends with the page (multiply on paper, screen on onyx). Links and buttons stay clickable on top. On first view the band pools behind the wordmark (overlapping washes, upward wicking, then single drops); sizes are in CSS pixels so phones and desktops match.
+
+### Links and arrows
+`.link-arrow` uses `--violet-text`; its underline draws in from the left on hover. Arrows are the authored SVG in `Arrow.astro` (nudges 3–4px on hover), never a text glyph.
 
 ### Buttons, plates, rails, stills, prose
 Unchanged from the earlier dossier: solid purple primary, outline secondary, hairline plates (Hours/Map/Contact/Search), method rail (Scope/Preview/Checks/Handover), captioned stills that say when an image is a generated concept.

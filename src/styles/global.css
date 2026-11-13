@@ -20,6 +20,7 @@
   --on-violet: #FFFFFF;
   --desk: #0B0B0C;
   --shade: #000;
+  --violet-text: #A182F2;
   --orchid: var(--violet);
   --ink-soft: var(--bone-soft);
 
@@ -75,6 +76,7 @@ html[data-theme='light'] {
   --on-violet: #F7F2E8;
   --desk: #CBBE9F;
   --shade: #3B2C14;
+  --violet-text: #553877;
 }
 
 body {
@@ -240,7 +242,7 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
   transition: color 150ms ease, background-size 260ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .site-nav a:hover { color: var(--bone); background-size: 100% 1px; }
-.site-nav a[aria-current='page'] { color: var(--violet); }
+.site-nav a[aria-current='page'] { color: var(--violet-text); }
 
 @media (max-width: 760px) {
   :root { --header-h: 8.25rem; }
@@ -332,11 +334,22 @@ html[data-theme='dark'] .theme-icon--moon { display: none; }
 }
 
 .link-arrow {
-  color: var(--violet);
+  color: var(--violet-text);
   text-decoration: none;
   font-weight: 650;
+  padding-bottom: 2px;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 360ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.link-arrow:hover { text-decoration: underline; text-underline-offset: 4px; }
+.link-arrow:hover { background-size: 100% 1px; }
+.arrow {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  vertical-align: -0.08em;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+a:hover > .arrow { transform: translateX(3px); }
 
 /* ---------- Rising files (sticky dossier stack) ---------- */
 .file-stack {
@@ -703,7 +716,7 @@ html[data-theme='light'] .ink-canvas { mix-blend-mode: multiply; }
 }
 .footer-cols ul { list-style: none; padding: 0; display: grid; gap: 0.4rem; }
 .footer-cols a { color: var(--bone); text-decoration: none; }
-.footer-cols a:hover { color: var(--violet); }
+.footer-cols a:hover { color: var(--violet-text); }
 
 .footer-wordmark {
   font-family: var(--font-display);
@@ -735,7 +748,7 @@ html[data-theme='light'] .ink-canvas { mix-blend-mode: multiply; }
 }
 .prose h3 { font-size: 1.2rem; margin-block: 2rem 0.7rem; }
 .prose p { margin-block: 1rem; color: var(--bone-soft); }
-.prose a { color: var(--violet); }
+.prose a { color: var(--violet-text); }
 .prose ul, .prose ol { margin-block: 1rem; padding-left: 1.3rem; color: var(--bone-soft); }
 .prose li { margin-block: 0.35rem; }
 .prose blockquote {

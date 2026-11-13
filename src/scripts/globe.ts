@@ -116,14 +116,14 @@ export function mountGlobe(scene: HTMLElement) {
     mobile = vw < 861;
     R = mobile ? clamp(Math.min(vw * 0.36, vh * 0.25), 110, 170) : clamp(Math.min(vw * 0.2, vh * 0.34), 170, 300);
     k = R / 280;
-    cardW = mobile ? Math.min(vw * 0.78, 340) : clamp(vw * 0.3, 300, 470);
+    cardW = mobile ? Math.min(vw * 0.78, 340) : clamp(vw * 0.34, 300, 540);
     gap = mobile ? 16 : 28;
     Rc = mobile ? 1100 : 2200;
     scene.style.setProperty('--card-w', `${cardW}px`);
     const margin = mobile ? 0 : Math.max(20, (vw - 1180) / 2);
     x0 = mobile ? 0 : -vw / 2 + margin + cardW / 2;
     oEnd = mobile ? cards.length - 1 : Math.max(0, cards.length - 1 - (vw - 2 * margin - cardW) / (cardW + gap));
-    stripY = vh * (mobile ? 0.13 : 0.14);
+    stripY = vh * (mobile ? 0.13 : 0.17);
     const copyBottom = copy.offsetTop + copy.offsetHeight;
     heroC = mobile ? [0, Math.max(copyBottom + R * 1.02 + 8, vh - R - 64) - vh / 2, 0] : [vw * 0.23, vh * 0.03, 0];
     scene.style.setProperty('--travel', mobile ? '330svh' : '270svh');

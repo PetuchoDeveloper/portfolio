@@ -5,6 +5,7 @@
    horizontal list of the same files. */
 import { site } from '../data/site';
 import { localizedPath, type Locale } from '../i18n';
+import Arrow from './Arrow.astro';
 
 interface Props { locale?: Locale; }
 const { locale = 'en' } = Astro.props;
@@ -18,7 +19,6 @@ const copy = es
       lede: 'Desarrollo sitios web rápidos para pequeños negocios y aplicaciones web confiables para instituciones. Desde México, en español o inglés.',
       start: 'Cuéntame tu proyecto',
       hint: ['Arrastra para girar', 'Desliza para buscar'],
-      tab: 'Trabajo / 04 archivos',
       workTitle: 'Un caso de estudio está listo. Los otros tres siguen en proceso.',
       workLink: 'Abrir el archivo de proyectos',
       cardsAria: 'Proyectos encontrados',
@@ -30,13 +30,13 @@ const copy = es
       lede: 'I build fast websites for small businesses and reliable web applications for institutions. From Mexico, in English or Spanish.',
       start: 'Start a project',
       hint: ['Drag to turn', 'Scroll to search'],
-      tab: 'Work / 04 files',
       workTitle: 'One case study is ready. Three are still being written.',
       workLink: 'Open the work folder',
       cardsAria: 'Found work',
       found: 'FOUND',
     };
 
+const pending = es ? 'Caso en proceso' : 'Write-up in progress';
 const cards = [
   {
     tab: 'SED', tone: 'panel', img: '/images/cards/sed-landing.webp', w: 880, h: 599,
@@ -45,28 +45,22 @@ const cards = [
     cta: es ? 'Leer el caso' : 'Read the case', href: path('/work/sed/'),
   },
   {
-    tab: 'SED · 02', tone: 'panel', img: '/images/cards/sed-eval.webp', w: 880, h: 550,
-    title: es ? 'Entrada a la evaluación' : 'Evaluation entry',
-    sub: es ? 'Cada estudiante entra con un código de acceso.' : 'Each student enters with an access code.',
-    cta: es ? 'Leer el caso' : 'Read the case', href: path('/work/sed/'),
-  },
-  {
-    tab: 'SED · 03', tone: 'panel', img: '/images/cards/sed-admin.webp', w: 880, h: 550,
-    title: es ? 'Acceso administrativo' : 'Admin sign-in',
-    sub: es ? 'Solo cuentas institucionales.' : 'Institutional accounts only.',
-    cta: es ? 'Leer el caso' : 'Read the case', href: path('/work/sed/'),
-  },
-  {
-    tab: 'SED · 04', tone: 'panel', img: '/images/cards/sed-dashboard.webp', w: 880, h: 493,
-    title: es ? 'Tablero de resultados' : 'Results dashboard',
-    sub: es ? 'Promedios por categoría y periodo.' : 'Averages by category and period.',
-    cta: es ? 'Leer el caso' : 'Read the case', href: path('/work/sed/'),
-  },
-  {
     tab: 'Tau', tone: 'violet', word: 'Tau',
-    title: es ? 'Tau — caso en proceso' : 'Tau — write-up in progress',
-    sub: es ? 'Plataforma de VOD: Django, React y un worker en Rust.' : 'VOD platform: Django, React and a Rust worker.',
-    cta: es ? 'Ver archivos' : 'See the files', href: path('/work/'),
+    title: es ? 'Tau — infraestructura de video' : 'Tau — video streaming stack',
+    sub: es ? 'Django, React y un worker de transcodificación en Rust.' : 'Django, React and a Rust transcoding worker.',
+    cta: pending, href: path('/work/'),
+  },
+  {
+    tab: 'Marketplace', tone: 'onyx', word: es ? 'Operaciones' : 'Marketplace ops',
+    title: es ? 'Plataforma de operaciones para marketplaces' : 'Marketplace operations platform',
+    sub: es ? 'Software operativo para vendedores en marketplaces de América Latina.' : 'Operations software for marketplace sellers in Latin America.',
+    cta: pending, href: path('/work/'),
+  },
+  {
+    tab: es ? 'Verificación' : 'Verification', tone: 'bone', word: es ? 'Verificación' : 'Verification gate',
+    title: es ? 'Control de verificación para automatizaciones' : 'Automation verification gate',
+    sub: es ? 'Revisa el resultado antes de que un flujo reporte éxito.' : 'Checks the recorded result before an automation can report success.',
+    cta: pending, href: path('/work/'),
   },
   {
     tab: es ? 'Siguiente' : 'Next', tone: 'kraft', word: es ? 'Tu negocio' : 'Your business',
@@ -87,12 +81,12 @@ for (let k = -4; k <= 4; k++) {
     slots.push({ lon: ((j + (k % 2 ? 0.5 : 0)) / n) * 360, lat: (lat * 180) / Math.PI, row: k });
   }
 }
-// Six found files spread over the three middle bands.
+// The found files spread over the three middle bands.
 const pickRow = (row: number, frac: number) => {
   const band = slots.filter((s) => s.row === row);
   return slots.indexOf(band[Math.round(frac * (band.length - 1))]);
 };
-const cardSlots = [pickRow(0, 0.05), pickRow(-1, 0.3), pickRow(1, 0.45), pickRow(0, 0.62), pickRow(-1, 0.8), pickRow(1, 0.95)];
+const cardSlots = [pickRow(0, 0.05), pickRow(-1, 0.3), pickRow(1, 0.5), pickRow(0, 0.7), pickRow(-1, 0.9)];
 
 const img = (src: string, pos = '50% 50%') => ({ kind: 'img', src: `/images/globe/${src}.webp`, pos });
 const label = (tone: string, k: string, d: string) => ({ kind: 'label', tone, k, d });
@@ -100,12 +94,12 @@ const words = (tone: string, t: string) => ({ kind: 'words', tone, t });
 const designs: Record<string, string>[] = [
   img('sed-landing', '50% 20%'), { kind: 'stamp', t: copy.found }, label('kraft', es ? 'Horario' : 'Hours', es ? 'Cuándo está abierto.' : 'When you are open.'),
   img('shopfront', '22% 40%'), { kind: 'glyph', tone: 'violet', g: 'K' }, { kind: 'num', tone: 'bone', n: '1,750+', d: es ? 'pruebas de backend · SED' : 'backend tests · SED' },
-  img('found-street', '62% 50%'), { kind: 'sketch', which: 'a', t: es ? 'Evidencia A' : 'Exhibit A' }, { kind: 'serp' },
-  img('folders', '55% 45%'), label('onyx', es ? 'Alcance' : 'Scope', es ? 'Plan, precio y fecha por escrito.' : 'Written plan, price, date.'), { kind: 'field', tone: 'violet' },
+  img('found-street', '62% 50%'), img('sed-admin', '60% 30%'), { kind: 'serp' },
+  img('folders', '55% 45%'), label('onyx', es ? 'Alcance' : 'Scope', es ? 'Plan, precio y fecha por escrito.' : 'Written plan, price, date.'), img('sed-instruments', '70% 20%'),
   img('sed-eval', '78% 40%'), { kind: 'code' }, label('bone', es ? 'Mapa' : 'Map', es ? 'Dónde encontrarlo.' : 'Where to find you.'),
-  img('credential', '40% 50%'), { kind: 'glyph', tone: 'kraft', g: '§' }, { kind: 'sketch', which: 'b', t: es ? 'Evidencia B' : 'Exhibit B' },
+  img('credential', '40% 50%'), { kind: 'glyph', tone: 'kraft', g: '§' }, img('shopfront', '70% 15%'),
   img('sed-admin', '22% 50%'), { kind: 'num', tone: 'kraft', n: '830+', d: es ? 'pruebas de frontend · SED' : 'frontend tests · SED' }, label('violet', es ? 'Avance' : 'Preview', es ? 'Un enlace funcional cada semana.' : 'A live link every week.'),
-  img('sed-dashboard', '50% 30%'), { kind: 'ruled', t: es ? 'Cliente' : 'Client' }, { kind: 'field', tone: 'kraft' },
+  img('sed-dashboard', '50% 30%'), { kind: 'ruled', t: es ? 'Cliente' : 'Client' }, img('found-street', '45% 92%'),
   img('sed-instruments', '40% 40%'), label('onyx', es ? 'Búsqueda' : 'Search', es ? 'Cómo lo interpreta Google.' : 'How Google reads you.'), words('bone', 'Django · React · Astro'),
   img('shopfront', '86% 45%'), label('kraft', es ? 'Entrega' : 'Handover', es ? 'Tu repositorio. Tu dominio.' : 'Your repo. Your domain.'), { kind: 'glyph', tone: 'onyx', g: 'V' },
   img('found-street', '30% 75%'), words('violet', es ? 'ES / EN' : 'EN / ES'), label('bone', es ? 'Contacto' : 'Contact', es ? 'Cómo comunicarse.' : 'How to reach you.'),
@@ -114,26 +108,35 @@ const designs: Record<string, string>[] = [
   img('credential', '82% 38%'), { kind: 'glyph', tone: 'bone', g: '№' }, words('onyx', es ? 'Hecho en México' : 'Made in Mexico'),
   img('sed-landing', '18% 62%'), img('shopfront', '52% 88%'), img('found-street', '82% 28%'), img('folders', '24% 38%'),
   img('credential', '14% 82%'), img('sed-eval', '18% 50%'), img('sed-admin', '84% 52%'), img('sed-dashboard', '14% 48%'),
+  img('sed-landing', '82% 40%'), img('sed-eval', '50% 80%'), img('sed-instruments', '15% 70%'), img('folders', '50% 90%'),
+  img('shopfront', '30% 75%'), img('credential', '55% 20%'), img('sed-dashboard', '85% 80%'), img('found-street', '15% 45%'),
+  img('sed-landing', '50% 50%'), img('sed-admin', '40% 85%'),
 ];
-// Spread repeats: each slot takes the least-used design whose copies sit farthest
-// away on the sphere. Seeded, so every build is identical.
+// Spread repeats: each slot takes the least-used source whose copies sit farthest
+// away on the sphere (crops of one photo count as one source, at most four
+// copies). Seeded, so every build is identical.
 let seed = 0x8c2f6b41;
 const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32);
 const unit = (s: { lon: number; lat: number }) => {
   const la = (s.lat * Math.PI) / 180, lo = (s.lon * Math.PI) / 180;
   return [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)];
 };
-const placed: number[][][] = designs.map(() => []);
+const sourceOf = (d: number) => designs[d].src ?? `design-${d}`;
+const placed = new Map<string, number[][]>();
+const cropUses = designs.map(() => 0);
 const pick: number[] = [];
 for (const i of slots.map((_, i) => i).sort(() => rand() - 0.5)) {
   const v = unit(slots[i]);
   let best = 0, bestScore = -Infinity;
-  designs.forEach((_, d) => {
-    const near = placed[d].reduce((m, p) => Math.max(m, p[0] * v[0] + p[1] * v[1] + p[2] * v[2]), -1);
-    const score = -placed[d].length * 10 - near + rand() * 0.05;
-    if (score > bestScore) { bestScore = score; best = d; }
+  designs.forEach((d, n) => {
+    const at = placed.get(sourceOf(n)) ?? [];
+    if (d.kind === 'img' && at.length >= 4) return;
+    const near = at.reduce((m, p) => Math.max(m, p[0] * v[0] + p[1] * v[1] + p[2] * v[2]), -1);
+    const score = -at.length * 2 - cropUses[n] * 3 - near * 4 + rand() * 0.05;
+    if (score > bestScore) { bestScore = score; best = n; }
   });
-  placed[best].push(v);
+  placed.set(sourceOf(best), [...(placed.get(sourceOf(best)) ?? []), v]);
+  cropUses[best]++;
   pick[i] = best;
 }
 const tiles = slots.map((slot, i) => ({ ...slot, card: cardSlots.indexOf(i), d: designs[pick[i]] }));
@@ -192,18 +195,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
               <><span class="serp-url">kevinvarick.dev</span><span class="serp-title">{copy.title.join(' ')}</span><span class="tile-d">{site.tagline}</span></>
             ) : t.d.kind === 'code' ? (
               <code>{'{'}<br />&nbsp;"@type": "ProfessionalService",<br />&nbsp;"areaServed": "Worldwide"<br />{'}'}</code>
-            ) : t.d.kind === 'sketch' ? (
-              <>
-                <span class="tile-k">{t.d.t}</span>
-                {t.d.which === 'a' ? (
-                  <svg viewBox="0 0 80 80" fill="none"><path d="M40 72Q37 53 40 34M38 56Q32 51 27 49Q29 55 38 56ZM41 47Q49 42 55 39Q53 46 41 47Z" /><ellipse cx="40" cy="22" rx="4.5" ry="9" /><ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(72 40 22)" /><ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(144 40 22)" /><ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(216 40 22)" /><ellipse cx="40" cy="22" rx="4.5" ry="9" transform="rotate(288 40 22)" /></svg>
-                ) : (
-                  <svg viewBox="0 0 80 80" fill="none"><path d="M74 6L63 68M74 6L35 52M74 6L10 29M74 6L18 0M70 30Q65 25 58 25M49 36Q46 25 35 20M24 24Q29 12 20 0M49 36L36 46" /><ellipse cx="36" cy="52" rx="4" ry="5" /><path d="M33 49L27 45L17 41M32 54L26 55L16 58M39 49L45 45L55 41M40 54L46 55L56 58" /></svg>
-                )}
-              </>
-            ) : (
-              <span class="tile-tab"></span>
-            )}
+            ) : null}
           </div>
         ))}
       </div>
@@ -213,9 +205,8 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     </div>
 
     <div class="work-head wrap" data-work-head>
-      <p class="work-tab">{copy.tab}</p>
       <h2 class="h2">{copy.workTitle}</h2>
-      <a class="link-arrow" href={path('/work/')}>{copy.workLink} <span aria-hidden="true">→</span></a>
+      <a class="link-arrow" href={path('/work/')}>{copy.workLink} <Arrow /></a>
     </div>
 
     <ol class="cards" data-cards aria-label={copy.cardsAria}>
@@ -234,7 +225,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
               <span class="card-cap">
                 <strong>{c.title}</strong>
                 <span>{c.sub}</span>
-                <em>{c.cta} <span aria-hidden="true">→</span></em>
+                <em>{c.cta} <Arrow /></em>
               </span>
             </a>
           </li>
@@ -257,6 +248,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     --tile-h: 84px;
     --card-w: min(400px, 78vw);
     --card-h: calc(var(--card-w) * 0.75);
+    --cap-h: 6.6rem;
   }
   .scene-pin {
     position: relative;
@@ -279,7 +271,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     text-transform: uppercase;
     color: var(--bone-soft);
   }
-  .case-line span:first-child { color: var(--violet); }
+  .case-line span:first-child { color: var(--violet-text); }
   .case-line span:last-child { margin-left: auto; }
 
   .hero-copy {
@@ -361,7 +353,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
   .tone--bone, .tile--stamp, .tile--serp, .tile--ruled, .tile--case { background: #ECE7DE; color: #17130F; }
   .tone--kraft { background: #CDB68B; color: #17130F; }
   .tone--violet { background: #7C4FE0; color: #FFFFFF; }
-  .tone--onyx, .tile--code, .tile--sketch { background: #1E1E21; color: #ECE7DE; }
+  .tone--onyx, .tile--code { background: #1E1E21; color: #ECE7DE; }
   .tile--img { background: #2A2A2D; }
   .tile { outline: 1px solid rgb(0 0 0 / 0.14); outline-offset: -1px; }
 
@@ -411,8 +403,6 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     letter-spacing: 0.2em;
     transform: rotate(-8deg);
   }
-  .tile--sketch svg { width: 46px; height: 46px; margin: auto; }
-  .tile--sketch path, .tile--sketch ellipse { stroke: #A88BEF; stroke-width: 1.6; }
   .tile--code code {
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 7.5px;
@@ -434,17 +424,6 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     margin-top: 6px;
     background: linear-gradient(#17130F33 1px, transparent 1px) 0 0 / 100% 11px;
   }
-  .tile--field::before {
-    content: '';
-    position: absolute;
-    left: 10px;
-    top: 0;
-    width: 44px;
-    height: 9px;
-    background: rgb(0 0 0 / 0.16);
-    clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 100%, 0 100%);
-  }
-
   .globe-hint {
     position: absolute;
     left: 50%;
@@ -464,21 +443,8 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     grid-area: work;
     margin-top: clamp(3rem, 8vw, 5rem);
   }
-  .work-head .h2 { max-width: 20ch; margin-top: 1.1rem; }
+  .work-head .h2 { max-width: 20ch; }
   .work-head .link-arrow { display: inline-block; margin-top: 1rem; }
-  .work-tab {
-    display: inline-flex;
-    align-items: center;
-    height: var(--tab-h);
-    padding: 0 1.4rem;
-    background: var(--violet);
-    color: var(--on-violet);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 100%, 0 100%);
-  }
 
   .cards {
     grid-area: cards;
@@ -501,7 +467,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
   .card-body {
     position: relative;
     display: grid;
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) var(--cap-h);
     height: 100%;
     background: var(--panel);
     color: var(--bone);
@@ -511,8 +477,10 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     overflow: hidden;
     transition: border-color 200ms ease;
   }
-  .card--violet .card-body { background: var(--violet); color: var(--on-violet); border-color: var(--violet-deep); }
+  .card--violet .card-body { background: #7C4FE0; color: #FFFFFF; border-color: #6936CC; }
   .card--kraft .card-body { background: #CDB68B; color: #17130F; border-color: #A8915F; }
+  .card--onyx .card-body { background: #1E1E21; color: #ECE7DE; border-color: #3D3D42; }
+  .card--bone .card-body { background: #ECE7DE; color: #17130F; border-color: #C7BFAF; }
   .card-tab {
     position: absolute;
     z-index: 2;
@@ -530,6 +498,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     position: relative;
     overflow: hidden;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     place-items: center;
   }
   .card-media img {
@@ -548,9 +517,10 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     text-align: center;
     padding-inline: 1rem;
   }
-  .card--kraft .card-word { font-size: calc(var(--card-w) * 0.13); }
+  .card--kraft .card-word, .card--onyx .card-word, .card--bone .card-word { font-size: calc(var(--card-w) * 0.115); }
   .card-cap {
     display: grid;
+    align-content: start;
     gap: 0.15rem;
     padding: 0.8rem 1rem 0.9rem;
     font-size: 0.8125rem;
@@ -563,13 +533,12 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     font-style: normal;
     font-weight: 650;
     margin-top: 0.3rem;
-    color: var(--violet);
+    color: var(--violet-text);
   }
-  .card--violet .card-cap em, .card--kraft .card-cap em { color: inherit; }
-  .card-cap em span { display: inline-block; transition: transform 200ms ease; }
+  .card:not(.card--panel) .card-cap em { color: inherit; }
   .card-body:hover { border-color: var(--violet); }
   .card-body:hover img { transform: scale(1.04); }
-  .card-body:hover em span { transform: translateX(4px); }
+  .card-body:hover .arrow { transform: translateX(4px); }
 
   .card-stamp {
     position: absolute;
@@ -650,7 +619,6 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     align-items: end;
     column-gap: 2rem;
   }
-  .is-live .work-head .work-tab { grid-column: 1 / -1; justify-self: start; }
   .is-live .work-head.is-on { pointer-events: auto; }
   .is-live .cards {
     position: absolute;
@@ -671,6 +639,11 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     backface-visibility: hidden;
   }
   .is-live .cards.is-on .card { pointer-events: auto; }
+  .is-live .card-body {
+    clip-path: inset(0 0 var(--cap-h) 0);
+    transition: clip-path 520ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .is-live .card.is-flat .card-body { clip-path: inset(0); }
   .is-live .card-cap, .is-live .card-tab { transition: opacity 300ms ease; }
   .is-live .card:not(.is-flat) .card-cap,
   .is-live .card:not(.is-flat) .card-tab { opacity: 0; }
@@ -698,6 +671,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     .is-live .globe-hint { display: none; }
     .hero-copy { margin-right: 1.25rem; }
     .globe-stage { min-height: 360px; --k: 0.55; }
+    .scene { --card-h: calc(var(--card-w) * 0.95); }
     .is-live .hero-copy {
       top: 3.25rem;
       bottom: auto;

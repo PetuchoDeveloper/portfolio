@@ -7,6 +7,7 @@ import EvidenceGlobe from './EvidenceGlobe.astro';
 import Still from './Still.astro';
 import SitePlate from './SitePlate.astro';
 import MethodRail from './MethodRail.astro';
+import Arrow from './Arrow.astro';
 
 interface Props { locale?: Locale; }
 const { locale = 'en' } = Astro.props;
@@ -73,7 +74,7 @@ const posts = (await getCollection('blog'))
             <SitePlate locale={locale} />
             <p class="muted" style="margin-top:1.5rem">{copy.apps}</p>
             <p style="margin-top:1.25rem">
-              <a class="link-arrow" href={path('/services/')}>{copy.offerLink} <span aria-hidden="true">→</span></a>
+              <a class="link-arrow" href={path('/services/')}>{copy.offerLink} <Arrow /></a>
             </p>
           </div>
         </div>
@@ -130,7 +131,7 @@ const posts = (await getCollection('blog'))
         ))}
       </div>
       <p style="margin-top:1.5rem">
-        <a class="link-arrow" href={path('/blog/')}>{copy.allNotes} <span aria-hidden="true">→</span></a>
+        <a class="link-arrow" href={path('/blog/')}>{copy.allNotes} <Arrow /></a>
       </p>
     </div>
   </section>
