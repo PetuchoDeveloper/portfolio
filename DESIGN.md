@@ -27,6 +27,10 @@ colors:
   manganese-deep: "#4E326C"
   on-manganese: "#F7F2E8"
   manganese-text: "#553877"
+  brass: "#C9A15A"
+  brass-paper: "#7D5E22"
+  brass-paper-mark: "#A57C2C"
+  brass-stamp: "#9A7432"
   paper-desk: "#CBBE9F"
   tile-bone: "#ECE7DE"
   tile-kraft: "#CDB68B"
@@ -144,6 +148,11 @@ Two grounds carry the same world. Dark is matte onyx with bone type. Light is pa
 ### Identity
 - **Clearance purple** (`violet` dark, `manganese` light): fills only: primary action, file tabs, the Start file, the Tau card, focus ring, selection, scrollbar thumb, the FOUND stamp.
 - **Purple text** (`violet-text` dark, `manganese-text` light, CSS `--violet-text`): links, card calls to action, the case line, the current nav item. It holds 4.5:1 or more on every ground and plate; solid violet text does not.
+
+### Brass accent (about 10%)
+- **Brass** (`brass` on onyx, `brass-paper` on paper for small text, `brass-paper-mark` for large marks; CSS `--accent`, `--accent-mark`): the full stop of the hero title and of "Leave a mark.", the "Case file 001" label, footer column labels, post dates, the hint rule.
+- **Brass plates and seal** (`brass` text on onyx tiles, `brass-stamp` on bone; CSS `--plate-accent`, `--stamp-accent`, the same in both themes): number and № tiles in the globe, the FOUND stamp (double-ring seal).
+- Brass is a material, not a second brand color: no fills, no buttons, no gradients or fake foil. Purple keeps every action.
 
 ### Evidence tiles (theme-independent)
 `tile-bone`, `tile-kraft`, `tile-violet`, `tile-onyx`. The globe tiles are objects, so they do not change with the theme.

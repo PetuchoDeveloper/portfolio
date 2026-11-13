@@ -93,19 +93,19 @@ const label = (tone: string, k: string, d: string) => ({ kind: 'label', tone, k,
 const words = (tone: string, t: string) => ({ kind: 'words', tone, t });
 const designs: Record<string, string>[] = [
   img('sed-landing', '50% 20%'), { kind: 'stamp', t: copy.found }, label('kraft', es ? 'Horario' : 'Hours', es ? 'Cuándo está abierto.' : 'When you are open.'),
-  img('shopfront', '22% 40%'), { kind: 'glyph', tone: 'violet', g: 'K' }, { kind: 'num', tone: 'bone', n: '1,750+', d: es ? 'pruebas de backend · SED' : 'backend tests · SED' },
+  img('shopfront', '22% 40%'), { kind: 'glyph', tone: 'violet', g: 'K' }, { kind: 'num', tone: 'brass', n: '1,750+', d: es ? 'pruebas de backend · SED' : 'backend tests · SED' },
   img('found-street', '62% 50%'), img('sed-admin', '60% 30%'), { kind: 'serp' },
   img('folders', '55% 45%'), label('onyx', es ? 'Alcance' : 'Scope', es ? 'Plan, precio y fecha por escrito.' : 'Written plan, price, date.'), img('sed-instruments', '70% 20%'),
   img('sed-eval', '78% 40%'), { kind: 'code' }, label('bone', es ? 'Mapa' : 'Map', es ? 'Dónde encontrarlo.' : 'Where to find you.'),
   img('credential', '40% 50%'), { kind: 'glyph', tone: 'kraft', g: '§' }, img('shopfront', '70% 15%'),
-  img('sed-admin', '22% 50%'), { kind: 'num', tone: 'kraft', n: '830+', d: es ? 'pruebas de frontend · SED' : 'frontend tests · SED' }, label('violet', es ? 'Avance' : 'Preview', es ? 'Un enlace funcional cada semana.' : 'A live link every week.'),
+  img('sed-admin', '22% 50%'), { kind: 'num', tone: 'brass', n: '830+', d: es ? 'pruebas de frontend · SED' : 'frontend tests · SED' }, label('violet', es ? 'Avance' : 'Preview', es ? 'Un enlace funcional cada semana.' : 'A live link every week.'),
   img('sed-dashboard', '50% 30%'), { kind: 'ruled', t: es ? 'Cliente' : 'Client' }, img('found-street', '45% 92%'),
   img('sed-instruments', '40% 40%'), label('onyx', es ? 'Búsqueda' : 'Search', es ? 'Cómo lo interpreta Google.' : 'How Google reads you.'), words('bone', 'Django · React · Astro'),
   img('shopfront', '86% 45%'), label('kraft', es ? 'Entrega' : 'Handover', es ? 'Tu repositorio. Tu dominio.' : 'Your repo. Your domain.'), { kind: 'glyph', tone: 'onyx', g: 'V' },
   img('found-street', '30% 75%'), words('violet', es ? 'ES / EN' : 'EN / ES'), label('bone', es ? 'Contacto' : 'Contact', es ? 'Cómo comunicarse.' : 'How to reach you.'),
   img('folders', '82% 62%'), words('onyx', es ? 'Sin rastreadores. Sin cookies.' : 'No trackers. No cookies.'), label('kraft', es ? 'Revisión' : 'Checks', es ? 'Pruebo antes de publicar.' : 'I test before launch.'),
   img('sed-landing', '50% 85%'), { kind: 'case', t: es ? 'Caso 001' : 'Case 001' }, words('kraft', 'PostgreSQL · Rust'),
-  img('credential', '82% 38%'), { kind: 'glyph', tone: 'bone', g: '№' }, words('onyx', es ? 'Hecho en México' : 'Made in Mexico'),
+  img('credential', '82% 38%'), { kind: 'glyph', tone: 'brass', g: '№' }, words('onyx', es ? 'Hecho en México' : 'Made in Mexico'),
   img('sed-landing', '18% 62%'), img('shopfront', '52% 88%'), img('found-street', '82% 28%'), img('folders', '24% 38%'),
   img('credential', '14% 82%'), img('sed-eval', '18% 50%'), img('sed-admin', '84% 52%'), img('sed-dashboard', '14% 48%'),
   img('sed-landing', '82% 40%'), img('sed-eval', '50% 80%'), img('sed-instruments', '15% 70%'), img('folders', '50% 90%'),
@@ -152,7 +152,9 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     <div class="hero-copy wrap" data-hero-copy>
       <h1 id="hero-title" class:list={['display', 'hero-title', es && 'hero-title--long']}>
         {copy.title.map((line, i) => (
-          <span class="line" style={`--i:${i}`}>{line}</span>
+          <span class="line" style={`--i:${i}`}>
+            {line.endsWith('.') ? <>{line.slice(0, -1)}<span class="mark">.</span></> : line}
+          </span>
         ))}
       </h1>
       <p class="lede hero-lede">{copy.lede}</p>
@@ -271,7 +273,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     text-transform: uppercase;
     color: var(--bone-soft);
   }
-  .case-line span:first-child { color: var(--violet-text); }
+  .case-line span:first-child { color: var(--accent); }
   .case-line span:last-child { margin-left: auto; }
 
   .hero-copy {
@@ -354,6 +356,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
   .tone--kraft { background: #CDB68B; color: #17130F; }
   .tone--violet { background: #7C4FE0; color: #FFFFFF; }
   .tone--onyx, .tile--code { background: #1E1E21; color: #ECE7DE; }
+  .tone--brass { background: #1E1E21; color: var(--plate-accent); }
   .tile--img { background: #2A2A2D; }
   .tile { outline: 1px solid rgb(0 0 0 / 0.14); outline-offset: -1px; }
 
@@ -394,8 +397,8 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
   }
   .tile--stamp { align-items: center; justify-content: center; }
   .tile-stamp {
-    border: 2px solid #7C4FE0;
-    color: #7C4FE0;
+    border: 2px solid var(--stamp-accent);
+    color: var(--stamp-accent);
     border-radius: 3px;
     padding: 4px 7px;
     font-weight: 800;
@@ -544,8 +547,9 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     position: absolute;
     right: 8%;
     bottom: 12%;
-    border: 3px solid var(--violet);
-    color: var(--violet);
+    border: 3px solid var(--stamp-accent);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, #ECE7DE 82%, transparent), inset 0 0 0 3px var(--stamp-accent);
+    color: var(--stamp-accent);
     background: color-mix(in srgb, #ECE7DE 82%, transparent);
     border-radius: 4px;
     padding: 0.3em 0.6em;
@@ -602,7 +606,7 @@ const cardImg = (i: number) => cards[i].img?.replace('/cards/', '/globe/') ?? ''
     height: 1px;
     margin-right: 1.4rem;
     vertical-align: middle;
-    background: currentColor;
+    background: var(--accent);
   }
 
   .is-live .work-head {

@@ -21,6 +21,10 @@
   --desk: #0B0B0C;
   --shade: #000;
   --violet-text: #A182F2;
+  /* Brass: the ~10% accent. Details only (marks, seals, plates, small labels), never fills or actions. */
+  --accent: #C9A15A;
+  --plate-accent: #C9A15A;
+  --stamp-accent: #9A7432;
   --orchid: var(--violet);
   --ink-soft: var(--bone-soft);
 
@@ -77,6 +81,8 @@ html[data-theme='light'] {
   --desk: #CBBE9F;
   --shade: #3B2C14;
   --violet-text: #553877;
+  --accent: #7D5E22;
+  --accent-mark: #A57C2C;
 }
 
 body {
@@ -711,7 +717,7 @@ html[data-theme='light'] .ink-canvas { mix-blend-mode: multiply; }
   font-size: 0.6875rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--bone-soft);
+  color: var(--accent);
   margin-bottom: 0.75rem;
 }
 .footer-cols ul { list-style: none; padding: 0; display: grid; gap: 0.4rem; }
@@ -789,6 +795,8 @@ html[data-theme='light'] .ink-canvas { mix-blend-mode: multiply; }
   text-decoration: none;
   transition: background 150ms ease;
 }
+.post-row time { color: var(--accent); font-variant-numeric: tabular-nums; }
+.mark { color: var(--accent-mark, var(--accent)); }
 .post-row:hover { background: color-mix(in srgb, var(--violet) 6%, transparent); }
 .post-row > * { transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1); }
 .post-row:hover > div { transform: translateX(0.75rem); }
