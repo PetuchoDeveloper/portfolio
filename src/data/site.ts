@@ -30,13 +30,13 @@ export const services = [
     name: 'Websites for small businesses',
     priority: 'Primary',
     summary:
-      'A custom website that explains what you do, works well on a phone, and gives search engines the information they need to list your business.',
+      'A website made for your business, not a template. It tells people what you do in seconds, works great on a phone, and gives Google everything it needs to list you.',
     deliverables: [
-      'Custom design matched to your business, not a template',
-      'A mobile-first build with a strict speed budget',
-      'Technical search setup: structured data, sitemap, and local service terms',
-      'Clear contact, service, and location pages',
-      'Your code, domain, and hosting accounts handed over to you',
+      'A design made for your business. No templates.',
+      'Built for phones first, and fast. Nobody waits for a spinner.',
+      'The technical search setup: structured data, sitemap, and the local words your customers type.',
+      'Clear pages for what you offer, where you are, and how to reach you.',
+      'Your code, domain, and hosting, in your name.',
     ],
   },
   {
@@ -44,13 +44,13 @@ export const services = [
     name: 'Full-stack web applications',
     priority: 'Primary',
     summary:
-      'Web applications built from prototype through launch, with a React frontend, a Django or FastAPI backend, PostgreSQL, and an automated deployment pipeline.',
+      'Got an idea for an app, or an old system that needs replacing? I build it from the first prototype to launch day: React on the front, Django or FastAPI on the back, PostgreSQL, and automatic deploys.',
     deliverables: [
-      'React / Next.js frontends with strict performance budgets',
-      'Django or FastAPI backends with automated test suites',
-      'Database design, background jobs, and API contracts',
-      'Docker-based deployment pipelines (AWS, EC2, or your VPS)',
-      'A review of authentication, sessions, secrets, and data protection before launch',
+      'React or Next.js frontends that stay fast.',
+      'Django or FastAPI backends with automated tests.',
+      'Database design, background jobs, and clear API contracts.',
+      'Docker deploys to AWS, EC2, or your own server.',
+      'A security review of logins, sessions, secrets, and data before launch.',
     ],
   },
 ] as const;
@@ -61,13 +61,13 @@ export const servicesEs = [
     name: 'Sitios web para pequeños negocios',
     priority: 'Principal',
     summary:
-      'Un sitio a la medida que explica lo que haces, funciona bien en el teléfono y da a los buscadores la información necesaria para mostrar tu negocio.',
+      'Un sitio hecho para tu negocio, no una plantilla. Le dice a la gente qué haces en segundos, se ve bien en el teléfono y le da a Google todo lo que necesita para mostrarte.',
     deliverables: [
-      'Diseño a la medida de tu negocio, sin plantillas genéricas',
-      'Desarrollo pensado primero para móvil y sujeto a un presupuesto estricto de rendimiento',
-      'Configuración técnica para buscadores: datos estructurados, sitemap y términos de servicio local',
-      'Páginas claras de contacto, servicios y ubicación',
-      'Entrega de tu código, dominio y cuentas de hospedaje',
+      'Un diseño hecho para tu negocio. Nada de plantillas.',
+      'Pensado primero para el teléfono, y rápido. Nadie espera a que gire el loader.',
+      'La configuración técnica para buscadores: datos estructurados, sitemap y las palabras locales que escriben tus clientes.',
+      'Páginas claras de lo que ofreces, dónde estás y cómo contactarte.',
+      'Tu código, tu dominio y tu hospedaje, a tu nombre.',
     ],
   },
   {
@@ -75,13 +75,13 @@ export const servicesEs = [
     name: 'Aplicaciones web full-stack',
     priority: 'Principal',
     summary:
-      'Aplicaciones web desarrolladas desde el prototipo hasta el lanzamiento, con frontend en React, backend en Django, PostgreSQL y un proceso automatizado de despliegue.',
+      '¿Tienes la idea de una app, o un sistema viejo que ya hay que cambiar? Lo construyo desde el primer prototipo hasta el día del lanzamiento: React al frente, Django o FastAPI atrás, PostgreSQL y despliegues automáticos.',
     deliverables: [
-      'Frontends en React o Next.js con presupuestos estrictos de rendimiento',
-      'Backends en Django con pruebas automatizadas',
-      'Diseño de base de datos, tareas en segundo plano y contratos de API',
-      'Despliegues con Docker en AWS, EC2 o tu VPS',
-      'Revisión de autenticación, sesiones, secretos y protección de datos antes del lanzamiento',
+      'Frontends en React o Next.js que se mantienen rápidos.',
+      'Backends en Django o FastAPI con pruebas automatizadas.',
+      'Diseño de base de datos, tareas en segundo plano y contratos de API claros.',
+      'Despliegues con Docker en AWS, EC2 o tu propio servidor.',
+      'Una revisión de seguridad de accesos, sesiones, secretos y datos antes de lanzar.',
     ],
   },
 ] as const;

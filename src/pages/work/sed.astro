@@ -30,9 +30,9 @@ const jsonLd = {
         Teacher evaluations, made anonymous.
       </h1>
       <p class="lede" style="margin-top:1.5rem">
-        SED is the evaluation system for a public university in Mexico:
-        students, teachers, and staff evaluate teaching performance every
-        term without storing a link between a response and a person's identity.
+        SED is how a public university in Mexico evaluates its teaching.
+        Students, teachers, and staff answer every term, and the system never
+        stores a link between an answer and the person who gave it.
       </p>
       <p class="chips" style="color:var(--ink-soft)">
         <span>Django + DRF</span>
@@ -76,8 +76,8 @@ const jsonLd = {
         <p class="file-kicker">By construction</p>
         <h2 class="h2" style="margin-top:0.4rem">How anonymity is built</h2>
         <p class="muted" style="margin:0.9rem 0 1.25rem; max-width:46ch">
-          The respondent never creates an account. The file that remains
-          cannot be edited.
+          You never create an account. And once your answer is in, nobody
+          can edit it, not even an admin.
         </p>
         <AnonPlate />
       </div>
@@ -88,19 +88,21 @@ const jsonLd = {
     <div class="wrap prose">
       <h2>The problem</h2>
       <p>
-        The university's previous evaluation system was a legacy stack with a
-        fundamental trust problem: respondents could not be sure their answers
-        were anonymous, so participation and honesty suffered. The new system
-        had to guarantee anonymity <em>by construction</em>, survive real
-        term-end traffic, and produce reports administrators could audit.
+        Picture this: you're a student and the university asks you to rate
+        your teacher. Would you be honest if you weren't sure it was
+        anonymous? Me neither. That was the problem with the old system.
+        People couldn't be sure their answers were anonymous, so fewer of them
+        answered, and fewer answered honestly. The new one had to be anonymous
+        <em>by construction</em>, hold up when everyone answers at the end of
+        the term, and give administrators reports they can audit.
       </p>
 
       <h2>What I built</h2>
       <p>
-        A full-stack platform with two separate sides: an admin
-        console for catalogs, teaching assignments, survey instruments,
-        credentials, and analytics, plus a respondent flow that works with a
-        single opaque credential and leaves no identifying trail.
+        One platform with two separate sides. An admin console for catalogs,
+        teaching assignments, survey instruments, credentials, and analytics.
+        And a respondent flow that only needs one opaque code and leaves no
+        trail back to you.
       </p>
     </div>
     <div class="wrap media-split" style="margin-top:2rem">
@@ -124,14 +126,14 @@ const jsonLd = {
     <div class="wrap prose">
       <ul>
         <li>
-          <strong>Opaque credential system:</strong> respondents redeem a
-          server-issued token for an anonymous session. No name, no account,
-          no way to link a response to a person.
+          <strong>Opaque credentials:</strong> you trade a token from the
+          server for an anonymous session. No name, no account, no way to link
+          an answer to a person.
         </li>
         <li>
-          <strong>Immutable submissions:</strong> once an evaluation is
-          submitted it cannot be edited or deleted. The dataset the
-          institution reports on remains the dataset that was collected.
+          <strong>Answers that can't change:</strong> once an evaluation is
+          sent, nobody can edit or delete it. The data the university reports
+          on is exactly the data that was collected.
         </li>
         <li>
           <strong>Survey engine:</strong> configurable instruments with matrix
@@ -147,7 +149,7 @@ const jsonLd = {
       </ul>
 
       <h2>Engineering standards</h2>
-      <p>The project has checks at each stage of development and release:</p>
+      <p>Every stage has checks, from the first commit to the release:</p>
       <ul>
         <li><strong>1,750+ backend tests</strong> and <strong>830+ frontend tests</strong>, run in CI on every change.</li>
         <li><strong>Strict bundle budgets:</strong> every JavaScript chunk is measured and capped for slower devices and campus Wi-Fi.</li>
@@ -163,11 +165,11 @@ const jsonLd = {
 
       <h2>Result</h2>
       <p>
-        The institution can use the platform for each evaluation period. The
-        respondent flow does not collect a person's identity, submitted
-        evaluations cannot be changed, and automated tests protect the main
-        workflows. Architecture documentation gives new engineers a place to
-        start without relying on an oral handover.
+        The university can run every evaluation period on it. It never
+        collects who you are, answers can't be changed once they're sent, and
+        automated tests guard the main flows. There's also architecture
+        documentation, so the next engineer doesn't depend on someone
+        remembering how it all works.
       </p>
       <p>
         The current deployment is live at
@@ -180,9 +182,10 @@ const jsonLd = {
   <section style="padding-bottom:clamp(4rem,8vw,6rem)">
     <div class="wrap">
       <div class="folder folder--orchid">
-        <h2 class="h2">Building software that handles sensitive data?</h2>
+        <h2 class="h2">Building something that handles sensitive data?</h2>
         <p class="muted" style="margin-top:1rem">
-          Tell me what the system must protect and how people will use it.
+          Tell me what it has to protect and who's going to use it. We'll
+          figure out the rest together.
         </p>
         <a class="btn btn--solid" style="margin-top:1.75rem" href="/contact/">Talk about your project</a>
       </div>
