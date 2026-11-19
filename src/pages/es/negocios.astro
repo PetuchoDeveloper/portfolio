@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+
+const steps = [
+  ['1', 'Me escribes', 'Por WhatsApp o correo: qué hace tu negocio, dónde está y unas fotos de tu trabajo.'],
+  ['2', 'Ves una propuesta', 'Te muestro cómo se vería tu página antes de que pagues nada.'],
+  ['3', 'La publicamos', 'Pagas el 50% al empezar y el 50% al entregar. La página queda en línea con tu dominio.'],
+];
+const included = [
+  'Una página hecha para tu negocio, no una plantilla.',
+  'Pensada primero para el celular, porque ahí te buscan.',
+  'Tu dirección con enlace a Google Maps y un botón para que te escriban por WhatsApp.',
+  'Tus servicios y tu zona, con las palabras que tus clientes escriben en Google.',
+  'Tus fotos y, si las tienes, tus reseñas de Google.',
+];
+const faq = [
+  ['¿Qué pago aparte?', 'El dominio y el hospedaje los pagas tú directamente, con tu nombre. Así la página es tuya y no depende de mí.'],
+  ['¿Ya tengo Facebook, para qué una página?', 'Facebook sirve para que te vean tus seguidores. Una página propia sirve para que te encuentre quien te busca en Google y no te conoce todavía.'],
+  ['¿Esto es una agencia grande?', 'No. Soy una persona, Kevin. Hablas conmigo desde el primer mensaje hasta la entrega.'],
+];
+const mailto = `mailto:${site.email}?subject=${encodeURIComponent('Quiero una página para mi negocio')}`;
+---
+
+<BaseLayout
+  title="Páginas web para negocios locales"
+  description="Una página web para tu negocio local por 5,900 MXN: hecha para tu negocio, pensada para el celular y con botón de WhatsApp. Primero ves una propuesta, sin compromiso."
+  locale="es"
+  path="/es/negocios/"
+  alternateEnPath="/services/"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="display" style="max-width:16ch">Que te encuentren en Google y te escriban por WhatsApp.</h1>
+      <p class="lede" style="margin-top:1.5rem">
+        Hago páginas web para negocios locales: barberías, talleres, salones, consultorios, oficios. Una sola página clara, rápida en el celular, con tus datos, tus fotos y un botón para que el cliente te escriba.
+      </p>
+      <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap">
+        <a class="btn btn--solid" href={mailto}>Escríbeme por correo</a>
+        <a class="btn" href="/es/work/sed/">Ver un proyecto mío</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(4rem,8vw,6rem)">
+    <div class="wrap">
+      <article class="folder folder--orchid">
+        <p class="tab-label" style="color:inherit; opacity:0.85">Precio</p>
+        <h2 class="h2" style="margin-top:0.5rem">5,900 MXN por una página</h2>
+        <p class="muted" style="margin-top:1rem; max-width:60ch">Un precio, por escrito, antes de empezar. Sin mensualidades obligatorias.</p>
+        <p class="tab-label" style="margin-top:2rem; color:inherit; opacity:0.85">Qué incluye</p>
+        <ul style="margin-top:0.75rem; padding-left:1.25rem; display:grid; gap:0.5rem; max-width:62ch">
+          {included.map((i) => <li class="muted">{i}</li>)}
+        </ul>
+      </article>
+
+      <div style="margin-top:1.25rem; display:grid; gap:1.25rem; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))">
+        {steps.map(([n, t, d]) => (
+          <article class="folder">
+            <p class="tab-label">Paso {n}</p>
+            <h3 class="h3" style="margin-top:0.5rem">{t}</h3>
+            <p class="muted" style="margin-top:0.75rem">{d}</p>
+          </article>
+        ))}
+      </div>
+
+      <article class="folder" style="margin-top:1.25rem">
+        <p class="tab-label">Qué puedes comprobar</p>
+        <p class="muted" style="margin-top:0.75rem; max-width:62ch">
+          Todavía no tengo páginas de negocios locales que mostrar, y no voy a inventarlas. Lo que sí puedes ver es cómo trabajo: esta misma página, y un sistema real que construí para una universidad pública, con pruebas y revisión de seguridad.
+        </p>
+        <a class="btn" style="margin-top:1.25rem" href="/es/work/sed/">Ver el proyecto</a>
+      </article>
+
+      <div style="margin-top:2.5rem; display:grid; gap:1rem; max-width:62ch">
+        {faq.map(([q, a]) => (
+          <div>
+            <h3 class="h3">{q}</h3>
+            <p class="muted" style="margin-top:0.5rem">{a}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="folder folder--orchid" style="margin-top:2.5rem">
+        <h2 class="h2">¿Te preparo una propuesta?</h2>
+        <p class="muted" style="margin-top:1rem">Sin compromiso. Cuéntame qué hace tu negocio y te digo cómo quedaría tu página.</p>
+        <a class="btn btn--solid" style="margin-top:1.75rem" href={mailto}>Escríbeme</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
