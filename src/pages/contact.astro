@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactActions from '../components/ContactActions.astro';
 import { site } from '../data/site';
 ---
 
@@ -22,43 +23,13 @@ import { site } from '../data/site';
             <a class="h3" style="text-decoration:none; color:var(--orchid)" href={`mailto:${site.email}`}>{site.email}</a>
           </div>
           <div class="folder" style="padding:1.15rem 1.35rem">
-            <p class="tab-label">What to include</p>
-            <p class="muted" style="font-size:0.9375rem">What you need · when you need it · a budget, if you have one in mind</p>
-          </div>
-          <div class="folder" style="padding:1.15rem 1.35rem">
             <p class="tab-label">Response time</p>
             <p class="muted" style="font-size:0.9375rem">Within 1 business day · {site.location} (GMT-6)</p>
           </div>
         </div>
       </div>
 
-      <form
-        class="folder"
-        action={`mailto:${site.email}`}
-        method="get"
-        enctype="text/plain"
-        style="display:grid; gap:1rem"
-        aria-label="Project inquiry"
-      >
-        <p class="tab-label">Or draft the email here</p>
-        <label class="field">
-          <span class="muted">Your name</span>
-          <input name="name" required autocomplete="name" />
-        </label>
-        <label class="field">
-          <span class="muted">Your email</span>
-          <input name="email" type="email" required autocomplete="email" />
-        </label>
-        <label class="field">
-          <span class="muted">What do you need?</span>
-          <textarea name="body" rows="6" required placeholder="A website for my bakery. I need it online before the holiday season…"></textarea>
-        </label>
-        <button class="btn btn--solid" type="submit">Open email draft</button>
-        <p class="muted" style="font-size:0.8125rem">
-          This form doesn't send or save anything. It just opens a draft in
-          your mail app. Or write me directly at {site.email}.
-        </p>
-      </form>
+      <ContactActions />
     </div>
   </section>
 </BaseLayout>

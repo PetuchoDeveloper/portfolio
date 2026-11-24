@@ -1,0 +1,97 @@
+---
+import { site } from '../data/site';
+import type { Locale } from '../i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const copy = locale === 'es'
+  ? {
+    heading: 'Qué incluir',
+    prompt: 'Cuéntame qué necesitas, para quién es y para cuándo. Si ya tienes un presupuesto en mente, inclúyelo también.',
+    email: 'Escríbeme por correo',
+    copyAddress: 'Copiar dirección de correo',
+    copied: 'Dirección copiada.',
+    copyError: 'No se pudo copiar. Puedes seleccionar la dirección de correo y copiarla.',
+  }
+  : {
+    heading: 'What to include',
+    prompt: 'Tell me what you need, who it’s for, and when you need it. If you have a budget in mind, include that too.',
+    email: 'Email me',
+    copyAddress: 'Copy email address',
+    copied: 'Email address copied.',
+    copyError: 'Couldn’t copy it. You can select and copy the email address.',
+  };
+---
+
+<div class="folder contact-actions">
+  <h2 class="tab-label">{copy.heading}</h2>
+  <p class="muted contact-prompt">{copy.prompt}</p>
+  <div class="contact-buttons">
+    <a class="btn btn--solid" href={`mailto:${site.email}`}>{copy.email}</a>
+    <button
+      class="btn copy-email"
+      type="button"
+      data-copy-email={site.email}
+      data-copy-success={copy.copied}
+      data-copy-error={copy.copyError}
+      hidden
+    >{copy.copyAddress}</button>
+  </div>
+  <p class="muted copy-status" role="status" data-copy-status></p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-email]').forEach((button) => {
+    const status = button.closest('.contact-actions')?.querySelector('[data-copy-status]');
+    const { copyEmail, copySuccess, copyError } = button.dataset;
+    if (!status || !copyEmail || !copySuccess || !copyError || !navigator.clipboard?.writeText) return;
+
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      status.textContent = '';
+      try {
+        await navigator.clipboard.writeText(copyEmail);
+        status.textContent = copySuccess;
+      } catch {
+        status.textContent = copyError;
+      }
+    });
+  });
+</script>
+
+<style>
+  .contact-actions {
+    align-self: start;
+  }
+
+  .contact-prompt {
+    margin-top: 0.75rem;
+    max-width: 34ch;
+  }
+
+  .contact-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .copy-email {
+    cursor: pointer;
+  }
+
+  .copy-email[hidden] {
+    display: none;
+  }
+
+  .copy-status {
+    font-size: 0.875rem;
+  }
+
+  .copy-status:not(:empty) {
+    margin-top: 0.75rem;
+  }
+</style>
