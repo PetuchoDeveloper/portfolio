@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactActions from '../../components/ContactActions.astro';
 import { site } from '../../data/site';
 ---
 
@@ -22,29 +23,13 @@ import { site } from '../../data/site';
             <a class="h3" style="text-decoration:none; color:var(--orchid)" href={`mailto:${site.email}`}>{site.email}</a>
           </div>
           <div class="folder" style="padding:1.15rem 1.35rem">
-            <p class="tab-label">Qué incluir</p>
-            <p class="muted" style="font-size:0.9375rem">Qué necesitas · para cuándo · un presupuesto, si ya tienes uno en mente</p>
-          </div>
-          <div class="folder" style="padding:1.15rem 1.35rem">
             <p class="tab-label">Tiempo de respuesta</p>
             <p class="muted" style="font-size:0.9375rem">En un día hábil · {site.location} (GMT-6)</p>
           </div>
         </div>
       </div>
 
-      <form class="folder" action={`mailto:${site.email}`} method="get" enctype="text/plain" style="display:grid; gap:1rem" aria-label="Consulta sobre un proyecto">
-        <p class="tab-label">O prepara el correo aquí</p>
-        <label class="field"><span class="muted">Tu nombre</span><input name="name" required autocomplete="name" /></label>
-        <label class="field"><span class="muted">Tu correo</span><input name="email" type="email" required autocomplete="email" /></label>
-        <label class="field">
-          <span class="muted">¿Qué necesitas?</span>
-          <textarea name="body" rows="6" required placeholder="Un sitio para mi panadería. Necesito publicarlo antes de la temporada navideña…"></textarea>
-        </label>
-        <button class="btn btn--solid" type="submit">Abrir borrador de correo</button>
-        <p class="muted" style="font-size:0.8125rem">
-          Este formulario no envía ni guarda nada. Solo abre un borrador en tu app de correo. O escríbeme directo a {site.email}.
-        </p>
-      </form>
+      <ContactActions locale="es" />
     </div>
   </section>
 </BaseLayout>
